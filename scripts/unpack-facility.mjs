@@ -62,7 +62,7 @@ if (headOpen) {
 
 html = html.replace(
   /<meta\s+name="viewport"\s+content="[^"]*"\s*\/?>/i,
-  '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+  '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n  <link rel="icon" href="/favicon.png" type="image/png" />\n  <link rel="apple-touch-icon" href="/favicon.png" />',
 );
 
 const responsivePatch = `<style id="facility-responsive-patch">
