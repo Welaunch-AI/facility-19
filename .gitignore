@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local HTML bundle extraction (large; regenerate with npm run facility:unpack)
+/extracted

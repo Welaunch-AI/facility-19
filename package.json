@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "facility:extract": "node scripts/extract-bundler.mjs",
+    "facility:unpack": "node scripts/unpack-facility.mjs"
   },
   "dependencies": {
     "next": "16.2.4",
