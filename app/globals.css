@@ -45,3 +45,28 @@ body.facility-shell.aria-voice-page {
   overscroll-behavior: auto;
   background: #ffffff;
 }
+
+/* Talk-to-Aria: soft “Lovable-style” orb rings behind the hang-up control */
+@keyframes voice-orb-ring {
+  0%,
+  100% {
+    opacity: 0.32;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.52;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes voice-orb-glow {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}

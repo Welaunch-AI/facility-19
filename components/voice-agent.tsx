@@ -1,6 +1,7 @@
 "use client";
 
 import { useConversation } from "@elevenlabs/react";
+import { PhoneOff } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 
 function cn(...parts: (string | false | undefined)[]) {
@@ -28,26 +29,6 @@ function MicIcon({ className }: { className?: string }) {
   );
 }
 
-
-function PhoneOffIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="48"
-      height="48"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 6.35 1.05 2 2 0 0 1 1.72 2v3.36a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 4h3.36a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 1.05 6.35 2 2 0 0 1-.45 2.11L8.76 15.32" />
-      <line x1="2" y1="2" x2="22" y2="22" />
-    </svg>
-  );
-}
 
 function Volume2Icon({ className }: { className?: string }) {
   return (
@@ -250,17 +231,49 @@ export function VoiceAgent() {
       : "bg-[#8EC5FF]";
 
   const statusTextClass = "text-[15px] font-medium text-[#2B6FD6]";
+  const orbStyle = isConnected
+    ? {
+        background:
+          "linear-gradient(180deg, #5c6573 0%, #4b5563 52%, #374151 100%)",
+        boxShadow: isSpeaking
+          ? "0 20px 56px -12px rgba(59,130,246,0.2), 0 16px 48px -14px rgba(55,65,81,0.5), inset 0 1px 0 rgba(255,255,255,0.16)"
+          : "0 16px 48px -14px rgba(55,65,81,0.55), 0 8px 20px -8px rgba(30,41,59,0.28), inset 0 1px 0 rgba(255,255,255,0.14)",
+      }
+    : {
+        background:
+          "linear-gradient(135deg, #4B5563 0%, #3F4A56 42%, #1E293B 100%)",
+        boxShadow: "0 12px 28px rgba(15,23,42,0.22), 0 2px 6px rgba(15,23,42,0.08)",
+      };
 
   return (
     <div className="flex w-full flex-col items-center gap-12">
-      <div className="relative flex h-[17.5rem] w-[17.5rem] items-center justify-center">
-        {isConnected && isSpeaking && (
+      <div className="relative flex h-[19rem] w-[19rem] items-center justify-center">
+        {isConnected && (
           <div
             className={cn(
-              "absolute inset-2 rounded-full bg-slate-500/15 blur-2xl transition-all duration-500",
-              "scale-100 opacity-90",
+              "pointer-events-none absolute inset-[-2.75rem] rounded-full transition-[opacity,transform] duration-500",
+              isSpeaking && "motion-safe:[animation:voice-orb-glow_2.8s_ease-in-out_infinite]",
             )}
+            aria-hidden
+            style={{
+              background:
+                "radial-gradient(circle at center, rgba(147,197,253,0.5) 0%, rgba(219,234,254,0.22) 40%, transparent 72%)",
+              opacity: isSpeaking ? 1 : 0.85,
+            }}
           />
+        )}
+        {isConnected && (
+          <div className="pointer-events-none absolute inset-0" aria-hidden>
+            <div
+              className="absolute inset-0 m-auto h-[12.25rem] w-[12.25rem] rounded-full border border-sky-300/40 motion-safe:[animation:voice-orb-ring_3s_ease-in-out_infinite]"
+            />
+            <div
+              className="absolute inset-0 m-auto h-[14.25rem] w-[14.25rem] rounded-full border border-sky-200/35 motion-safe:[animation:voice-orb-ring_3.4s_ease-in-out_infinite] [animation-delay:0.35s]"
+            />
+            <div
+              className="absolute inset-0 m-auto h-[16.25rem] w-[16.25rem] rounded-full border border-sky-100/28 motion-safe:[animation:voice-orb-ring_3.8s_ease-in-out_infinite] [animation-delay:0.7s]"
+            />
+          </div>
         )}
         <button
           type="button"
@@ -268,13 +281,13 @@ export function VoiceAgent() {
           disabled={isConnecting}
           aria-label={isConnected ? "End conversation" : "Start conversation"}
           className={cn(
-            "relative flex h-44 w-44 items-center justify-center rounded-full text-white transition-transform duration-300",
-            "bg-gradient-to-br from-[#4B5563] via-[#3F4A56] to-[#1E293B]",
-            "shadow-[0_12px_28px_rgba(15,23,42,0.22),0_2px_6px_rgba(15,23,42,0.08)]",
-            "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#2B6FD6]/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+            "relative z-10 flex h-44 w-44 items-center justify-center rounded-full text-white transition-[transform,box-shadow] duration-300",
+            "border border-white/15",
+            "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#2B6FD6]/35 focus-visible:ring-offset-[3px] focus-visible:ring-offset-white",
             "enabled:hover:scale-[1.02] enabled:active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-85",
-            isConnected && isSpeaking && "scale-[1.04]",
+            isConnected && isSpeaking && "scale-[1.03]",
           )}
+          style={orbStyle}
         >
           {isConnecting ? (
             <div
@@ -282,7 +295,12 @@ export function VoiceAgent() {
               aria-hidden
             />
           ) : isConnected ? (
-            <PhoneOffIcon className="text-white" />
+            <PhoneOff
+              aria-hidden
+              size={52}
+              strokeWidth={2.1}
+              className="text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]"
+            />
           ) : (
             <MicIcon className="text-white" />
           )}
