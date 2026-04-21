@@ -389,5 +389,45 @@ html = html.replace(/<\/body>/i, `${navFallbackScript}</body>`);
 const outHtml = path.join(outDir, "index.html");
 fs.writeFileSync(outHtml, html, "utf8");
 
+const LOVABLE_ARIA = "https://talk-aloud.lovable.app/";
+const INTERNAL_ARIA = "/talk-to-aria";
+
+function rewriteAriaUrlsInDir(dir) {
+  for (const name of fs.readdirSync(dir)) {
+    const full = path.join(dir, name);
+    const st = fs.statSync(full);
+    if (st.isDirectory()) {
+      rewriteAriaUrlsInDir(full);
+      continue;
+    }
+    if (!name.endsWith(".js") && name !== "index.html") continue;
+    let text = fs.readFileSync(full, "utf8");
+    if (text.includes(LOVABLE_ARIA)) {
+      text = text.split(LOVABLE_ARIA).join(INTERNAL_ARIA);
+    }
+    if (name.endsWith(".js") && text.includes("ARIA_URL")) {
+      text = text.replace(
+        /href=\{(ARIA_URL(?:_[SAHP])?)\} target="_blank" rel="noreferrer"/g,
+        "href={$1}",
+      );
+      text = text.replace(
+        "{ l: 'Meet Aria →', h: ARIA_URL, ext: true }",
+        "{ l: 'Meet Aria →', h: ARIA_URL, ext: false }",
+      );
+    }
+    if (name.endsWith(".js") && name.includes("cfee6374")) {
+      text = text.replace(
+        /href=\{t\.href\}\s+target="_blank"\s+rel="noreferrer"/,
+        `href={t.href}
+                  target={t.href.startsWith('/') ? undefined : '_blank'}
+                  rel="noreferrer"`,
+      );
+    }
+    fs.writeFileSync(full, text, "utf8");
+  }
+}
+
+rewriteAriaUrlsInDir(outDir);
+
 console.log("Wrote", outHtml);
 console.log("Assets:", Object.keys(manifest).length);

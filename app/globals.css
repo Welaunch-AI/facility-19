@@ -38,3 +38,9 @@ body.facility-shell {
   border: 0;
   touch-action: manipulation;
 }
+
+/* Allow scroll on Talk-to-Aria route (root layout uses overflow:hidden for legacy shell). */
+body.facility-shell.aria-voice-page {
+  overflow: auto;
+  overscroll-behavior: auto;
+}

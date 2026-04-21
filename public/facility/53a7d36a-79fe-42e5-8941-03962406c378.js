@@ -2,7 +2,7 @@
 
 const { useEffect, useState, useRef, useMemo } = React;
 
-const ARIA_URL = 'https://talk-aloud.lovable.app/';
+const ARIA_URL = '/talk-to-aria';
 const BOOK_URL = 'https://cal.com/aviral-bhutani-facility19/discovery-call';
 
 function Wordmark({ size = 22 }) {
@@ -51,7 +51,7 @@ function Nav() {
         </div>
         <div className="nav-cta">
           <a className="btn btn-ghost nav-cta-book" href={BOOK_URL} target="_blank" rel="noreferrer" style={{ height: 40 }}>Book a call</a>
-          <a className="btn btn-primary" href={ARIA_URL} target="_blank" rel="noreferrer" style={{ height: 40 }}>
+          <a className="btn btn-primary" href={ARIA_URL} style={{ height: 40 }}>
             Meet Aria <ArrowRight />
           </a>
         </div>
@@ -75,7 +75,7 @@ function Nav() {
           <a href="#contact" onClick={close}>Contact</a>
           <div className="nav-mobile-ctas">
             <a className="btn btn-ghost" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
-            <a className="btn btn-primary" href={ARIA_URL} target="_blank" rel="noreferrer" onClick={close}>
+            <a className="btn btn-primary" href={ARIA_URL} onClick={close}>
               Meet Aria <ArrowRight />
             </a>
           </div>
@@ -109,7 +109,7 @@ function Footer() {
           { l: 'Contact', h: '#contact' },
         ]}/>
         <FooterCol title="Get started" items={[
-          { l: 'Meet Aria →', h: ARIA_URL, ext: true },
+          { l: 'Meet Aria →', h: ARIA_URL, ext: false },
           { l: 'Book a call →', h: BOOK_URL, ext: true },
         ]}/>
       </div>
@@ -269,7 +269,7 @@ function AriaBubble() {
           <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-2)' }}>
             Tell me what's breaking. I'll match you with the right agent, walk you through how it connects to your stack, and show you what operators in your situation have done.
           </p>
-          <a className="btn btn-primary" href={ARIA_URL} target="_blank" rel="noreferrer" style={{ marginTop: 14, width: '100%', justifyContent: 'center' }}>
+          <a className="btn btn-primary" href={ARIA_URL} style={{ marginTop: 14, width: '100%', justifyContent: 'center' }}>
             Start the conversation <ArrowRight />
           </a>
         </div>

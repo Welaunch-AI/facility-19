@@ -173,7 +173,7 @@ function Hero({ agents, variant = 'roster' }) {
           </RevealH>
           <RevealH delay={240}>
             <div style={{ marginTop: 40, display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <a className="btn btn-primary" href={ARIA_URL_H} target="_blank" rel="noreferrer" style={{ height: 52, fontSize: 16 }}>
+              <a className="btn btn-primary" href={ARIA_URL_H} style={{ height: 52, fontSize: 16 }}>
                 Meet Aria, she'll walk you through everything <ArrowRightH />
               </a>
               <a className="btn btn-ghost" href="#agents" style={{ height: 52, fontSize: 16 }}>

@@ -209,7 +209,7 @@ function TechStack() {
                 Facility19 connects to whatever you're already running. No rip-and-replace. No new platform to learn. We plug our agents into your existing stack and put them to work.
               </p>
             </div>
-            <a className="btn btn-ghost" href={ARIA_URL_S} target="_blank" rel="noreferrer" style={{ marginTop: 28 }}>
+            <a className="btn btn-ghost" href={ARIA_URL_S} style={{ marginTop: 28 }}>
               Ask Aria what platforms we connect to <ArrowRightS />
             </a>
           </div>
@@ -992,7 +992,7 @@ function Capabilities({ items }) {
                 </div>
               ))}
             </div>
-            <a className="btn btn-ghost" href={ARIA_URL_S} target="_blank" rel="noreferrer" style={{ marginTop: 28 }}>
+            <a className="btn btn-ghost" href={ARIA_URL_S} style={{ marginTop: 28 }}>
               Ask Aria about your stack <ArrowRightS />
             </a>
           </div>

@@ -116,7 +116,7 @@ function BuildInHouse() {
             <p style={{ color: 'var(--slate)', fontSize: 15, lineHeight: 1.6, marginTop: 20, maxWidth: 540 }}>
               To build this yourself you need an AI engineer, a systems integrator, a QA team, and someone to manage it 24/7, then do it all again when your stack changes. We already have the team.
             </p>
-            <a className="btn btn-primary" href={ARIA_URL_P} target="_blank" rel="noreferrer" style={{ marginTop: 28 }}>
+            <a className="btn btn-primary" href={ARIA_URL_P} style={{ marginTop: 28 }}>
               Tell Aria what's breaking <ArrowRightP />
             </a>
           </div>
@@ -255,7 +255,7 @@ function Pricing() {
                 <a
                   className={'btn ' + (t.variant === 'primary' ? 'btn-brand' : 'btn-ghost')}
                   href={t.href}
-                  target="_blank"
+                  target={t.href.startsWith('/') ? undefined : '_blank'}
                   rel="noreferrer"
                   style={{
                     marginTop: 'auto',
@@ -308,7 +308,7 @@ function FinalCTA() {
                 Tell Aria what is breaking in your operation. She matches you with the right agent, explains how it wires into your stack, and walks you through what it costs, right now.
               </p>
               <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
-                <a className="btn btn-brand" href={ARIA_URL_P} target="_blank" rel="noreferrer" style={{ height: 52, fontSize: 16 }}>
+                <a className="btn btn-brand" href={ARIA_URL_P} style={{ height: 52, fontSize: 16 }}>
                   Talk to Aria, free, no sign-up <ArrowRightP />
                 </a>
                 <a className="btn btn-ghost" href={BOOK_URL_P} target="_blank" rel="noreferrer" style={{ height: 52, fontSize: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>

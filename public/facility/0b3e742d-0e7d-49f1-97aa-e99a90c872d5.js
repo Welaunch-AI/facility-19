@@ -210,7 +210,7 @@ function Agents({ agents, cardVariant = 'default' }) {
                 Dispatch. Procurement. QA. Compliance. AR. Scheduling. Fleet. Whatever is eating your team alive, we can build an agent for it.
               </p>
             </div>
-            <a className="btn btn-primary" href={ARIA_URL_A} target="_blank" rel="noreferrer" style={{ height: 52, justifySelf: 'end' }}>
+            <a className="btn btn-primary" href={ARIA_URL_A} style={{ height: 52, justifySelf: 'end' }}>
               Ask Aria what we could build <ArrowRightA />
             </a>
           </div>
