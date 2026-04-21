@@ -16,7 +16,7 @@ function MicIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
@@ -38,7 +38,7 @@ function PhoneOffIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.75"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
@@ -241,24 +241,26 @@ export function VoiceAgent() {
         : "Listening"
       : "Disconnected";
 
+  const statusDotClass = isConnecting
+    ? "bg-[#8EC5FF] animate-pulse"
+    : isConnected
+      ? isSpeaking
+        ? "bg-[#2B6FD6] animate-pulse scale-110"
+        : "bg-[#2B6FD6] animate-pulse"
+      : "bg-[#8EC5FF]";
+
+  const statusTextClass = "text-[15px] font-medium text-[#2B6FD6]";
+
   return (
-    <div className="flex w-full max-w-md flex-col items-center gap-10">
-      <div className="relative flex h-64 w-64 items-center justify-center">
-        {isConnected && (
-          <>
-            <div
-              className={cn(
-                "absolute inset-0 rounded-full bg-[#6B7BFF]/20 blur-2xl transition-all duration-500",
-                isSpeaking ? "scale-110 opacity-100" : "scale-90 opacity-60",
-              )}
-            />
-            <div
-              className={cn(
-                "absolute inset-4 rounded-full bg-[#6B7BFF]/30 transition-transform duration-700",
-                isSpeaking ? "scale-105 animate-pulse" : "scale-100",
-              )}
-            />
-          </>
+    <div className="flex w-full flex-col items-center gap-12">
+      <div className="relative flex h-[17.5rem] w-[17.5rem] items-center justify-center">
+        {isConnected && isSpeaking && (
+          <div
+            className={cn(
+              "absolute inset-2 rounded-full bg-slate-500/15 blur-2xl transition-all duration-500",
+              "scale-100 opacity-90",
+            )}
+          />
         )}
         <button
           type="button"
@@ -266,17 +268,17 @@ export function VoiceAgent() {
           disabled={isConnecting}
           aria-label={isConnected ? "End conversation" : "Start conversation"}
           className={cn(
-            "relative flex h-40 w-40 items-center justify-center rounded-full shadow-2xl transition-all duration-500",
-            "bg-gradient-to-br from-[#6B7BFF] to-[#3D4DDB] text-white",
-            "focus:outline-none focus-visible:ring-4 focus-visible:ring-[#6B7BFF]/40",
-            "hover:scale-105 active:scale-95 disabled:cursor-not-allowed",
-            isConnected && isSpeaking && "scale-110",
-            !isConnected && "opacity-95",
+            "relative flex h-44 w-44 items-center justify-center rounded-full text-white transition-transform duration-300",
+            "bg-gradient-to-br from-[#4B5563] via-[#3F4A56] to-[#1E293B]",
+            "shadow-[0_12px_28px_rgba(15,23,42,0.22),0_2px_6px_rgba(15,23,42,0.08)]",
+            "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#2B6FD6]/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+            "enabled:hover:scale-[1.02] enabled:active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-85",
+            isConnected && isSpeaking && "scale-[1.04]",
           )}
         >
           {isConnecting ? (
             <div
-              className="h-12 w-12 rounded-full border-4 border-white/30 border-t-white animate-spin"
+              className="h-11 w-11 rounded-full border-[3px] border-white/25 border-t-white animate-spin"
               aria-hidden
             />
           ) : isConnected ? (
@@ -287,34 +289,34 @@ export function VoiceAgent() {
         </button>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col items-center gap-2.5 px-1">
+        <div className="flex items-center gap-2.5">
           <span
-            className={cn(
-              "h-2 w-2 rounded-full transition-colors",
-              isConnected ? "animate-pulse bg-[#1F8A5F]" : "bg-[#8A8F9C]/50",
-            )}
+            className={cn("h-2 w-2 shrink-0 rounded-full transition-colors", statusDotClass)}
+            aria-hidden
           />
-          <p className="text-sm font-medium text-[#5E6472]">{statusLabel}</p>
+          <p className={statusTextClass}>{statusLabel}</p>
         </div>
-        <p className="text-center text-xs text-[#8A8F9C]">
+        <p className="text-center text-sm leading-snug text-[#8B9BB8]">
           {isConnecting
             ? "Hang tight…"
             : isConnected
-              ? "Tap the orb to end"
+              ? "Tap the button to end the call"
               : "Tap the mic to start"}
         </p>
         {error && (
-          <p className="max-w-xs text-center text-sm text-[#C0392B]">{error}</p>
+          <p className="max-w-[280px] text-center text-sm leading-snug text-[#C53030]">
+            {error}
+          </p>
         )}
       </div>
 
       {isConnected && (
-        <div className="flex w-full max-w-xs items-center gap-3">
+        <div className="flex w-full max-w-[280px] items-center gap-3 border-t border-slate-200/90 pt-8">
           <button
             type="button"
             onClick={() => void toggleMute()}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#DAD8D0] bg-white text-[#0A0A0B] transition-colors hover:bg-[#F3F3EF]"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition-colors hover:bg-slate-50"
             aria-label="Toggle mute"
           >
             {muted ? <VolumeXIcon /> : <Volume2Icon />}
@@ -326,7 +328,7 @@ export function VoiceAgent() {
             step={1}
             value={muted ? 0 : Math.round(volume * 100)}
             onChange={(e) => void handleVolumeChange(e)}
-            className="h-2 flex-1 cursor-pointer accent-[#3D4DDB]"
+            className="h-2 flex-1 cursor-pointer accent-[#2B6FD6]"
             aria-label="Volume"
           />
         </div>
@@ -337,16 +339,26 @@ export function VoiceAgent() {
 
 export function VoiceAgentHeader() {
   return (
-    <header className="mb-12 text-center">
+    <header className="mb-14 flex w-full flex-col items-center text-center">
       <h1 className="sr-only">Facility19 — Talk to Aria</h1>
-      <img
-        src="/favicon.png"
-        alt="Facility19"
-        className="mx-auto mb-4 h-16 w-auto md:h-20"
-        width={160}
-        height={160}
-      />
-      <p className="mx-auto max-w-md text-[#5E6472]">
+      <div className="mb-8 flex items-center justify-center gap-3">
+        <img
+          src="/favicon.png"
+          alt=""
+          className="h-12 w-12 shrink-0 object-contain md:h-14 md:w-14"
+          width={56}
+          height={56}
+        />
+        <div className="flex items-baseline gap-0.5 leading-none">
+          <span className="text-[1.65rem] font-bold tracking-tight text-[#0A0A0B] md:text-[1.85rem]">
+            Facility
+          </span>
+          <span className="text-[1.65rem] font-semibold tracking-tight text-[#2B6FD6] md:text-[1.85rem]">
+            19
+          </span>
+        </div>
+      </div>
+      <p className="max-w-[340px] text-[0.95rem] font-medium leading-relaxed text-[#5A6D86] md:text-base">
         Tap the mic to start a real-time voice conversation.
       </p>
     </header>

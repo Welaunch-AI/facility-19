@@ -43,4 +43,5 @@ body.facility-shell {
 body.facility-shell.aria-voice-page {
   overflow: auto;
   overscroll-behavior: auto;
+  background: #ffffff;
 }
