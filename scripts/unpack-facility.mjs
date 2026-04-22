@@ -242,6 +242,17 @@ const responsivePatch = `<style id="facility-responsive-patch">
       justify-content: center !important;
     }
 
+    /* Hero CTAs: .btn is nowrap + fixed height; long "Meet Aria…" clips on narrow screens */
+    section#top .wrap a.btn {
+      white-space: normal !important;
+      height: auto !important;
+      min-height: 52px !important;
+      padding: 14px 18px !important;
+      line-height: 1.35 !important;
+      box-sizing: border-box !important;
+      flex-wrap: wrap !important;
+    }
+
     /* --- Mobile roster fixes (<=720px): Hero "Your AI team" + #agents expandable --- */
     section#top .wrap > div[style*="grid-template-columns: 1.4fr 1fr"] {
       width: 100% !important;
