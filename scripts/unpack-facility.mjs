@@ -86,6 +86,14 @@ const responsivePatch = `<style id="facility-responsive-patch">
   /* The source bundle used JSX-style attribute selectors that never match
      rendered DOM inline styles. These selectors target actual rendered CSS. */
   @media (max-width: 1024px) {
+    .nav {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 10002 !important;
+    }
+    #root { padding-top: 64px !important; }
     .wrap { padding: 0 24px !important; }
     .nav-links { display: none !important; }
     .nav-cta { display: none !important; }
@@ -135,9 +143,10 @@ const responsivePatch = `<style id="facility-responsive-patch">
       grid-template-columns: 1fr 1fr !important;
       gap: 32px !important;
     }
-    [style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] {
-      grid-template-columns: 60px minmax(0, 1.3fr) minmax(0, 1fr) auto !important;
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] {
+      grid-template-columns: 60px minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) auto !important;
       gap: 16px !important;
+      align-items: center !important;
     }
 
     [style*="padding: 80px 72px"] { padding: 56px 32px !important; }
@@ -145,6 +154,14 @@ const responsivePatch = `<style id="facility-responsive-patch">
   }
 
   @media (max-width: 720px) {
+    .nav {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 10002 !important;
+    }
+    #root { padding-top: 64px !important; }
     .wrap {
       padding-left: max(20px, env(safe-area-inset-left, 0px)) !important;
       padding-right: max(20px, env(safe-area-inset-right, 0px)) !important;
@@ -172,14 +189,27 @@ const responsivePatch = `<style id="facility-responsive-patch">
       grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
 
-    [style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] {
-      grid-template-columns: 44px minmax(0, 1fr) auto !important;
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] {
+      display: grid !important;
+      grid-template-columns: 52px minmax(0, 1fr) auto !important;
       gap: 12px !important;
-      padding: 16px 18px !important;
+      padding: 14px 16px !important;
+      align-items: center !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
     }
-    [style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] > *:nth-child(3),
-    [style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] > *:nth-child(4) {
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] > *:nth-child(3),
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] > *:nth-child(4) {
       display: none !important;
+    }
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] > div:nth-child(2) {
+      min-width: 0 !important;
+      text-align: left !important;
+    }
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] > div:nth-child(5) {
+      justify-self: end !important;
+      align-self: center !important;
     }
     [style*="padding: 14px 32px 14px 32px"] { padding: 14px 18px !important; }
     [style*="padding: 32px 32px 32px 0"] {
@@ -209,6 +239,204 @@ const responsivePatch = `<style id="facility-responsive-patch">
     [style*="margin-top: 40px"][style*="gap: 12px"][style*="flex-wrap: wrap"] .btn,
     section#contact .btn {
       width: 100% !important;
+      justify-content: center !important;
+    }
+
+    /* --- Mobile roster fixes (<=720px): Hero "Your AI team" + #agents expandable --- */
+    section#top .wrap > div[style*="grid-template-columns: 1.4fr 1fr"] {
+      width: 100% !important;
+      max-width: 100% !important;
+      justify-items: stretch !important;
+    }
+    section#top .wrap > div[style*="grid-template-columns: 1.4fr 1fr"] > * {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      justify-self: stretch !important;
+    }
+    section#top .card[style*="padding: 28"],
+    section#top .card[style*="padding:28"] {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap: 14"],
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap:14"] {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 10px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      justify-items: stretch !important;
+      align-items: stretch !important;
+      box-sizing: border-box !important;
+    }
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap: 14"] > div,
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap:14"] > div {
+      min-width: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      padding: 10px 6px !important;
+      justify-self: stretch !important;
+      box-sizing: border-box !important;
+    }
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap: 14"] [style*="font-size: 14px"],
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap:14"] [style*="font-size: 14px"] {
+      font-size: 12px !important;
+    }
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap: 14"] [style*="font-size: 10px"],
+    section#top [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"][style*="gap:14"] [style*="font-size: 10px"] {
+      font-size: 9px !important;
+    }
+
+    section#agents .card > div:first-child[style*="grid-template-columns: 80px"] {
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+      padding: 12px 18px !important;
+      justify-items: stretch !important;
+    }
+    section#agents .card > div:first-child[style*="grid-template-columns: 80px"] > div:first-child,
+    section#agents .card > div:first-child[style*="grid-template-columns: 80px"] > div:nth-child(3),
+    section#agents .card > div:first-child[style*="grid-template-columns: 80px"] > div:nth-child(4),
+    section#agents .card > div:first-child[style*="grid-template-columns: 80px"] > div:nth-child(5) {
+      display: none !important;
+    }
+    section#agents .card > div:first-child[style*="grid-template-columns: 80px"] > div:nth-child(2) {
+      grid-column: 1 / -1 !important;
+      text-align: center !important;
+    }
+
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] > div:first-child {
+      padding-left: 0 !important;
+    }
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] [style*="font-size: 26px"] {
+      font-size: 20px !important;
+      letter-spacing: -0.02em !important;
+    }
+    section#agents .card button[style*="grid-template-columns: 80px 1.4fr 1fr 1fr auto"] [style*="font-size: 11px"][style*="text-transform: uppercase"] {
+      font-size: 10px !important;
+    }
+
+    section#agents [style*="border-top: 1px solid var(--line)"][style*="padding: 32px 32px 32px 0"] {
+      padding: 20px 18px 24px !important;
+      grid-template-columns: 1fr !important;
+      gap: 20px !important;
+    }
+    section#agents [style*="border-top: 1px solid var(--line)"][style*="padding: 32px 32px 32px 0"] > div:first-child {
+      flex-direction: column !important;
+      align-items: center !important;
+      padding-left: 0 !important;
+      gap: 16px !important;
+    }
+    section#agents [style*="border-top: 1px solid var(--line)"][style*="padding: 32px 32px 32px 0"] > div:first-child > div:last-child {
+      text-align: center !important;
+      width: 100% !important;
+    }
+    section#agents [style*="border-top: 1px solid var(--line)"][style*="padding: 32px 32px 32px 0"] > div:first-child > div:last-child [style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+      text-align: center !important;
+    }
+    section#agents [style*="border-top: 1px solid var(--line)"][style*="padding: 32px 32px 32px 0"] > div:first-child > div:last-child [style*="font-size: 16px"][style*="line-height: 1.55"] {
+      text-align: left !important;
+    }
+
+    /* How it works (#how): horizontal carousel, centered snap, neighbor peek */
+    section#how {
+      overflow: visible !important;
+    }
+    section#how .wrap > div[style*="margin-top: 72"] > div[aria-hidden="true"]:first-of-type {
+      left: max(12px, env(safe-area-inset-left, 0px)) !important;
+      right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    }
+    #how .f19-how-steps {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      grid-template-columns: unset !important;
+      gap: 14px !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      scroll-snap-type: x mandatory !important;
+      scroll-padding-inline: max(20px, env(safe-area-inset-left, 0px)) !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+      padding: 8px 0 28px !important;
+      margin-left: calc(-1 * max(20px, env(safe-area-inset-left, 0px))) !important;
+      margin-right: calc(-1 * max(20px, env(safe-area-inset-right, 0px))) !important;
+      padding-left: max(20px, env(safe-area-inset-left, 0px)) !important;
+      padding-right: max(20px, env(safe-area-inset-right, 0px)) !important;
+      width: calc(100% + 2 * max(20px, env(safe-area-inset-left, 0px))) !important;
+      max-width: none !important;
+      box-sizing: border-box !important;
+    }
+    #how .f19-how-steps::-webkit-scrollbar {
+      display: none !important;
+    }
+    #how .f19-how-steps > div {
+      flex: 0 0 min(300px, calc(100vw - 56px)) !important;
+      max-width: min(320px, calc(100vw - 40px)) !important;
+      min-width: 0 !important;
+      scroll-snap-align: center !important;
+      scroll-snap-stop: always !important;
+    }
+    #how .f19-how-steps > div > button {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Capabilities: full-width diagram column on small screens */
+    .f19-cap-grid {
+      grid-template-columns: 1fr !important;
+      gap: 32px !important;
+    }
+    .f19-capabilities {
+      padding: 48px 0 !important;
+    }
+
+    /* Live integrations: stack detail below platform list (no overlay on mobile) */
+    .f19-stack-diagram {
+      overflow: visible !important;
+      overflow-anchor: none !important;
+    }
+    .f19-stack-diagram .f19-stack-main {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+      min-height: unset !important;
+      align-items: stretch !important;
+      grid-template-columns: unset !important;
+    }
+    .f19-stack-diagram .f19-stack-rail {
+      flex-shrink: 0 !important;
+      width: 100% !important;
+      max-height: none !important;
+    }
+    .f19-stack-diagram .f19-stack-rail > button {
+      transform: none !important;
+      scroll-margin-block: 4px !important;
+      touch-action: manipulation !important;
+    }
+    .f19-stack-diagram .f19-stack-hub {
+      position: relative !important;
+      padding: 0 !important;
+      min-height: 0 !important;
+      width: 100% !important;
+    }
+    .f19-stack-diagram .f19-stack-hub > svg {
+      display: none !important;
+    }
+    .f19-stack-diagram .f19-stack-hub-inner {
+      position: relative !important;
+      right: auto !important;
+      top: auto !important;
+      transform: none !important;
+      width: 100% !important;
+      max-width: none !important;
+      margin-top: 0 !important;
+    }
+    .f19-stack-diagram .f19-stack-footer {
       justify-content: center !important;
     }
   }
@@ -392,6 +620,214 @@ fs.writeFileSync(outHtml, html, "utf8");
 const LOVABLE_ARIA = "https://talk-aloud.lovable.app/";
 const INTERNAL_ARIA = "/talk-to-aria";
 
+/** Horizontal step carousel on small screens (scroll-snap + sync to active step). */
+function patchHowItWorksCarousel(dir) {
+  for (const name of fs.readdirSync(dir)) {
+    if (!name.endsWith(".js")) continue;
+    const full = path.join(dir, name);
+    let text = fs.readFileSync(full, "utf8");
+    if (!text.includes("function HowItWorks({ steps })")) continue;
+
+    const reactImportOld = "const { useState: useStateS, useEffect: useEffectS } = React;";
+    const reactImportNew =
+      "const { useState: useStateS, useEffect: useEffectS, useRef: useRefS } = React;";
+    if (text.includes(reactImportOld) && !text.includes("useRef: useRefS")) {
+      text = text.split(reactImportOld).join(reactImportNew);
+    }
+
+    if (!text.includes("howCarouselRef")) {
+      text = text
+        .split("  const [active, setActive] = useStateS(0);\n  // auto-advance")
+        .join(
+          "  const [active, setActive] = useStateS(0);\n  const howCarouselRef = useRefS(null);\n  // auto-advance",
+        );
+    }
+
+    const scrollEffectAfter = `  }, [steps.length]);
+
+  useEffectS(() => {
+    const root = howCarouselRef.current;
+    if (!root || typeof window === "undefined") return;
+    if (window.innerWidth > 720) return;
+    const howEl = document.getElementById("how");
+    if (!howEl) return;
+    const r = howEl.getBoundingClientRect();
+    if (r.bottom <= 0 || r.top >= window.innerHeight) return;
+    const slide = root.children[active];
+    if (!slide) return;
+    requestAnimationFrame(() => {
+      slide.scrollIntoView({
+        inline: "center",
+        block: "nearest",
+        behavior: "smooth",
+      });
+    });
+  }, [active]);
+
+  const progress = `;
+    const scrollEffectBefore = `  }, [steps.length]);
+
+  const progress = `;
+    if (text.includes(scrollEffectBefore) && text.includes("howCarouselRef")) {
+      text = text.split(scrollEffectBefore).join(scrollEffectAfter);
+    }
+
+    const gridOld =
+      "<div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>\n            {steps.map((s, i) => {";
+    const gridNew =
+      "<div ref={howCarouselRef} className=\"f19-how-steps\" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>\n            {steps.map((s, i) => {";
+    if (text.includes("f19-how-steps")) {
+      /* already patched */
+    } else if (text.includes(gridOld)) {
+      text = text.split(gridOld).join(gridNew);
+    } else {
+      console.warn("patchHowItWorksCarousel: step grid snippet not found in", name);
+    }
+
+    fs.writeFileSync(full, text, "utf8");
+    console.log("Patched HowItWorks carousel in", name);
+    return;
+  }
+}
+
+/** Live integrations: class hooks + mobile-friendly taps (no layout overlay). */
+function patchStackDiagramMobile(dir) {
+  for (const name of fs.readdirSync(dir)) {
+    if (!name.endsWith(".js")) continue;
+    const full = path.join(dir, name);
+    let text = fs.readFileSync(full, "utf8");
+    if (!text.includes("function StackDiagram()")) continue;
+    if (text.includes("f19-stack-diagram")) {
+      console.log("StackDiagram mobile patch already applied in", name);
+      return;
+    }
+
+    text = text
+      .split(
+        `    <div
+      onMouseEnter={() => setPaused(true)}`,
+      )
+      .join(
+        `    <div
+      className="f19-stack-diagram"
+      onMouseEnter={() => setPaused(true)}`,
+      );
+
+    text = text
+      .split(
+        `      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1.1fr',
+        gap: 12,
+        alignItems: 'stretch',
+        minHeight: 420,
+      }}>`,
+      )
+      .join(
+        `      <div className="f19-stack-main" style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1.1fr',
+        gap: 12,
+        alignItems: 'stretch',
+        minHeight: 420,
+      }}>`,
+      );
+
+    text = text
+      .split(
+        `              <button
+                key={pl.key}
+                onMouseEnter={() => setHovered(i)}
+                onClick={() => { setHovered(i); setActive(i); }}`,
+      )
+      .join(
+        `              <button
+                type="button"
+                key={pl.key}
+                onMouseEnter={() => setHovered(i)}
+                onClick={() => {
+                  setHovered(i);
+                  setActive(i);
+                  if (typeof window !== "undefined" && window.innerWidth <= 720) {
+                    const y = window.scrollY;
+                    requestAnimationFrame(() => {
+                      window.scrollTo(0, y);
+                      requestAnimationFrame(() => window.scrollTo(0, y));
+                    });
+                  }
+                }}`,
+      );
+
+    text = text
+      .split(
+        `        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', zIndex: 2 }}>`,
+      )
+      .join(
+        `        <div className="f19-stack-rail" style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', zIndex: 2 }}>`,
+      );
+
+    text = text
+      .split(`        <div style={{ position: 'relative', padding: '4px 0 0 4px' }}>`)
+      .join(`        <div className="f19-stack-hub" style={{ position: 'relative', padding: '4px 0 0 4px' }}>`);
+
+    text = text
+      .split(
+        `          <div style={{
+            position: 'absolute',
+            right: 8,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 'calc(100% - 60px)',
+            maxWidth: 280,
+            zIndex: 2,
+          }}>`,
+      )
+      .join(
+        `          <div className="f19-stack-hub-inner" style={{
+            position: 'absolute',
+            right: 8,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 'calc(100% - 60px)',
+            maxWidth: 280,
+            zIndex: 2,
+          }}>`,
+      );
+
+    text = text
+      .split(
+        `      <div style={{
+        marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)',
+        display: 'flex', flexWrap: 'wrap', gap: 6,
+      }}>`,
+      )
+      .join(
+        `      <div className="f19-stack-footer" style={{
+        marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)',
+        display: 'flex', flexWrap: 'wrap', gap: 6,
+      }}>`,
+      );
+
+    const capOld = `function Capabilities({ items }) {
+  return (
+    <section style={{ padding: '96px 0' }}>
+      <div className="wrap" style={{ display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 64, alignItems: 'center' }}>`;
+    const capNew = `function Capabilities({ items }) {
+  return (
+    <section className="f19-capabilities" style={{ padding: '96px 0' }}>
+      <div className="wrap f19-cap-grid" style={{ display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 64, alignItems: 'center' }}>`;
+    if (text.includes(capOld)) {
+      text = text.split(capOld).join(capNew);
+    } else {
+      console.warn("patchStackDiagramMobile: could not add Capabilities class in", name);
+    }
+
+    fs.writeFileSync(full, text, "utf8");
+    console.log("Patched StackDiagram mobile layout in", name);
+    return;
+  }
+}
+
 function rewriteAriaUrlsInDir(dir) {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
@@ -428,6 +864,8 @@ function rewriteAriaUrlsInDir(dir) {
 }
 
 rewriteAriaUrlsInDir(outDir);
+patchHowItWorksCarousel(outDir);
+patchStackDiagramMobile(outDir);
 
 console.log("Wrote", outHtml);
 console.log("Assets:", Object.keys(manifest).length);

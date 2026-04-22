@@ -1,6 +1,6 @@
 // Mid-page sections: Metrics band, Tech Stack, Three Kinds, How it works, Capabilities
 
-const { useState: useStateS, useEffect: useEffectS } = React;
+const { useState: useStateS, useEffect: useEffectS, useRef: useRefS } = React;
 const { Reveal: RevealS, Counter: CounterS, ArrowRight: ArrowRightS, ARIA_URL: ARIA_URL_S } = window.F19UI;
 
 function MetricsBand({ metrics }) {
@@ -487,6 +487,7 @@ function StepMotion({ n, active }) {
 
 function HowItWorks({ steps }) {
   const [active, setActive] = useStateS(0);
+  const howCarouselRef = useRefS(null);
   // auto-advance
   useEffectS(() => {
     const t = setInterval(() => {
@@ -494,6 +495,25 @@ function HowItWorks({ steps }) {
     }, 3800);
     return () => clearInterval(t);
   }, [steps.length]);
+
+  useEffectS(() => {
+    const root = howCarouselRef.current;
+    if (!root || typeof window === "undefined") return;
+    if (window.innerWidth > 720) return;
+    const howEl = document.getElementById("how");
+    if (!howEl) return;
+    const r = howEl.getBoundingClientRect();
+    if (r.bottom <= 0 || r.top >= window.innerHeight) return;
+    const slide = root.children[active];
+    if (!slide) return;
+    requestAnimationFrame(() => {
+      slide.scrollIntoView({
+        inline: "center",
+        block: "nearest",
+        behavior: "smooth",
+      });
+    });
+  }, [active]);
 
   const progress = ((active + 0.5) / steps.length) * 100;
 
@@ -543,7 +563,7 @@ function HowItWorks({ steps }) {
             }}/>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
+          <div ref={howCarouselRef} className="f19-how-steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
             {steps.map((s, i) => {
               const isActive = i === active;
               const isDone = i < active;
@@ -727,6 +747,7 @@ function StackDiagram() {
 
   return (
     <div
+      className="f19-stack-diagram"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => { setPaused(false); setHovered(null); }}
       style={{
@@ -751,7 +772,7 @@ function StackDiagram() {
         </span>
       </div>
 
-      <div style={{
+      <div className="f19-stack-main" style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1.1fr',
         gap: 12,
@@ -759,14 +780,25 @@ function StackDiagram() {
         minHeight: 420,
       }}>
         {/* LEFT RAIL — platforms */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', zIndex: 2 }}>
+        <div className="f19-stack-rail" style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', zIndex: 2 }}>
           {STACK_PLATFORMS.map((pl, i) => {
             const isActive = i === shown;
             return (
               <button
+                type="button"
                 key={pl.key}
                 onMouseEnter={() => setHovered(i)}
-                onClick={() => { setHovered(i); setActive(i); }}
+                onClick={() => {
+                  setHovered(i);
+                  setActive(i);
+                  if (typeof window !== "undefined" && window.innerWidth <= 720) {
+                    const y = window.scrollY;
+                    requestAnimationFrame(() => {
+                      window.scrollTo(0, y);
+                      requestAnimationFrame(() => window.scrollTo(0, y));
+                    });
+                  }
+                }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 10,
                   padding: '10px 12px',
@@ -812,7 +844,7 @@ function StackDiagram() {
         </div>
 
         {/* RIGHT — hub + flowing detail */}
-        <div style={{ position: 'relative', padding: '4px 0 0 4px' }}>
+        <div className="f19-stack-hub" style={{ position: 'relative', padding: '4px 0 0 4px' }}>
           {/* Connector SVG — draws lines from each platform button to the hub */}
           <svg
             aria-hidden
@@ -865,7 +897,7 @@ function StackDiagram() {
           </svg>
 
           {/* Hub — the Facility19 agent receiving + response card */}
-          <div style={{
+          <div className="f19-stack-hub-inner" style={{
             position: 'absolute',
             right: 8,
             top: '50%',
@@ -940,7 +972,7 @@ function StackDiagram() {
       </div>
 
       {/* footer — quick list of other integration types */}
-      <div style={{
+      <div className="f19-stack-footer" style={{
         marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)',
         display: 'flex', flexWrap: 'wrap', gap: 6,
       }}>
@@ -964,8 +996,8 @@ function StackDiagram() {
 
 function Capabilities({ items }) {
   return (
-    <section style={{ padding: '96px 0' }}>
-      <div className="wrap" style={{ display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 64, alignItems: 'center' }}>
+    <section className="f19-capabilities" style={{ padding: '96px 0' }}>
+      <div className="wrap f19-cap-grid" style={{ display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 64, alignItems: 'center' }}>
         <RevealS>
           <div>
             <div className="section-eyebrow">Wired into your stack</div>
