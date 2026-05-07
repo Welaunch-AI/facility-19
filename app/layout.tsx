@@ -1,6 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import fs from "node:fs";
+import path from "node:path";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
+
+const zoominfoEmbed = fs
+  .readFileSync(
+    path.join(process.cwd(), "scripts", "zoominfo-embed.txt"),
+    "utf8",
+  )
+  .trim();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +49,12 @@ export default function RootLayout({
       lang="en"
       className={`facility-html ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full facility-shell">{children}</body>
+      <body className="min-h-full facility-shell">
+        <Script id="zoominfo-embed" strategy="beforeInteractive">
+          {zoominfoEmbed}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }

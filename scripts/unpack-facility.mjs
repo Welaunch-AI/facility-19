@@ -462,6 +462,19 @@ const responsivePatch = `<style id="facility-responsive-patch">
 
 html = html.replace(/<\/head>/i, `${responsivePatch}</head>`);
 
+const zoominfoPath = path.join(root, "scripts", "zoominfo-embed.txt");
+try {
+  const zoominfoBody = fs.readFileSync(zoominfoPath, "utf8").trim();
+  if (zoominfoBody) {
+    html = html.replace(
+      /<\/head>/i,
+      `  <script>${zoominfoBody}</script>\n</head>`,
+    );
+  }
+} catch {
+  console.warn("facility: could not read scripts/zoominfo-embed.txt (ZoomInfo skipped)");
+}
+
 const navFallbackScript = `<script id="facility-nav-fallback">
   (function () {
     function q(root, sel) { return root ? root.querySelector(sel) : null; }
