@@ -111,7 +111,7 @@ function BuildInHouse() {
           <div>
             <div className="section-eyebrow">Can't we just build this in-house?</div>
             <h2 className="display-l" style={{ marginTop: 18 }}>
-              You could. <span style={{ color: 'var(--slate)' }}>Or you could talk to Aria this afternoon.</span>
+              You could. <span style={{ color: 'var(--slate)' }}>Or you could talk to Aria.</span>
             </h2>
             <p style={{ color: 'var(--slate)', fontSize: 15, lineHeight: 1.6, marginTop: 20, maxWidth: 540 }}>
               To build this yourself you need an AI engineer, a systems integrator, a QA team, and someone to manage it 24/7, then do it all again when your stack changes. We already have the team.
