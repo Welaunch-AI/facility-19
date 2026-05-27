@@ -157,18 +157,18 @@ function Hero({ agents, variant = 'roster' }) {
         <div style={{ textAlign: 'center', maxWidth: 1100, margin: '0 auto' }}>
           <RevealH>
             <div className="section-eyebrow" style={{ marginBottom: 32, justifyContent: 'center', display: 'inline-flex' }}>
-              AI staffing for facility management
+              Your back office. Running on AI.
             </div>
           </RevealH>
           <RevealH delay={80}>
             <h1 className="display-xxl" style={{ marginTop: 8 }}>
-              The FM industry just got a new kind of worker.<br/>
+              The industry just got a new kind of worker.<br/>
               <span style={{ color: 'var(--brand-ink)' }}>Meet your AI team.</span>
             </h1>
           </RevealH>
           <RevealH delay={160}>
             <p className="lede" style={{ marginTop: 32, fontSize: 20, marginLeft: 'auto', marginRight: 'auto', textAlign: 'center' }}>
-              You have your staff. You have your contractors. Now meet the third kind of employee, one that works every shift, never burns out, and costs a fraction of a full-time hire.
+              You have your staff. You have your contractors. Now meet the third kind — one that handles dispatch, scheduling, compliance, and follow-up 24 hours a day, never calls in sick, and costs a fraction of a full-time hire.
             </p>
           </RevealH>
           <RevealH delay={240}>
@@ -220,9 +220,9 @@ function Hero({ agents, variant = 'roster' }) {
                 display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16,
                 padding: '20px 18px', background: 'var(--paper)', border: '1px solid var(--line)', borderRadius: 16,
               }}>
-                <HeroStat k="24/7" v="Monitored by our 40-person ops team" />
-                <HeroStat k="< 5 wks" v="From kickoff to production agent" />
-                <HeroStat k="20 to 30" v="Agents in a full-roster deployment" />
+                <HeroStat k="24/7" v="Your operation running without gaps" />
+                <HeroStat k="< 5 wks" v="From contract to live agents in your stack" />
+                <HeroStat k="3+ hrs/day" v="Typical admin time recaptured per dispatcher" />
               </div>
             </div>
           </RevealH>

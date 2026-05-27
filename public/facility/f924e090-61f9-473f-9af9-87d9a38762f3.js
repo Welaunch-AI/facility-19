@@ -1,7 +1,7 @@
 // Mid-page sections: Metrics band, Tech Stack, Three Kinds, How it works, Capabilities
 
 const { useState: useStateS, useEffect: useEffectS, useRef: useRefS } = React;
-const { Reveal: RevealS, Counter: CounterS, ArrowRight: ArrowRightS, ARIA_URL: ARIA_URL_S } = window.F19UI;
+const { Reveal: RevealS, Counter: CounterS, ArrowRight: ArrowRightS, ARIA_URL: ARIA_URL_S, BOOK_URL: BOOK_URL_S } = window.F19UI;
 
 function MetricsBand({ metrics }) {
   return (
@@ -299,6 +299,33 @@ function ThreeKinds() {
             </RevealS>
           ))}
         </div>
+        <RevealS delay={240}>
+          <div style={{
+            marginTop: 56, padding: '44px 48px', textAlign: 'center',
+            background: 'var(--paper-2)', border: '1px solid var(--line)', borderRadius: 16,
+          }}>
+            <h3 style={{
+              fontFamily: 'var(--f-display)', fontSize: 28, fontWeight: 500,
+              letterSpacing: '-0.02em', lineHeight: 1.2, maxWidth: 720, margin: '0 auto',
+            }}>
+              Ready to hire your third kind?
+            </h3>
+            <p style={{
+              marginTop: 16, fontSize: 17, lineHeight: 1.55, color: 'var(--slate)',
+              maxWidth: 640, marginLeft: 'auto', marginRight: 'auto',
+            }}>
+              Talk to Aria — she'll walk you through what an AI team looks like inside your operation.
+            </p>
+            <div style={{ marginTop: 28, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a className="btn btn-primary" href={ARIA_URL_S} style={{ height: 52, fontSize: 16 }}>
+                Talk to Aria <ArrowRightS />
+              </a>
+              <a className="btn btn-ghost" href={BOOK_URL_S} target="_blank" rel="noreferrer" style={{ height: 52, fontSize: 16 }}>
+                Book a 30-min walkthrough
+              </a>
+            </div>
+          </div>
+        </RevealS>
       </div>
     </section>
   );

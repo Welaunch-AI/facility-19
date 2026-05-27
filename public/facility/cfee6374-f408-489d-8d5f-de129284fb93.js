@@ -1,6 +1,119 @@
 // Cases, Testimonials, Pricing, Build-in-house, CTA
 
+const { useState: useStateP } = React;
 const { Reveal: RevealP, ArrowRight: ArrowRightP, ARIA_URL: ARIA_URL_P, BOOK_URL: BOOK_URL_P } = window.F19UI;
+
+const OPERATION_OPTIONS_P = [
+  { value: 'pest_control', label: 'Pest control' },
+  { value: 'fire_safety', label: 'Fire safety' },
+  { value: 'facility_management', label: 'Facility management (FM)' },
+  { value: 'other', label: 'Other' },
+];
+
+function industryPhraseFor(operationType) {
+  switch (operationType) {
+    case 'pest_control': return 'pest control companies';
+    case 'fire_safety': return 'fire safety companies';
+    case 'facility_management': return 'FM companies';
+    case 'other': return 'operations like yours';
+    default: return 'pest control / fire safety / FM companies';
+  }
+}
+
+function WalkthroughLeadForm() {
+  const [name, setName] = useStateP('');
+  const [email, setEmail] = useStateP('');
+  const [operationType, setOperationType] = useStateP('');
+  const [submitted, setSubmitted] = useStateP(false);
+  const [errorMsg, setErrorMsg] = useStateP('');
+
+  const industryPhrase = industryPhraseFor(operationType);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !operationType) {
+      setErrorMsg('Please fill in all fields.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setErrorMsg('Please enter a valid work email.');
+      return;
+    }
+    setErrorMsg('');
+    setSubmitted(true);
+  }
+
+  if (submitted) {
+    return (
+      <div className="f19-lead-form f19-lead-form--success">
+        <div className="f19-lead-form__success-icon" aria-hidden>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M3.5 9.5L7 13L14.5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <p className="f19-lead-form__success-text">
+          Thanks — we'll send you a walkthrough built for your operation.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form className="f19-lead-form" onSubmit={handleSubmit} noValidate>
+      <div className="f19-lead-form__eyebrow">Tailored walkthrough</div>
+      <h3 className="f19-lead-form__title">
+        Built for <em>{industryPhrase}</em>
+      </h3>
+      <p className="f19-lead-form__hint">
+        Not ready to talk to Aria? Leave your details and we'll send a walkthrough for your operation.
+      </p>
+      <div className="f19-lead-form__fields">
+        <label className="f19-lead-form__field">
+          <span className="f19-lead-form__label">Name</span>
+          <input
+            type="text"
+            name="name"
+            className="f19-lead-form__input"
+            autoComplete="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Jane Smith"
+          />
+        </label>
+        <label className="f19-lead-form__field">
+          <span className="f19-lead-form__label">Work email</span>
+          <input
+            type="email"
+            name="email"
+            className="f19-lead-form__input"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@company.com"
+          />
+        </label>
+        <label className="f19-lead-form__field">
+          <span className="f19-lead-form__label">Operation type</span>
+          <select
+            name="operationType"
+            className="f19-lead-form__select"
+            value={operationType}
+            onChange={(e) => setOperationType(e.target.value)}
+          >
+            <option value="" disabled>Select your industry</option>
+            {OPERATION_OPTIONS_P.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+      {errorMsg && <p className="f19-lead-form__error" role="alert">{errorMsg}</p>}
+      <button type="submit" className="btn btn-brand f19-lead-form__submit">
+        Send me the walkthrough <ArrowRightP />
+      </button>
+    </form>
+  );
+}
 
 function Cases({ cases }) {
   return (
@@ -285,7 +398,7 @@ function FinalCTA() {
     <section id="contact" style={{ padding: '120px 0 60px' }}>
       <div className="wrap">
         <RevealP>
-          <div style={{
+          <div className="f19-contact-card" style={{
             position: 'relative',
             padding: '80px 72px',
             borderRadius: 24,
@@ -297,29 +410,32 @@ function FinalCTA() {
               position: 'absolute', top: -150, right: -150, width: 500, height: 500, borderRadius: '50%',
               background: 'radial-gradient(closest-side, rgba(107,123,255,0.4), transparent 70%)',
             }} />
-            <div style={{ position: 'relative', maxWidth: 760 }}>
-              <div className="section-eyebrow" style={{ color: 'var(--brand)' }}>
-                Two minutes with Aria
+            <div className="f19-contact-card__body">
+              <div className="f19-contact-intro">
+                <div className="section-eyebrow" style={{ color: 'var(--brand)' }}>
+                  Two minutes with Aria
+                </div>
+                <h2 className="display-xl" style={{ marginTop: 20, lineHeight: 1.05 }}>
+                  Your team is good. <span style={{ color: 'var(--slate-2)' }}>Aria makes them unstoppable.</span>
+                </h2>
+                <p style={{ fontSize: 18, lineHeight: 1.55, marginTop: 24, color: 'rgba(255,255,255,0.76)', maxWidth: 520 }}>
+                  Tell Aria what is breaking in your operation. She matches you with the right agent, explains how it wires into your stack, and walks you through what it costs, right now.
+                </p>
+                <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
+                  <a className="btn btn-brand" href={ARIA_URL_P} style={{ height: 52, fontSize: 16 }}>
+                    Talk to Aria, free, no sign-up <ArrowRightP />
+                  </a>
+                  <a className="btn btn-ghost" href={BOOK_URL_P} target="_blank" rel="noreferrer" style={{ height: 52, fontSize: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>
+                    Book a 30-min call
+                  </a>
+                </div>
+                <div style={{ marginTop: 48, display: 'flex', gap: 32, flexWrap: 'wrap', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
+                  <span>· No pitch deck</span>
+                  <span>· No three-week waiting game</span>
+                  <span>· Walkthrough tailored to your industry</span>
+                </div>
               </div>
-              <h2 className="display-xl" style={{ marginTop: 20, lineHeight: 1.05 }}>
-                Your team is good. <span style={{ color: 'var(--slate-2)' }}>Aria makes them unstoppable.</span>
-              </h2>
-              <p style={{ fontSize: 18, lineHeight: 1.55, marginTop: 24, color: 'rgba(255,255,255,0.76)', maxWidth: 620 }}>
-                Tell Aria what is breaking in your operation. She matches you with the right agent, explains how it wires into your stack, and walks you through what it costs, right now.
-              </p>
-              <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
-                <a className="btn btn-brand" href={ARIA_URL_P} style={{ height: 52, fontSize: 16 }}>
-                  Talk to Aria, free, no sign-up <ArrowRightP />
-                </a>
-                <a className="btn btn-ghost" href={BOOK_URL_P} target="_blank" rel="noreferrer" style={{ height: 52, fontSize: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>
-                  Book a 30-min call
-                </a>
-              </div>
-              <div style={{ marginTop: 48, display: 'flex', gap: 32, flexWrap: 'wrap', color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>
-                <span>· No pitch deck</span>
-                <span>· No CRM form</span>
-                <span>· No three-week waiting game</span>
-              </div>
+              <WalkthroughLeadForm />
             </div>
           </div>
         </RevealP>
