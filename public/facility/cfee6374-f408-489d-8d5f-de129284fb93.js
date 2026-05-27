@@ -52,7 +52,7 @@ function WalkthroughLeadForm() {
           </svg>
         </div>
         <p className="f19-lead-form__success-text">
-          Thanks — we'll send you a walkthrough built for your operation.
+          Thanks, we'll send you a walkthrough built for your operation.
         </p>
       </div>
     );

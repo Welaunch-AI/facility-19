@@ -1,4 +1,4 @@
-// Hero — animated agent roster with facility backdrop + human/agent duo
+// Hero, animated agent roster with facility backdrop + human/agent duo
 
 const { useEffect: useEffectH, useState: useStateH } = React;
 const { Reveal: RevealH, ArrowRight: ArrowRightH, ARIA_URL: ARIA_URL_H, BOOK_URL: BOOK_URL_H } = window.F19UI;
@@ -168,7 +168,7 @@ function Hero({ agents, variant = 'roster' }) {
           </RevealH>
           <RevealH delay={160}>
             <p className="lede" style={{ marginTop: 32, fontSize: 20, marginLeft: 'auto', marginRight: 'auto', textAlign: 'center' }}>
-              You have your staff. You have your contractors. Now meet the third kind — one that handles dispatch, scheduling, compliance, and follow-up 24 hours a day, never calls in sick, and costs a fraction of a full-time hire.
+              You have your staff. You have your contractors. Now meet the third kind, one that handles dispatch, scheduling, compliance, and follow-up 24 hours a day, never calls in sick, and costs a fraction of a full-time hire.
             </p>
           </RevealH>
           <RevealH delay={240}>

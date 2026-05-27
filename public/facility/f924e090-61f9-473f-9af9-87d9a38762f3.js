@@ -52,7 +52,7 @@ function MetricsBand({ metrics }) {
   );
 }
 
-// Live map tracker — dispatcher's view
+// Live map tracker, dispatcher's view
 function DispatcherViz() {
   const trucks = [
     { id: 14, x: 82, y: 35, color: '#3D4DDB', tech: 'Ortiz' },
@@ -314,7 +314,7 @@ function ThreeKinds() {
               marginTop: 16, fontSize: 17, lineHeight: 1.55, color: 'var(--slate)',
               maxWidth: 640, marginLeft: 'auto', marginRight: 'auto',
             }}>
-              Talk to Aria — she'll walk you through what an AI team looks like inside your operation.
+              Talk to Aria, she'll walk you through what an AI team looks like inside your operation.
             </p>
             <div style={{ marginTop: 28, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <a className="btn btn-primary" href={ARIA_URL_S} style={{ height: 52, fontSize: 16 }}>
@@ -364,7 +364,7 @@ function ThreeKindsIcon({ kind, brand }) {
   );
 }
 
-// Motion graphic per step — small, looping animations that communicate the stage
+// Motion graphic per step, small, looping animations that communicate the stage
 function StepMotion({ n, active }) {
   const common = { width: '100%', height: '100%', viewBox: '0 0 160 120', preserveAspectRatio: 'xMidYMid meet' };
   if (n === '01') {
@@ -482,7 +482,7 @@ function StepMotion({ n, active }) {
       </svg>
     );
   }
-  // n === '04' — Expand roster: avatars popping into a constellation
+  // n === '04', Expand roster: avatars popping into a constellation
   return (
     <svg {...common}>
       {/* center hub */}
@@ -671,7 +671,7 @@ function HowItWorks({ steps }) {
   );
 }
 
-// Interactive stack diagram — left rail of platforms, center agent, right rail of outcomes
+// Interactive stack diagram, left rail of platforms, center agent, right rail of outcomes
 // Clicking/hovering a platform fires packets along the wire and updates the "now handling" card
 const STACK_PLATFORMS = [
   {
@@ -795,7 +795,7 @@ function StackDiagram() {
           </span>
         </div>
         <span className="mono" style={{ fontSize: 10, color: 'var(--slate)' }}>
-          {paused ? 'hover — paused' : `${shown + 1} / ${STACK_PLATFORMS.length}`}
+          {paused ? 'hover, paused' : `${shown + 1} / ${STACK_PLATFORMS.length}`}
         </span>
       </div>
 
@@ -806,7 +806,7 @@ function StackDiagram() {
         alignItems: 'stretch',
         minHeight: 420,
       }}>
-        {/* LEFT RAIL — platforms */}
+        {/* LEFT RAIL, platforms */}
         <div className="f19-stack-rail" style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative', zIndex: 2 }}>
           {STACK_PLATFORMS.map((pl, i) => {
             const isActive = i === shown;
@@ -870,9 +870,9 @@ function StackDiagram() {
           })}
         </div>
 
-        {/* RIGHT — hub + flowing detail */}
+        {/* RIGHT, hub + flowing detail */}
         <div className="f19-stack-hub" style={{ position: 'relative', padding: '4px 0 0 4px' }}>
-          {/* Connector SVG — draws lines from each platform button to the hub */}
+          {/* Connector SVG, draws lines from each platform button to the hub */}
           <svg
             aria-hidden
             viewBox="0 0 300 440"
@@ -890,7 +890,7 @@ function StackDiagram() {
               const rowH = 420 / STACK_PLATFORMS.length;
               const y = rowH * i + rowH / 2;
               const isActive = i === shown;
-              // curve from (0, y) to (230, 220) — hub center
+              // curve from (0, y) to (230, 220), hub center
               const d = `M 0 ${y} C 100 ${y}, 120 220, 230 220`;
               return (
                 <path
@@ -923,7 +923,7 @@ function StackDiagram() {
             })()}
           </svg>
 
-          {/* Hub — the Facility19 agent receiving + response card */}
+          {/* Hub, the Facility19 agent receiving + response card */}
           <div className="f19-stack-hub-inner" style={{
             position: 'absolute',
             right: 8,
@@ -998,7 +998,7 @@ function StackDiagram() {
         </div>
       </div>
 
-      {/* footer — quick list of other integration types */}
+      {/* footer, quick list of other integration types */}
       <div className="f19-stack-footer" style={{
         marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--line)',
         display: 'flex', flexWrap: 'wrap', gap: 6,
@@ -1032,13 +1032,13 @@ function Capabilities({ items }) {
               Every platform you run. <span style={{ color: 'var(--slate)' }}>One roster.</span>
             </h2>
             <p style={{ marginTop: 20, color: 'var(--slate)', fontSize: 15, lineHeight: 1.6 }}>
-              Your tech stack took a decade to build. We don't replace it. Our agents read and write to the platforms you already pay for — work orders, dispatch, GPS, accounting, telephony — and act inside them like any other teammate.
+              Your tech stack took a decade to build. We don't replace it. Our agents read and write to the platforms you already pay for, work orders, dispatch, GPS, accounting, telephony, and act inside them like any other teammate.
             </p>
             <div style={{ marginTop: 24, display: 'grid', gap: 10 }}>
               {[
                 ['Read', 'Pull work orders, routes, invoices, call transcripts'],
                 ['Decide', 'Triage, source vendors, resequence routes, flag invoices'],
-                ['Write back', 'Update records, dispatch, send messages — with an audit trail'],
+                ['Write back', 'Update records, dispatch, send messages, with an audit trail'],
               ].map(([t, d], i) => (
                 <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <div className="mono" style={{

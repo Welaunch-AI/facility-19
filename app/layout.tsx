@@ -25,7 +25,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Facility19, AI employees for facility management",
   description:
-    "Facility19 — AI employees for facility management. Enterprise-grade automation for your operations.",
+    "Facility19, AI employees for facility management. Enterprise-grade automation for your operations.",
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",

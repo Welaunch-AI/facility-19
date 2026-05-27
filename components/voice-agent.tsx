@@ -358,7 +358,7 @@ export function VoiceAgent() {
 export function VoiceAgentHeader() {
   return (
     <header className="mb-14 flex w-full flex-col items-center text-center">
-      <h1 className="sr-only">Facility19 — Talk to Aria</h1>
+      <h1 className="sr-only">Facility19 | Talk to Aria</h1>
       <div className="mb-8 flex items-center justify-center gap-3">
         <img
           src="/favicon.png"
