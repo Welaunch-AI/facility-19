@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 
+/** Default n8n webhook; override with N8N_WALKTHROUGH_WEBHOOK_URL if needed. */
+const DEFAULT_N8N_WALKTHROUGH_WEBHOOK =
+  "https://welaunch-kaif.app.n8n.cloud/webhook/02f72f5d-1202-4061-b498-e06bba4a7266";
+
 type LeadPayload = {
   fullName: string;
   workEmail: string;
@@ -31,13 +35,9 @@ function parsePayload(body: unknown): LeadPayload | null {
 }
 
 export async function POST(request: Request) {
-  const webhookUrl = process.env.N8N_WALKTHROUGH_WEBHOOK_URL?.trim();
-  if (!webhookUrl) {
-    return NextResponse.json(
-      { error: "Lead capture is not configured" },
-      { status: 503 },
-    );
-  }
+  const webhookUrl =
+    process.env.N8N_WALKTHROUGH_WEBHOOK_URL?.trim() ||
+    DEFAULT_N8N_WALKTHROUGH_WEBHOOK;
 
   let body: unknown;
   try {
