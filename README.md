@@ -16,6 +16,7 @@ Set these for local dev (`.env.local`) and in production (e.g. Vercel):
 |----------|----------|-------------|
 | `ELEVENLABS_API_KEY` | **Yes** | Your ElevenLabs API key. Used only on the server in the token route. |
 | `ELEVENLABS_AGENT_ID` | No | Agent ID for signed URL. Defaults to `agent_7701kpawyap3f3qt28vjpzexgmda` if unset. |
+| `N8N_WALKTHROUGH_WEBHOOK_URL` | **Yes** (homepage form) | n8n webhook URL for the homepage walkthrough lead form (`POST` JSON: `fullName`, `workEmail`, `industry`). |
 
 Without `ELEVENLABS_API_KEY`, `/api/elevenlabs-token` will fail and the voice page cannot connect.
 

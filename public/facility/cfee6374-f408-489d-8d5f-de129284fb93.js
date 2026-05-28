@@ -20,30 +20,57 @@ function industryPhraseFor(operationType) {
   }
 }
 
+function industryLabelFor(operationType) {
+  const match = OPERATION_OPTIONS_P.find((opt) => opt.value === operationType);
+  return match ? match.label : '';
+}
+
 function WalkthroughLeadForm() {
-  const [name, setName] = useStateP('');
-  const [email, setEmail] = useStateP('');
+  const [fullName, setFullName] = useStateP('');
+  const [workEmail, setWorkEmail] = useStateP('');
   const [operationType, setOperationType] = useStateP('');
-  const [submitted, setSubmitted] = useStateP(false);
+  const [status, setStatus] = useStateP('idle');
   const [errorMsg, setErrorMsg] = useStateP('');
 
   const industryPhrase = industryPhraseFor(operationType);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !operationType) {
+    if (!fullName.trim() || !workEmail.trim() || !operationType) {
       setErrorMsg('Please fill in all fields.');
+      setStatus('error');
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(workEmail.trim())) {
       setErrorMsg('Please enter a valid work email.');
+      setStatus('error');
       return;
     }
+    setStatus('loading');
     setErrorMsg('');
-    setSubmitted(true);
+    try {
+      const res = await fetch('/api/walkthrough-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: fullName.trim(),
+          workEmail: workEmail.trim(),
+          industry: industryLabelFor(operationType),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+      setStatus('success');
+      setFullName('');
+      setWorkEmail('');
+      setOperationType('');
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+    }
   }
 
-  if (submitted) {
+  if (status === 'success') {
     return (
       <div className="f19-lead-form f19-lead-form--success">
         <div className="f19-lead-form__success-icon" aria-hidden>
@@ -52,7 +79,7 @@ function WalkthroughLeadForm() {
           </svg>
         </div>
         <p className="f19-lead-form__success-text">
-          Thanks, we'll send you a walkthrough built for your operation.
+          Thanks! We got your details and will get back to you soon.
         </p>
       </div>
     );
@@ -69,14 +96,14 @@ function WalkthroughLeadForm() {
       </p>
       <div className="f19-lead-form__fields">
         <label className="f19-lead-form__field">
-          <span className="f19-lead-form__label">Name</span>
+          <span className="f19-lead-form__label">Full name</span>
           <input
             type="text"
-            name="name"
+            name="fullName"
             className="f19-lead-form__input"
             autoComplete="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             placeholder="Jane Smith"
           />
         </label>
@@ -84,16 +111,16 @@ function WalkthroughLeadForm() {
           <span className="f19-lead-form__label">Work email</span>
           <input
             type="email"
-            name="email"
+            name="workEmail"
             className="f19-lead-form__input"
             autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={workEmail}
+            onChange={(e) => setWorkEmail(e.target.value)}
             placeholder="you@company.com"
           />
         </label>
         <label className="f19-lead-form__field">
-          <span className="f19-lead-form__label">Operation type</span>
+          <span className="f19-lead-form__label">Industry</span>
           <select
             name="operationType"
             className="f19-lead-form__select"
@@ -108,8 +135,13 @@ function WalkthroughLeadForm() {
         </label>
       </div>
       {errorMsg && <p className="f19-lead-form__error" role="alert">{errorMsg}</p>}
-      <button type="submit" className="btn btn-brand f19-lead-form__submit">
-        Send me the walkthrough <ArrowRightP />
+      <button
+        type="submit"
+        className="btn btn-brand f19-lead-form__submit"
+        disabled={status === 'loading'}
+        style={{ opacity: status === 'loading' ? 0.7 : 1 }}
+      >
+        {status === 'loading' ? 'Sending…' : 'Send me the walkthrough'} <ArrowRightP />
       </button>
     </form>
   );
