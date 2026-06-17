@@ -475,6 +475,19 @@ try {
   console.warn("facility: could not read scripts/zoominfo-embed.txt (ZoomInfo skipped)");
 }
 
+const reb2bPath = path.join(root, "scripts", "reb2b-embed.txt");
+try {
+  const reb2bBody = fs.readFileSync(reb2bPath, "utf8").trim();
+  if (reb2bBody) {
+    html = html.replace(
+      /<\/head>/i,
+      `  <script>${reb2bBody}</script>\n</head>`,
+    );
+  }
+} catch {
+  console.warn("facility: could not read scripts/reb2b-embed.txt (reb2b skipped)");
+}
+
 const navFallbackScript = `<script id="facility-nav-fallback">
   (function () {
     function q(root, sel) { return root ? root.querySelector(sel) : null; }

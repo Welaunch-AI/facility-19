@@ -12,6 +12,13 @@ const zoominfoEmbed = fs
   )
   .trim();
 
+const reb2bEmbed = fs
+  .readFileSync(
+    path.join(process.cwd(), "scripts", "reb2b-embed.txt"),
+    "utf8",
+  )
+  .trim();
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -52,6 +59,9 @@ export default function RootLayout({
       <body className="min-h-full facility-shell">
         <Script id="zoominfo-embed" strategy="beforeInteractive">
           {zoominfoEmbed}
+        </Script>
+        <Script id="reb2b-embed" strategy="beforeInteractive">
+          {reb2bEmbed}
         </Script>
         {children}
       </body>
