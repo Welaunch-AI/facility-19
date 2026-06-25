@@ -48,6 +48,7 @@ function Nav() {
           <a href="#proof">Proof</a>
           <a href="#pricing">Pricing</a>
           <a href="#contact">Contact</a>
+          <a href="/partners">Partners</a>
         </div>
         <div className="nav-cta">
           <a className="btn btn-ghost nav-cta-book" href={BOOK_URL} target="_blank" rel="noreferrer" style={{ height: 40 }}>Book a call</a>
@@ -73,6 +74,7 @@ function Nav() {
           <a href="#proof" onClick={close}>Proof</a>
           <a href="#pricing" onClick={close}>Pricing</a>
           <a href="#contact" onClick={close}>Contact</a>
+          <a href="/partners" onClick={close}>Partners</a>
           <div className="nav-mobile-ctas">
             <a className="btn btn-ghost" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
             <a className="btn btn-primary" href={ARIA_URL} onClick={close}>
@@ -107,6 +109,8 @@ function Footer() {
         <FooterCol title="Company" items={[
           { l: 'Proof', h: '#proof' },
           { l: 'Contact', h: '#contact' },
+          { l: 'Privacy Policy', h: '/privacy' },
+          { l: 'Terms of Service', h: '/terms' },
         ]}/>
         <FooterCol title="Get started" items={[
           { l: 'Meet Aria →', h: ARIA_URL, ext: false },

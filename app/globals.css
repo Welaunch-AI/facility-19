@@ -40,10 +40,27 @@ body.facility-shell {
 }
 
 /* Allow scroll on Talk-to-Aria route (root layout uses overflow:hidden for legacy shell). */
+html.facility-html.aria-voice-page,
 body.facility-shell.aria-voice-page {
   overflow: auto;
   overscroll-behavior: auto;
+  height: auto;
+  min-height: 100%;
   background: #ffffff;
+}
+
+/* Allow scroll on legal pages (privacy, terms) and partners. */
+html.facility-html.privacy-page,
+html.facility-html.terms-page,
+html.facility-html.partners-page,
+body.facility-shell.privacy-page,
+body.facility-shell.terms-page,
+body.facility-shell.partners-page {
+  overflow: auto;
+  overscroll-behavior: auto;
+  height: auto;
+  min-height: 100%;
+  background: #fafaf8;
 }
 
 /* Talk-to-Aria: soft “Lovable-style” orb rings behind the hang-up control */

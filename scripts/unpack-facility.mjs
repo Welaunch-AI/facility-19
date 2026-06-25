@@ -888,6 +888,20 @@ function rewriteAriaUrlsInDir(dir) {
         "{ l: 'Meet Aria →', h: ARIA_URL, ext: false }",
       );
     }
+    if (name.endsWith(".js") && name.includes("53a7d36a")) {
+      text = text.replace(
+        `<a href="#contact">Contact</a>\n        </div>`,
+        `<a href="#contact">Contact</a>\n          <a href="/partners">Partners</a>\n        </div>`,
+      );
+      text = text.replace(
+        `<a href="#contact" onClick={close}>Contact</a>\n          <div className="nav-mobile-ctas">`,
+        `<a href="#contact" onClick={close}>Contact</a>\n          <a href="/partners" onClick={close}>Partners</a>\n          <div className="nav-mobile-ctas">`,
+      );
+      text = text.replace(
+        `{ l: 'Contact', h: '#contact' },\n        ]}/>`,
+        `{ l: 'Contact', h: '#contact' },\n          { l: 'Privacy Policy', h: '/privacy' },\n          { l: 'Terms of Service', h: '/terms' },\n        ]}/>`,
+      );
+    }
     if (name.endsWith(".js") && name.includes("cfee6374")) {
       text = text.replace(
         /href=\{t\.href\}\s+target="_blank"\s+rel="noreferrer"/,

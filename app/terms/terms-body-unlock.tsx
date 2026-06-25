@@ -2,9 +2,9 @@
 
 import { useLayoutEffect } from "react";
 
-const CLASS_NAME = "aria-voice-page";
+const CLASS_NAME = "terms-page";
 
-export function TalkBodyUnlock() {
+export function TermsBodyUnlock() {
   useLayoutEffect(() => {
     document.documentElement.classList.add(CLASS_NAME);
     document.body.classList.add(CLASS_NAME);
