@@ -11,7 +11,6 @@ const zoominfoEmbed = fs
     "utf8",
   )
   .trim();
-
 const reb2bEmbed = fs
   .readFileSync(
     path.join(process.cwd(), "scripts", "reb2b-embed.txt"),
@@ -23,7 +22,6 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -63,6 +61,32 @@ export default function RootLayout({
         <Script id="reb2b-embed" strategy="beforeInteractive">
           {reb2bEmbed}
         </Script>
+
+        {/* Google Analytics 4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-M3SYHBZ20X"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-M3SYHBZ20X');
+          `}
+        </Script>
+
+        {/* Microsoft Clarity */}
+        <Script id="ms-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "xc6pea3fjg");
+          `}
+        </Script>
+
         {children}
       </body>
     </html>
