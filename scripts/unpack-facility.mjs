@@ -488,6 +488,24 @@ try {
   console.warn("facility: could not read scripts/reb2b-embed.txt (reb2b skipped)");
 }
 
+const metaPixelPath = path.join(root, "scripts", "meta-pixel-embed.txt");
+const metaPixelNoscriptPath = path.join(root, "scripts", "meta-pixel-noscript.html");
+try {
+  const metaPixelBody = fs.readFileSync(metaPixelPath, "utf8").trim();
+  if (metaPixelBody) {
+    html = html.replace(
+      /<\/head>/i,
+      `  <script>${metaPixelBody}</script>\n</head>`,
+    );
+  }
+  const metaPixelNoscript = fs.readFileSync(metaPixelNoscriptPath, "utf8").trim();
+  if (metaPixelNoscript) {
+    html = html.replace(/<body>\s*/i, `<body>\n  ${metaPixelNoscript}\n  `);
+  }
+} catch {
+  console.warn("facility: could not read Meta Pixel embed files (Meta Pixel skipped)");
+}
+
 const navFallbackScript = `<script id="facility-nav-fallback">
   (function () {
     function q(root, sel) { return root ? root.querySelector(sel) : null; }

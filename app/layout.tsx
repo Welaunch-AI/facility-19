@@ -19,6 +19,13 @@ const reb2bEmbed = fs
   )
   .trim();
 
+const metaPixelEmbed = fs
+  .readFileSync(
+    path.join(process.cwd(), "scripts", "meta-pixel-embed.txt"),
+    "utf8",
+  )
+  .trim();
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -57,11 +64,23 @@ export default function RootLayout({
       className={`facility-html ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full facility-shell">
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=1020950010475993&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
         <Script id="zoominfo-embed" strategy="beforeInteractive">
           {zoominfoEmbed}
         </Script>
         <Script id="reb2b-embed" strategy="beforeInteractive">
           {reb2bEmbed}
+        </Script>
+        <Script id="meta-pixel" strategy="afterInteractive">
+          {metaPixelEmbed}
         </Script>
         {children}
       </body>
