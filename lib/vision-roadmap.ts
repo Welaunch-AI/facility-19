@@ -457,7 +457,9 @@ export function normalizeVisionRoadmap(
 ): VisionRoadmapDocument {
   const selectedAgents = selectedIds
     .map((id) => getCatalogAgent(id))
-    .filter(Boolean);
+    .filter((agent): agent is NonNullable<ReturnType<typeof getCatalogAgent>> =>
+      Boolean(agent),
+    );
   const selectedAgentNames = selectedAgents.map((agent) => agent.name);
   const goal = bp.sixty_day_goal?.trim() || "improve operational performance";
   const researchSummary = bp.research?.summary?.trim();

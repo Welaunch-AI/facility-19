@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { downloadRoadmapPdf } from "@/lib/download-roadmap-pdf";
 import type { JourneyStage } from "@/lib/workspaces";
 
 type WorkspaceNavProps = {
   workspaceId: string;
   showPdf?: boolean;
+  onPdfError?: (message: string | null) => void;
 };
 
 const NAV_LINKS = (base: string) =>
@@ -29,8 +32,13 @@ function navClassName(active: boolean) {
   return `app-shell-nav-pill ${active ? "is-active" : "text-[#5E6472]"}`;
 }
 
-export function WorkspaceNav({ workspaceId, showPdf = true }: WorkspaceNavProps) {
+export function WorkspaceNav({
+  workspaceId,
+  showPdf = true,
+  onPdfError,
+}: WorkspaceNavProps) {
   const pathname = usePathname();
+  const [pdfLoading, setPdfLoading] = useState(false);
   const base = `/workspaces/${workspaceId}`;
   const links = NAV_LINKS(base);
 
@@ -43,20 +51,15 @@ export function WorkspaceNav({ workspaceId, showPdf = true }: WorkspaceNavProps)
   }
 
   async function downloadPdf() {
-    const res = await fetch(`/api/workspaces/${workspaceId}/roadmap/pdf`);
-    if (!res.ok) return;
-
-    const blob = await res.blob();
-    const disposition = res.headers.get("Content-Disposition") ?? "";
-    const match = disposition.match(/filename="([^"]+)"/);
-    const filename = match?.[1] ?? "vision-roadmap.pdf";
-
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    anchor.click();
-    URL.revokeObjectURL(url);
+    onPdfError?.(null);
+    setPdfLoading(true);
+    try {
+      await downloadRoadmapPdf(workspaceId);
+    } catch (err) {
+      onPdfError?.(err instanceof Error ? err.message : "Could not download PDF.");
+    } finally {
+      setPdfLoading(false);
+    }
   }
 
   return (
@@ -91,9 +94,10 @@ export function WorkspaceNav({ workspaceId, showPdf = true }: WorkspaceNavProps)
           <button
             type="button"
             onClick={() => void downloadPdf()}
+            disabled={pdfLoading}
             className="app-shell-nav-action"
           >
-            Download PDF
+            {pdfLoading ? "Preparing PDF…" : "Download PDF"}
           </button>
         ) : null}
       </div>

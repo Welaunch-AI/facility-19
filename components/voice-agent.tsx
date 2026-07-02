@@ -1,125 +1,107 @@
 "use client";
 
-import { useConversation } from "@elevenlabs/react";
-import { PhoneOff } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
-import { LoadingInline } from "@/components/loading-spinner";
+import { ConversationProvider, useConversation } from "@elevenlabs/react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Mic, MicOff, Pause, Play, X } from "lucide-react";
+import { Orb } from "@/components/aria/Orb";
+import { ChatPanel, type AriaMessage } from "@/components/aria/ChatPanel";
+import { AriaHeader } from "@/components/aria/Header";
+import { AriaFooter } from "@/components/aria/Footer";
 
 function cn(...parts: (string | false | undefined)[]) {
   return parts.filter(Boolean).join(" ");
 }
 
-function MicIcon({ className }: { className?: string }) {
+function ControlButton({
+  children,
+  label,
+  onClick,
+  active,
+  activeColor,
+}: {
+  children: React.ReactNode;
+  label: string;
+  onClick: () => void;
+  active?: boolean;
+  activeColor?: string;
+}) {
   return (
-    <svg
-      className={className}
-      width="48"
-      height="48"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
+    <button
+      onClick={onClick}
+      title={label}
+      aria-label={label}
+      className="group relative flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-600 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:text-slate-900"
+      style={
+        active
+          ? {
+              background: activeColor ?? "#2b6dff",
+              color: "white",
+              boxShadow: `0 10px 24px -10px ${activeColor ?? "#2b6dff"}80`,
+            }
+          : undefined
+      }
     >
-      <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Z" />
-      <path d="M19 10v1a7 7 0 0 1-14 0v-1" />
-      <path d="M12 18v3" />
-    </svg>
+      {children}
+    </button>
   );
 }
 
-
-function Volume2Icon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M11 5 6 9H2v6h4l5 4V5Z" />
-      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-    </svg>
-  );
-}
-
-function VolumeXIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M11 5 6 9H2v6h4l5 4V5Z" />
-      <path d="m22 9-6 6" />
-      <path d="m16 9 6 6" />
-    </svg>
-  );
-}
-
-
-export function VoiceAgent() {
+function AriaConsoleInner() {
+  const [messages, setMessages] = useState<AriaMessage[]>([]);
+  const [paused, setPaused] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [volume, setVolume] = useState(0.8);
-  const [muted, setMuted] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const idRef = useRef(0);
 
-  const clearConnectTimeout = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-  };
+  const pushMessage = useCallback((role: "aria" | "user", text: string) => {
+    idRef.current += 1;
+    setMessages((prev) => [...prev, { id: `m${idRef.current}`, role, text }]);
+  }, []);
 
   const conversation = useConversation({
     onConnect: () => {
-      clearConnectTimeout();
       setIsConnecting(false);
       setError(null);
     },
     onDisconnect: () => {
-      clearConnectTimeout();
       setIsConnecting(false);
+      setPaused(false);
     },
-    onError: (err) => {
-      console.error("Conversation error:", err);
-      clearConnectTimeout();
-      setError(
-        typeof err === "string" ? err : "Connection error. Please try again.",
-      );
+    onMessage: ({ message, source }: { message: string; source: "user" | "ai" }) => {
+      pushMessage(source === "ai" ? "aria" : "user", message);
+    },
+    onError: (err: unknown) => {
+      console.error("[Aria]", err);
       setIsConnecting(false);
+      setError(typeof err === "string" ? err : "Voice session error. Please try again.");
     },
   });
 
-  const isConnected = conversation.status === "connected";
+  const connected = conversation.status === "connected";
   const isSpeaking = conversation.isSpeaking;
+  const isMuted = conversation.isMuted ?? false;
+
+  const orbState: "idle" | "listening" | "speaking" | "paused" = useMemo(() => {
+    if (!connected) return "idle";
+    if (paused) return "paused";
+    if (isSpeaking) return "speaking";
+    return "listening";
+  }, [connected, paused, isSpeaking]);
+
+  const statusLine = useMemo(() => {
+    if (!connected && !isConnecting) return "Speak — Aria is ready.";
+    if (isConnecting) return "Connecting…";
+    if (paused) return "Paused";
+    if (isSpeaking) return "Aria is speaking…";
+    return "Aria is listening…";
+  }, [connected, isConnecting, paused, isSpeaking]);
+
+  const typing = connected && isSpeaking && messages[messages.length - 1]?.role !== "aria";
 
   const start = useCallback(async () => {
+    if (isConnecting || connected) return;
     setError(null);
     setIsConnecting(true);
-
-    timeoutRef.current = setTimeout(() => {
-      setError("Connection timed out. Please try again.");
-      setIsConnecting(false);
-      void conversation.endSession();
-    }, 10000);
 
     try {
       try {
@@ -129,7 +111,7 @@ export function VoiceAgent() {
           });
           if (status.state === "denied") {
             throw new Error(
-              "Microphone is blocked. Enable it in your browser settings (or open the published site directly).",
+              "Microphone is blocked. Enable it in your browser settings.",
             );
           }
         }
@@ -166,13 +148,12 @@ export function VoiceAgent() {
         connectionType: "websocket",
       });
     } catch (err) {
-      clearConnectTimeout();
+      setIsConnecting(false);
       console.error("Start failed:", err);
       let msg = "Failed to start. Check your microphone and try again.";
       if (err instanceof Error) {
         if (err.name === "NotAllowedError") {
-          msg =
-            "Microphone access denied. Allow it in your browser settings, then reload.";
+          msg = "Microphone access denied. Allow it in your browser settings, then reload.";
         } else if (err.name === "NotFoundError") {
           msg = "No microphone found.";
         } else if (err.name === "NotReadableError") {
@@ -182,212 +163,185 @@ export function VoiceAgent() {
         }
       }
       setError(msg);
-      setIsConnecting(false);
     }
-  }, [conversation]);
+  }, [conversation, connected, isConnecting]);
 
-  const stop = useCallback(async () => {
-    clearConnectTimeout();
+  const end = useCallback(async () => {
     await conversation.endSession();
+    setPaused(false);
   }, [conversation]);
 
-  const handleVolumeChange = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const v = Number(e.target.value) / 100;
-      setVolume(v);
-      setMuted(v === 0);
-      try {
-        await conversation.setVolume({ volume: v });
-      } catch {
-        /* ignore */
-      }
-    },
-    [conversation],
-  );
-
-  const toggleMute = useCallback(async () => {
-    const next = !muted;
-    setMuted(next);
+  const toggleMute = useCallback(() => {
     try {
-      await conversation.setVolume({ volume: next ? 0 : volume || 0.8 });
-    } catch {
-      /* ignore */
+      conversation.setMuted(!isMuted);
+    } catch (e) {
+      console.error(e);
     }
-  }, [muted, volume, conversation]);
+  }, [conversation, isMuted]);
 
-  const statusLabel = isConnecting ? null : isConnected
-      ? isSpeaking
-        ? "Agent speaking"
-        : "Listening"
-      : "Disconnected";
-
-  const statusDotClass = isConnecting
-    ? "hidden"
-    : isConnected
-      ? isSpeaking
-        ? "bg-[#2B6FD6] animate-pulse scale-110"
-        : "bg-[#2B6FD6] animate-pulse"
-      : "bg-[#8EC5FF]";
-
-  const statusTextClass = "text-[15px] font-medium text-[#2B6FD6]";
-  const orbStyle = isConnected
-    ? {
-        background:
-          "linear-gradient(180deg, #5c6573 0%, #4b5563 52%, #374151 100%)",
-        boxShadow: isSpeaking
-          ? "0 20px 56px -12px rgba(59,130,246,0.2), 0 16px 48px -14px rgba(55,65,81,0.5), inset 0 1px 0 rgba(255,255,255,0.16)"
-          : "0 16px 48px -14px rgba(55,65,81,0.55), 0 8px 20px -8px rgba(30,41,59,0.28), inset 0 1px 0 rgba(255,255,255,0.14)",
+  const togglePause = useCallback(() => {
+    try {
+      if (paused) {
+        conversation.setMuted(false);
+        setPaused(false);
+      } else {
+        conversation.setMuted(true);
+        setPaused(true);
       }
-    : {
-        background:
-          "linear-gradient(135deg, #4B5563 0%, #3F4A56 42%, #1E293B 100%)",
-        boxShadow: "0 12px 28px rgba(15,23,42,0.22), 0 2px 6px rgba(15,23,42,0.08)",
-      };
+    } catch (e) {
+      console.error(e);
+    }
+  }, [conversation, paused]);
+
+  useEffect(() => {
+    return () => {
+      if (conversation.status === "connected") {
+        void conversation.endSession();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div className="flex w-full flex-col items-center gap-12">
-      <div className="relative flex h-[19rem] w-[19rem] items-center justify-center">
-        {isConnected && (
-          <div
-            className={cn(
-              "pointer-events-none absolute inset-[-2.75rem] rounded-full transition-[opacity,transform] duration-500",
-              isSpeaking && "motion-safe:[animation:voice-orb-glow_2.8s_ease-in-out_infinite]",
-            )}
-            aria-hidden
-            style={{
-              background:
-                "radial-gradient(circle at center, rgba(147,197,253,0.5) 0%, rgba(219,234,254,0.22) 40%, transparent 72%)",
-              opacity: isSpeaking ? 1 : 0.85,
-            }}
-          />
-        )}
-        {isConnected && (
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
-            <div
-              className="absolute inset-0 m-auto h-[12.25rem] w-[12.25rem] rounded-full border border-sky-300/40 motion-safe:[animation:voice-orb-ring_3s_ease-in-out_infinite]"
-            />
-            <div
-              className="absolute inset-0 m-auto h-[14.25rem] w-[14.25rem] rounded-full border border-sky-200/35 motion-safe:[animation:voice-orb-ring_3.4s_ease-in-out_infinite] [animation-delay:0.35s]"
-            />
-            <div
-              className="absolute inset-0 m-auto h-[16.25rem] w-[16.25rem] rounded-full border border-sky-100/28 motion-safe:[animation:voice-orb-ring_3.8s_ease-in-out_infinite] [animation-delay:0.7s]"
-            />
-          </div>
-        )}
-        <button
-          type="button"
-          onClick={isConnected ? stop : start}
-          disabled={isConnecting}
-          aria-label={isConnected ? "End conversation" : "Start conversation"}
-          className={cn(
-            "relative z-10 flex h-44 w-44 items-center justify-center rounded-full text-white transition-[transform,box-shadow] duration-300",
-            "border border-white/15",
-            "focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#2B6FD6]/35 focus-visible:ring-offset-[3px] focus-visible:ring-offset-white",
-            "enabled:hover:scale-[1.02] enabled:active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-85",
-            isConnected && isSpeaking && "scale-[1.03]",
-          )}
-          style={orbStyle}
-        >
-          {isConnecting ? (
-            <div
-              className="h-11 w-11 rounded-full border-[3px] border-white/25 border-t-white animate-spin"
-              aria-hidden
-            />
-          ) : isConnected ? (
-            <PhoneOff
-              aria-hidden
-              size={52}
-              strokeWidth={2.1}
-              className="text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]"
-            />
-          ) : (
-            <MicIcon className="text-white" />
-          )}
-        </button>
-      </div>
-
-      <div className="flex flex-col items-center gap-2.5 px-1">
-        <div className="flex items-center gap-2.5">
-          {isConnecting ? (
-            <LoadingInline
-              size="sm"
-              label="Connecting"
-              className={statusTextClass}
-            />
-          ) : (
-            <>
-              <span
-                className={cn("h-2 w-2 shrink-0 rounded-full transition-colors", statusDotClass)}
-                aria-hidden
-              />
-              <p className={statusTextClass}>{statusLabel}</p>
-            </>
-          )}
-        </div>
-        <p className="text-center text-sm leading-snug text-[#8B9BB8]">
-          {isConnecting
-            ? null
-            : isConnected
-              ? "Tap the button to end the call"
-              : "Tap the mic to start"}
-        </p>
-        {error && (
-          <p className="max-w-[280px] text-center text-sm leading-snug text-[#C53030]">
-            {error}
-          </p>
-        )}
-      </div>
-
-      {isConnected && (
-        <div className="flex w-full max-w-[280px] items-center gap-3 border-t border-slate-200/90 pt-8">
+    <div className="aria-bg relative flex min-h-screen flex-col">
+      {/* Header */}
+      <header className="flex items-center justify-between px-6 pt-6 sm:px-10">
+        <AriaHeader />
+        {connected && (
           <button
-            type="button"
-            onClick={() => void toggleMute()}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition-colors hover:bg-slate-50"
-            aria-label="Toggle mute"
+            onClick={() => void end()}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-slate-500 shadow-sm ring-1 ring-slate-200 transition hover:text-slate-800"
+            aria-label="End session"
           >
-            {muted ? <VolumeXIcon /> : <Volume2Icon />}
+            <X className="h-4 w-4" />
           </button>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={1}
-            value={muted ? 0 : Math.round(volume * 100)}
-            onChange={(e) => void handleVolumeChange(e)}
-            className="h-2 flex-1 cursor-pointer accent-[#2B6FD6]"
-            aria-label="Volume"
-          />
+        )}
+      </header>
+
+      {/* Main */}
+      <main className="relative flex flex-1 items-center justify-center px-6 py-8 sm:px-10">
+        <div
+          className={cn(
+            "grid w-full max-w-7xl gap-8 transition-all duration-500 ease-out",
+            connected
+              ? "grid-cols-1 md:grid-cols-[1fr_minmax(0,520px)] lg:grid-cols-[1fr_minmax(0,600px)]"
+              : "grid-cols-1",
+          )}
+        >
+          {/* Orb column */}
+          <div className="flex flex-col items-center justify-center gap-8">
+            <Orb state={orbState} size={connected ? 320 : 380} />
+            <div className="flex flex-col items-center gap-3 text-center">
+              <div className="font-serif-display text-2xl font-medium text-slate-800 sm:text-[28px]">
+                {statusLine}
+              </div>
+              {!connected && !isConnecting && (
+                <div className="text-[10px] font-medium uppercase tracking-[0.28em] text-slate-400">
+                  Voice Intelligence · Always On
+                </div>
+              )}
+              {error && (
+                <p className="max-w-[300px] text-center text-sm leading-snug text-red-600">
+                  {error}
+                </p>
+              )}
+              {!connected ? (
+                <button
+                  onClick={() => void start()}
+                  disabled={isConnecting}
+                  className="mt-2 inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-medium text-[#2b6dff] shadow-[0_10px_30px_-10px_rgba(43,109,255,0.4)] ring-1 ring-slate-100 transition hover:-translate-y-0.5 hover:shadow-[0_14px_36px_-10px_rgba(43,109,255,0.5)] disabled:opacity-60"
+                >
+                  <Play className="h-4 w-4 fill-current" />
+                  {isConnecting ? "Connecting…" : "Start"}
+                </button>
+              ) : (
+                <div className="mt-2 flex items-center gap-3">
+                  <ControlButton
+                    label={isMuted ? "Unmute" : "Mute"}
+                    active={isMuted}
+                    activeColor="#ff5a3c"
+                    onClick={toggleMute}
+                  >
+                    {isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  </ControlButton>
+                  <ControlButton
+                    label={paused ? "Resume" : "Pause"}
+                    active={paused}
+                    onClick={togglePause}
+                  >
+                    {paused ? (
+                      <Play className="h-4 w-4 fill-current" />
+                    ) : (
+                      <Pause className="h-4 w-4 fill-current" />
+                    )}
+                  </ControlButton>
+                  <ControlButton label="End" onClick={() => void end()} activeColor="#ff5a3c" active>
+                    <X className="h-4 w-4" />
+                  </ControlButton>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Chat panel */}
+          {connected && (
+            <div className="h-[520px] animate-in slide-in-from-right-8 fade-in duration-500 md:h-[600px]">
+              <ChatPanel
+                messages={messages}
+                typing={typing}
+                disabled={!connected}
+                onSend={(text) => {
+                  pushMessage("user", text);
+                  try { (conversation as unknown as { sendUserMessage: (t: string) => void }).sendUserMessage(text); } catch { /* noop */ }
+                }}
+                onActivity={() => {
+                  try { (conversation as unknown as { sendUserActivity: () => void }).sendUserActivity(); } catch { /* noop */ }
+                }}
+              />
+            </div>
+          )}
         </div>
-      )}
+      </main>
+
+      {/* Footer */}
+      <footer className="px-6 pb-6 sm:px-10">
+        <AriaFooter connected={connected} />
+      </footer>
+
+      {/* Back to website link */}
+      <a
+        href="/"
+        className="fixed bottom-6 left-6 z-40 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:text-slate-900 hover:shadow-md sm:left-10"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M19 12H5M12 5l-7 7 7 7" />
+        </svg>
+        Back to website
+      </a>
     </div>
   );
 }
 
-export function VoiceAgentHeader() {
+export function VoiceAgent() {
+  const [mounted, setMounted] = useState(false);
+  const [, forceRender] = useState(0);
+
+  useEffect(() => {
+    setMounted(true);
+    forceRender((n) => n + 1);
+  }, []);
+
+  if (!mounted) {
+    return <div className="aria-bg min-h-screen" />;
+  }
+
   return (
-    <header className="mb-14 flex w-full flex-col items-center text-center">
-      <h1 className="sr-only">Facility19 | Talk to Aria</h1>
-      <div className="mb-8 flex items-center justify-center gap-3">
-        <img
-          src="/favicon.png"
-          alt=""
-          className="h-12 w-12 shrink-0 object-contain md:h-14 md:w-14"
-          width={56}
-          height={56}
-        />
-        <div className="flex items-baseline gap-0.5 leading-none">
-          <span className="text-[1.65rem] font-bold tracking-tight text-[#0A0A0B] md:text-[1.85rem]">
-            Facility
-          </span>
-          <span className="text-[1.65rem] font-semibold tracking-tight text-[#2B6FD6] md:text-[1.85rem]">
-            19
-          </span>
-        </div>
-      </div>
-      <p className="max-w-[340px] text-[0.95rem] font-medium leading-relaxed text-[#5A6D86] md:text-base">
-        Tap the mic to start a real-time voice conversation.
-      </p>
-    </header>
+    <ConversationProvider>
+      <AriaConsoleInner />
+    </ConversationProvider>
   );
+}
+
+export function VoiceAgentHeader() {
+  return null;
 }

@@ -7,28 +7,11 @@ import { CustomAgentsCta } from "@/components/custom-agents-cta";
 import { LoadingPanel } from "@/components/loading-spinner";
 import { VisionRoadmapDocumentView } from "@/components/vision-roadmap-document";
 import { WorkspaceNav } from "@/components/workspace-nav";
+import { downloadRoadmapPdf } from "@/lib/download-roadmap-pdf";
 import {
-  hasVisionRoadmapDoc,
   VISION_ROADMAP_VERSION,
   type VisionRoadmapDocument,
 } from "@/lib/vision-roadmap";
-
-async function downloadRoadmapPdf(workspaceId: string) {
-  const res = await fetch(`/api/workspaces/${workspaceId}/roadmap/pdf`);
-  if (!res.ok) return;
-
-  const blob = await res.blob();
-  const disposition = res.headers.get("Content-Disposition") ?? "";
-  const match = disposition.match(/filename="([^"]+)"/);
-  const filename = match?.[1] ?? "vision-roadmap.pdf";
-
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
 
 export function RoadmapClient({
   workspaceId,
@@ -48,6 +31,8 @@ export function RoadmapClient({
   const [doc, setDoc] = useState<VisionRoadmapDocument | null>(initialDoc);
   const [loading, setLoading] = useState(needsRegenerate);
   const [skipped, setSkipped] = useState(!agentsMatched);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!needsRegenerate) return;
@@ -77,13 +62,29 @@ export function RoadmapClient({
     router.refresh();
   }
 
+  async function handleDownloadPdf() {
+    setPdfError(null);
+    setPdfLoading(true);
+    try {
+      await downloadRoadmapPdf(workspaceId);
+    } catch (err) {
+      setPdfError(err instanceof Error ? err.message : "Could not download PDF.");
+    } finally {
+      setPdfLoading(false);
+    }
+  }
+
   const showDocument = !loading && !skipped && Boolean(doc);
   const showActions = showDocument;
 
   return (
     <div className="app-shell-root min-h-dvh">
       <AppHeader title="Roadmap to 100x" subtitle={workspaceName} />
-      <WorkspaceNav workspaceId={workspaceId} showPdf={showActions} />
+      <WorkspaceNav
+        workspaceId={workspaceId}
+        showPdf={showActions}
+        onPdfError={setPdfError}
+      />
 
       <main className="mx-auto max-w-[960px] px-6 py-10 md:px-10">
         {loading ? (
@@ -119,11 +120,15 @@ export function RoadmapClient({
             </PrimaryButton>
             <button
               type="button"
-              onClick={() => void downloadRoadmapPdf(workspaceId)}
+              onClick={() => void handleDownloadPdf()}
+              disabled={pdfLoading}
               className="app-shell-btn app-shell-btn-ghost"
             >
-              Download PDF
+              {pdfLoading ? "Preparing PDF…" : "Download PDF"}
             </button>
+            {pdfError ? (
+              <p className="w-full text-[14px] text-[#B42318]">{pdfError}</p>
+            ) : null}
           </div>
         ) : null}
       </main>
