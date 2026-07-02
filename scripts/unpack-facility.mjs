@@ -908,12 +908,24 @@ function rewriteAriaUrlsInDir(dir) {
     }
     if (name.endsWith(".js") && name.includes("53a7d36a")) {
       text = text.replace(
-        `<a href="#contact">Contact</a>\n        </div>`,
-        `<a href="#contact">Contact</a>\n          <a href="/partners">Partners</a>\n        </div>`,
+        `const ARIA_URL = '/talk-to-aria';\nconst BOOK_URL`,
+        `const ARIA_URL = '/talk-to-aria';\nconst START_URL = '/start';\nconst BOOK_URL`,
       );
       text = text.replace(
-        `<a href="#contact" onClick={close}>Contact</a>\n          <div className="nav-mobile-ctas">`,
-        `<a href="#contact" onClick={close}>Contact</a>\n          <a href="/partners" onClick={close}>Partners</a>\n          <div className="nav-mobile-ctas">`,
+        `<a href="#pricing">Pricing</a>\n        </div>`,
+        `<a href="#pricing">Pricing</a>\n          <a href="/partners">Partners</a>\n        </div>`,
+      );
+      text = text.replace(
+        `<a href="#pricing" onClick={close}>Pricing</a>\n          <div className="nav-mobile-ctas">`,
+        `<a href="#pricing" onClick={close}>Pricing</a>\n          <a href="/partners" onClick={close}>Partners</a>\n          <div className="nav-mobile-ctas">`,
+      );
+      text = text.replace(
+        `<div className="nav-cta">\n          <a className="btn btn-ghost nav-cta-book"`,
+        `<div className="nav-cta">\n          <a className="btn btn-primary nav-cta-start" href={START_URL} style={{ height: 40 }}>Create your workspace</a>\n          <a className="btn btn-ghost nav-cta-book"`,
+      );
+      text = text.replace(
+        `<div className="nav-mobile-ctas">\n            <a className="btn btn-ghost" href={BOOK_URL}`,
+        `<div className="nav-mobile-ctas">\n            <a className="btn btn-primary" href={START_URL} onClick={close}>Create your workspace</a>\n            <a className="btn btn-ghost" href={BOOK_URL}`,
       );
       text = text.replace(
         `{ l: 'Contact', h: '#contact' },\n        ]}/>`,
