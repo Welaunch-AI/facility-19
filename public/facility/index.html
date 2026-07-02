@@ -2,9 +2,6 @@
 <html lang="en"><head><script>window.__resources = {"f19Mark":"/facility/5c69784a-ce98-47bf-a5d6-6c5c62c4fe5d.png","agentMolly":"/facility/5001d2ff-cb59-4b63-a3b1-9d79db4c999a.png","agentRenee":"/facility/c0cf0bbb-6865-4c10-b59c-f2621b239c53.png","agentMatt":"/facility/f4f6295b-cae5-42d9-8343-a98bf7ed15e3.png","agentMorgan":"/facility/be42c46d-10bf-42e7-bcc8-5b8f2861958a.png","agentEmma":"/facility/e0c4380e-5416-4d71-aa6b-8905f5563764.png","agentLinda":"/facility/09d429e3-a9c0-45f5-a7fb-1800f0f729c3.png"};</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <link rel="dns-prefetch" href="https://prod.spline.design" />
-  <link rel="prefetch" href="/start" />
-  <link rel="prefetch" href="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" crossorigin="anonymous" />
   <link rel="icon" href="/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
   <title>Facility19, AI employees for facility management</title>
@@ -594,36 +591,23 @@ img { display: block; max-width: 100%; }
   font-weight: 500;
   font-size: 15px;
   letter-spacing: -0.005em;
-  transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
   white-space: nowrap;
 }
-.btn:active { transform: translateY(0); }
+.btn:active { transform: translateY(1px); }
 .btn-primary { background: var(--ink); color: var(--paper); }
-.btn-primary:hover {
-  background: var(--brand-ink);
-  box-shadow: 0 4px 16px rgba(10, 10, 11, 0.2);
-  transform: translateY(-1px);
-}
+.btn-primary:hover { background: var(--brand-ink); }
 .btn-ghost {
   background: transparent;
   color: var(--ink);
   border: 1px solid var(--line-2);
 }
-.btn-ghost:hover {
-  background: var(--paper-2);
-  border-color: var(--ink);
-  box-shadow: 0 4px 14px rgba(10, 10, 11, 0.08);
-  transform: translateY(-1px);
-}
+.btn-ghost:hover { background: var(--paper-2); border-color: var(--ink); }
 .btn-brand {
   background: var(--brand);
   color: white;
 }
-.btn-brand:hover {
-  background: var(--brand-ink);
-  box-shadow: 0 4px 16px rgba(107, 123, 255, 0.35);
-  transform: translateY(-1px);
-}
+.btn-brand:hover { background: var(--brand-ink); }
 
 .btn .arrow {
   transition: transform .2s ease;
@@ -845,54 +829,11 @@ section { position: relative; }
   background-repeat: repeat-x;
 }
 
-/* Card primitive — cursor-tracking brand spotlight */
+/* Card primitive */
 .card {
-  --spot-rgb: 107, 123, 255;
-  --spot-x: 50%;
-  --spot-y: 50%;
-  --spot-size: 280px;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
+  background: #fff;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #fff;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  background: radial-gradient(
-    var(--spot-size) circle at var(--spot-x) var(--spot-y),
-    rgba(var(--spot-rgb), 0.55),
-    rgba(var(--spot-rgb), 0.12) 45%,
-    transparent 70%
-  );
-}
-
-.card[data-spotlight-active]::before {
-  opacity: 1;
-}
-
-.card::after {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: calc(14px - 1px);
-  background: #fff;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.card > * {
-  position: relative;
-  z-index: 1;
 }
 
 /* Pulse */
@@ -905,19 +846,6 @@ section { position: relative; }
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--good);
   animation: pulseDot 1.8s infinite;
-}
-
-@keyframes f19-spin {
-  to { transform: rotate(360deg); }
-}
-.f19-btn-spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255,255,255,0.35);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: f19-spin 0.7s linear infinite;
-  flex-shrink: 0;
 }
 
 /* Marquee */
@@ -1778,19 +1706,4 @@ fbq('track', 'PageView');</script>
     mo.observe(document.documentElement, { childList: true, subtree: true });
     setTimeout(run, 0);
   })();
-</script>
-<script>
-  document.querySelectorAll('.card').forEach(function (card) {
-    card.addEventListener('pointermove', function (e) {
-      var rect = card.getBoundingClientRect();
-      card.style.setProperty('--spot-x', (e.clientX - rect.left) + 'px');
-      card.style.setProperty('--spot-y', (e.clientY - rect.top) + 'px');
-      card.setAttribute('data-spotlight-active', '');
-    }, { passive: true });
-    card.addEventListener('pointerleave', function () {
-      card.style.removeProperty('--spot-x');
-      card.style.removeProperty('--spot-y');
-      card.removeAttribute('data-spotlight-active');
-    }, { passive: true });
-  });
 </script></body></html>

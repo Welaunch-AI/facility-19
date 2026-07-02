@@ -3,25 +3,6 @@
 const { useEffect, useState, useRef, useMemo } = React;
 
 const ARIA_URL = '/talk-to-aria';
-const START_URL = '/start';
-const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
-
-function prefetchStartRoute() {
-  if (window.__f19StartPrefetch) return;
-  window.__f19StartPrefetch = true;
-  const add = (rel, href, as) => {
-    if (document.querySelector('link[href="' + href + '"]')) return;
-    const l = document.createElement('link');
-    l.rel = rel;
-    l.href = href;
-    if (as) l.as = as;
-    if (href.indexOf('spline') !== -1) l.crossOrigin = 'anonymous';
-    document.head.appendChild(l);
-  };
-  add('prefetch', START_URL);
-  add('prefetch', SPLINE_SCENE, 'fetch');
-  fetch(SPLINE_SCENE, { mode: 'cors' }).catch(function () {});
-}
 const BOOK_URL = 'https://cal.com/aviral-bhutani-facility19/discovery-call';
 
 function Wordmark({ size = 22 }) {
@@ -54,11 +35,7 @@ function Nav() {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
-  useEffect(() => {
-    prefetchStartRoute();
-  }, []);
   const close = () => setOpen(false);
-  const onStartHover = () => prefetchStartRoute();
   return (
     <nav className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' is-open' : '')}>
       <div className="wrap nav-inner">
@@ -70,10 +47,10 @@ function Nav() {
           <a href="#how">How it works</a>
           <a href="#proof">Proof</a>
           <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
           <a href="/partners">Partners</a>
         </div>
         <div className="nav-cta">
-          <a className="btn btn-primary nav-cta-start" href={START_URL} style={{ height: 40 }} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
           <a className="btn btn-ghost nav-cta-book" href={BOOK_URL} target="_blank" rel="noreferrer" style={{ height: 40 }}>Book a call</a>
           <a className="btn btn-primary" href={ARIA_URL} style={{ height: 40 }}>
             Meet Aria <ArrowRight />
@@ -96,9 +73,9 @@ function Nav() {
           <a href="#how" onClick={close}>How it works</a>
           <a href="#proof" onClick={close}>Proof</a>
           <a href="#pricing" onClick={close}>Pricing</a>
+          <a href="#contact" onClick={close}>Contact</a>
           <a href="/partners" onClick={close}>Partners</a>
           <div className="nav-mobile-ctas">
-            <a className="btn btn-primary" href={START_URL} onClick={close} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
             <a className="btn btn-ghost" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
             <a className="btn btn-primary" href={ARIA_URL} onClick={close}>
               Meet Aria <ArrowRight />

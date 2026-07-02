@@ -279,13 +279,10 @@ function ThreeKinds() {
                 }}>
                   {k.tag}
                 </div>
-                <div style={{
-                  fontFamily: 'var(--f-display)', fontSize: 30, letterSpacing: '-0.025em', fontWeight: 500, marginBottom: 16,
-                  color: k.brand ? 'var(--brand)' : undefined,
-                }}>
+                <div style={{ fontFamily: 'var(--f-display)', fontSize: 30, letterSpacing: '-0.025em', fontWeight: 500, marginBottom: 16 }}>
                   {k.title}
                 </div>
-                <p style={{ fontSize: 15, lineHeight: 1.55, color: 'var(--slate)' }}>
+                <p style={{ fontSize: 15, lineHeight: 1.55, color: k.brand ? 'rgba(255,255,255,0.8)' : 'var(--slate)' }}>
                   {k.body}
                 </p>
                 <div style={{ marginTop: 'auto', paddingTop: 28, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -293,8 +290,8 @@ function ThreeKinds() {
                     <span key={j} className="mono" style={{
                       fontSize: 11, letterSpacing: '0.03em',
                       padding: '5px 10px', borderRadius: 999,
-                      border: '1px solid var(--line-2)',
-                      color: 'var(--slate)',
+                      border: `1px solid ${k.brand ? 'rgba(255,255,255,0.18)' : 'var(--line-2)'}`,
+                      color: k.brand ? 'rgba(255,255,255,0.72)' : 'var(--slate)',
                     }}>{m}</span>
                   ))}
                 </div>
