@@ -141,7 +141,14 @@ function WalkthroughLeadForm() {
         disabled={status === 'loading'}
         style={{ opacity: status === 'loading' ? 0.7 : 1 }}
       >
-        {status === 'loading' ? 'Sending…' : 'Send me the walkthrough'} <ArrowRightP />
+        {status === 'loading' ? (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <span className="f19-btn-spinner" aria-hidden />
+            Sending
+          </span>
+        ) : (
+          <>Send me the walkthrough <ArrowRightP /></>
+        )}
       </button>
     </form>
   );

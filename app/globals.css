@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "./workspaces/[id]/dashboard/roi-dashboard.css";
+
+@source "../components/roi-dashboard/**/*.{tsx,ts}";
 
 :root {
   --background: #fafaf8;
@@ -10,6 +13,37 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+/* Hide scrollbars app-wide; overflow scrolling still works */
+html.facility-html,
+html.facility-html *,
+body.facility-shell,
+body.facility-shell * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html.facility-html::-webkit-scrollbar,
+html.facility-html *::-webkit-scrollbar,
+body.facility-shell::-webkit-scrollbar,
+body.facility-shell *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
 }
 
 /* Shell: single full-viewport iframe; no outer scroll (inner document scrolls). */
@@ -49,13 +83,27 @@ body.facility-shell.aria-voice-page {
   background: #ffffff;
 }
 
+html.facility-html.start-page,
+body.facility-shell.start-page {
+  overflow: hidden;
+  overscroll-behavior: none;
+  height: 100%;
+  min-height: 100dvh;
+  background: #fafaf8;
+}
+
 /* Allow scroll on legal pages (privacy, terms) and partners. */
 html.facility-html.privacy-page,
 html.facility-html.terms-page,
 html.facility-html.partners-page,
+html.facility-html.workspaces-page,
+html.facility-html.app-shell-page,
+html.facility-html.app-shell-page,
 body.facility-shell.privacy-page,
 body.facility-shell.terms-page,
-body.facility-shell.partners-page {
+body.facility-shell.partners-page,
+body.facility-shell.workspaces-page,
+body.facility-shell.app-shell-page {
   overflow: auto;
   overscroll-behavior: auto;
   height: auto;
@@ -86,4 +134,24 @@ body.facility-shell.partners-page {
     opacity: 1;
     transform: scale(1.04);
   }
+}
+
+/* Keep scrollbars hidden — load last so nothing overrides */
+html,
+body,
+html *,
+body * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+html *::-webkit-scrollbar,
+body *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none;
 }

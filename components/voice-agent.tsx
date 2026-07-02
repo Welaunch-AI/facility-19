@@ -3,6 +3,7 @@
 import { useConversation } from "@elevenlabs/react";
 import { PhoneOff } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
+import { LoadingInline } from "@/components/loading-spinner";
 
 function cn(...parts: (string | false | undefined)[]) {
   return parts.filter(Boolean).join(" ");
@@ -214,16 +215,14 @@ export function VoiceAgent() {
     }
   }, [muted, volume, conversation]);
 
-  const statusLabel = isConnecting
-    ? "Connecting…"
-    : isConnected
+  const statusLabel = isConnecting ? null : isConnected
       ? isSpeaking
         ? "Agent speaking"
         : "Listening"
       : "Disconnected";
 
   const statusDotClass = isConnecting
-    ? "bg-[#8EC5FF] animate-pulse"
+    ? "hidden"
     : isConnected
       ? isSpeaking
         ? "bg-[#2B6FD6] animate-pulse scale-110"
@@ -309,15 +308,25 @@ export function VoiceAgent() {
 
       <div className="flex flex-col items-center gap-2.5 px-1">
         <div className="flex items-center gap-2.5">
-          <span
-            className={cn("h-2 w-2 shrink-0 rounded-full transition-colors", statusDotClass)}
-            aria-hidden
-          />
-          <p className={statusTextClass}>{statusLabel}</p>
+          {isConnecting ? (
+            <LoadingInline
+              size="sm"
+              label="Connecting"
+              className={statusTextClass}
+            />
+          ) : (
+            <>
+              <span
+                className={cn("h-2 w-2 shrink-0 rounded-full transition-colors", statusDotClass)}
+                aria-hidden
+              />
+              <p className={statusTextClass}>{statusLabel}</p>
+            </>
+          )}
         </div>
         <p className="text-center text-sm leading-snug text-[#8B9BB8]">
           {isConnecting
-            ? "Hang tight…"
+            ? null
             : isConnected
               ? "Tap the button to end the call"
               : "Tap the mic to start"}
