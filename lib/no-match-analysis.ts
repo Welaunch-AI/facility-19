@@ -1,6 +1,10 @@
 import { chatCompletion } from "@/lib/openrouter";
 import { displaySkippedReason } from "@/lib/custom-agents-cta";
 import { researchContextForPrompt } from "@/lib/agent-matching";
+import {
+  extractUserGoalSignals,
+  userGoalsContextForPrompt,
+} from "@/lib/user-goal-signals";
 import type { BusinessProfile, NoMatchAnalysis } from "@/lib/workspaces";
 
 type LlmNoMatchResponse = {
@@ -82,19 +86,19 @@ export async function generateNoMatchAnalysis(
   const fallback = fallbackAnalysis(bp, skippedReason);
 
   try {
+    const goalSignals = extractUserGoalSignals(bp);
     const raw = await chatCompletion(
       [
         {
           role: "system",
           content:
-            "You analyze companies for AI agent fit. Facility 19 ships pre-built agents for physical field operations (HVAC, fleets, CMMS, technicians). When a company is NOT a fit, explain why and propose 2-4 custom AI agents tailored to THEIR actual business from website research — not field-ops agents. Return valid JSON only.",
+            "You analyze companies for AI agent fit. Facility 19 ships 49 pre-built agents across facility management, field operations, fleet, compliance, vendors, billing, and customer service. When a company is NOT a fit, explain why — explicitly referencing what the user stated in onboarding goals — and propose 2-4 custom AI agents tailored to THEIR actual business. Return valid JSON only.",
         },
         {
           role: "user",
-          content: `Domain: ${bp.domain ?? "unknown"}
-60-day goal: ${bp.sixty_day_goal ?? "not provided"}
-Primary goals: ${(bp.primary_goals ?? []).join(", ") || "none"}
-Custom goal: ${bp.custom_goal ?? "none"}
+          content: `${userGoalsContextForPrompt(goalSignals)}
+
+Domain: ${bp.domain ?? "unknown"}
 Skip reason: ${displaySkippedReason(skippedReason) ?? "no field-ops match"}
 
 ${researchContextForPrompt(bp.research)}
@@ -102,20 +106,21 @@ ${researchContextForPrompt(bp.research)}
 Return JSON:
 {
   "websiteSummary": "2-3 sentences on what this company does based on the website research — specific, not generic",
-  "whyNotFacility19": "2-3 sentences explaining why Facility 19's field-operations agent catalog (technicians, fleets, CMMS, building maintenance) does not apply — reference their actual business model",
+  "whyNotFacility19": "2-3 sentences explaining why Facility 19's 49-agent catalog does not apply — reference their business model AND which user goals could not be mapped to catalog agents",
   "customAgents": [
     {
       "name": "Agent name (e.g. Pipeline Agent, Content Agent)",
       "role": "Short role label",
       "description": "What this custom agent would do for THIS company specifically",
-      "mapsToGoal": "How it maps to their 60-day or stated goals"
+      "mapsToGoal": "How it maps to their 60-day goal, primary goals, or custom goal — quote the user goal"
     }
   ]
 }
 
 Rules:
-- customAgents: 2-4 items, each grounded in website research and goals
-- Do NOT suggest Facility 19 catalog agents (ARIA, Molly, Dex, etc.)
+- customAgents: 2-4 items, each grounded in user goals first, then website research
+- mapsToGoal must cite specific user-stated goals, not generic placeholders
+- Do NOT suggest Facility 19 catalog agents (Linda, Ace, Harvey, Monica, etc.)
 - Be specific to their industry (SaaS, agency, EdTech, GTM, etc.)
 - whyNotFacility19 must be clear and non-judgmental`,
         },

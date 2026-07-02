@@ -1,3 +1,5 @@
+import type { VisionRoadmapDocument } from "@/lib/vision-roadmap";
+
 export type ResearchStatus = "pending" | "complete" | "failed";
 
 export type CompanyProfile = {
@@ -37,7 +39,11 @@ export type BusinessProfile = {
   no_match_analysis?: NoMatchAnalysis;
   /** Set when agent matching has run once — prevents re-analysis on revisit. */
   agent_matching_completed_at?: string;
+  /** Bump when matching logic changes to invalidate stale cached recommendations. */
+  agent_matching_version?: number;
   vision_roadmap?: string;
+  vision_roadmap_doc?: VisionRoadmapDocument;
+  vision_roadmap_version?: number;
   journey_stage?: JourneyStage;
 };
 
@@ -149,10 +155,10 @@ export function hasRecommendedAgents(bp: BusinessProfile): boolean {
   return (bp.recommended_agent_ids ?? []).length > 0;
 }
 
+/** Increment when recommendation rules change so workspaces re-match automatically. */
+export const AGENT_MATCHING_VERSION = 2;
+
 export function hasCompletedAgentMatching(bp: BusinessProfile): boolean {
-  if (bp.agent_matching_completed_at) return true;
-  if (bp.recommendation_skipped_reason) return true;
-  if (bp.no_match_analysis) return true;
-  if (Array.isArray(bp.recommended_details)) return true;
-  return false;
+  if (bp.agent_matching_version !== AGENT_MATCHING_VERSION) return false;
+  return Boolean(bp.agent_matching_completed_at);
 }

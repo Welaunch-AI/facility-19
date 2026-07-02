@@ -2,11 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { AppHeader, PrimaryButton, ShellCard } from "@/components/app-shell";
 import { CustomAgentsCta } from "@/components/custom-agents-cta";
 import { LoadingPanel } from "@/components/loading-spinner";
+import { VisionRoadmapDocumentView } from "@/components/vision-roadmap-document";
 import { WorkspaceNav } from "@/components/workspace-nav";
+import {
+  hasVisionRoadmapDoc,
+  VISION_ROADMAP_VERSION,
+  type VisionRoadmapDocument,
+} from "@/lib/vision-roadmap";
 
 async function downloadRoadmapPdf(workspaceId: string) {
   const res = await fetch(`/api/workspaces/${workspaceId}/roadmap/pdf`);
@@ -28,36 +33,39 @@ async function downloadRoadmapPdf(workspaceId: string) {
 export function RoadmapClient({
   workspaceId,
   workspaceName,
-  initialMarkdown,
+  initialDoc,
   agentsMatched,
 }: {
   workspaceId: string;
   workspaceName: string;
-  initialMarkdown: string | null;
+  initialDoc: VisionRoadmapDocument | null;
   agentsMatched: boolean;
 }) {
   const router = useRouter();
-  const [markdown, setMarkdown] = useState(initialMarkdown);
-  const [loading, setLoading] = useState(agentsMatched && !initialMarkdown);
+  const needsRegenerate =
+    agentsMatched &&
+    (!initialDoc || initialDoc.version !== VISION_ROADMAP_VERSION);
+  const [doc, setDoc] = useState<VisionRoadmapDocument | null>(initialDoc);
+  const [loading, setLoading] = useState(needsRegenerate);
   const [skipped, setSkipped] = useState(!agentsMatched);
 
   useEffect(() => {
-    if (!agentsMatched || initialMarkdown) return;
+    if (!needsRegenerate) return;
     (async () => {
       const res = await fetch(
         `/api/workspaces/${workspaceId}/generate/roadmap`,
         { method: "POST" },
       );
       const data = await res.json();
-      if (data.skipped || !data.markdown) {
+      if (data.skipped || !data.doc) {
         setSkipped(true);
-        setMarkdown(null);
+        setDoc(null);
       } else {
-        setMarkdown(data.markdown ?? "");
+        setDoc(data.doc ?? null);
       }
       setLoading(false);
     })();
-  }, [workspaceId, initialMarkdown, agentsMatched]);
+  }, [workspaceId, needsRegenerate]);
 
   async function enterDashboard() {
     await fetch(`/api/workspaces/${workspaceId}/journey`, {
@@ -69,7 +77,7 @@ export function RoadmapClient({
     router.refresh();
   }
 
-  const showDocument = !loading && !skipped && Boolean(markdown);
+  const showDocument = !loading && !skipped && Boolean(doc);
   const showActions = showDocument;
 
   return (
@@ -77,7 +85,7 @@ export function RoadmapClient({
       <AppHeader title="Roadmap to 100x" subtitle={workspaceName} />
       <WorkspaceNav workspaceId={workspaceId} showPdf={showActions} />
 
-      <main className="mx-auto max-w-[800px] px-6 py-10 md:px-10">
+      <main className="mx-auto max-w-[960px] px-6 py-10 md:px-10">
         {loading ? (
           <LoadingPanel label="Generating your vision roadmap" />
         ) : skipped ? (
@@ -89,20 +97,20 @@ export function RoadmapClient({
               No vision document — agents didn&apos;t match
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-[#5E6472]">
-              Facility 19 only generates a vision roadmap when field-operations agents
-              match your business. Explore custom agents or enter your workspace to
-              continue.
+              Facility 19 only generates a vision roadmap when agents from our
+              49-agent catalog match your business. Explore custom agents or enter
+              your workspace to continue.
             </p>
             <CustomAgentsCta className="mx-auto mt-4 max-w-lg" />
             <PrimaryButton type="button" className="mt-8" onClick={enterDashboard}>
               Show demo workspace
             </PrimaryButton>
           </ShellCard>
-        ) : (
-          <ShellCard as="article" className="markdown-body p-8 md:p-10">
-            <ReactMarkdown>{markdown ?? ""}</ReactMarkdown>
+        ) : doc ? (
+          <ShellCard className="overflow-hidden p-0">
+            <VisionRoadmapDocumentView doc={doc} />
           </ShellCard>
-        )}
+        ) : null}
 
         {showActions ? (
           <div className="mt-8 flex flex-wrap gap-3">

@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import {
   AGENT_CATALOG,
   AUTO_SELECT_THRESHOLD,
-  RELEVANCE_THRESHOLD,
+  MIN_USE_CASE_THRESHOLD,
+  catalogClusterSummary,
   catalogForPrompt,
   getCatalogAgent,
 } from "@/lib/agent-catalog";
@@ -11,11 +12,19 @@ import {
   researchContextForPrompt,
   waitForResearch,
 } from "@/lib/agent-matching";
+import {
+  augmentRecommendations,
+  boostHintScores,
+} from "@/lib/recommendation-augment";
 import { withCustomAgentsCta } from "@/lib/custom-agents-cta";
 import { generateNoMatchAnalysis } from "@/lib/no-match-analysis";
 import { chatCompletion } from "@/lib/openrouter";
 import { createClient } from "@/lib/supabase/server";
-import { hasCompletedAgentMatching } from "@/lib/workspaces";
+import {
+  extractUserGoalSignals,
+  userGoalsContextForPrompt,
+} from "@/lib/user-goal-signals";
+import { hasCompletedAgentMatching, AGENT_MATCHING_VERSION } from "@/lib/workspaces";
 import { getOwnedWorkspace, updateWorkspaceProfile } from "@/lib/workspace-api";
 import type { RecommendedAgentDetail } from "@/lib/workspaces";
 
@@ -32,14 +41,19 @@ type LlmResponse = {
 function validateRecommendations(
   agents: LlmAgentResult[],
   skippedReason?: string,
+  goalAgentHints: string[] = [],
 ): { agents: RecommendedAgentDetail[]; skippedReason?: string } {
   const validated: RecommendedAgentDetail[] = [];
+  const hintSet = new Set(goalAgentHints);
 
   for (const agent of agents) {
     const catalog = getCatalogAgent(agent.id);
     if (!catalog) continue;
-    const score = agent.relevanceScore ?? 0;
-    if (score < RELEVANCE_THRESHOLD) continue;
+    let score = agent.relevanceScore ?? 0;
+    if (hintSet.has(agent.id) && score >= MIN_USE_CASE_THRESHOLD - 0.05) {
+      score = Math.max(score, MIN_USE_CASE_THRESHOLD);
+    }
+    if (score < MIN_USE_CASE_THRESHOLD) continue;
 
     validated.push({
       id: catalog.id,
@@ -55,7 +69,7 @@ function validateRecommendations(
   validated.sort((a, b) => (b.relevanceScore ?? 0) - (a.relevanceScore ?? 0));
 
   return {
-    agents: validated.slice(0, 4),
+    agents: validated,
     skippedReason: validated.length === 0 ? skippedReason : undefined,
   };
 }
@@ -73,6 +87,7 @@ async function saveEmptyRecommendations(
     recommendation_skipped_reason: skippedReason,
     no_match_analysis: noMatchAnalysis,
     agent_matching_completed_at: new Date().toISOString(),
+    agent_matching_version: AGENT_MATCHING_VERSION,
   });
 }
 
@@ -111,7 +126,11 @@ export async function POST(
     research = await waitForResearch(supabase, workspaceId, user.id);
   }
 
-  const eligibility = assessFieldOpsEligibility(research, bp.domain);
+  const eligibility = assessFieldOpsEligibility(research, bp.domain, {
+    sixty_day_goal: bp.sixty_day_goal,
+    primary_goals: bp.primary_goals,
+    custom_goal: bp.custom_goal,
+  });
   if (!eligibility.eligible) {
     const skippedReason = withCustomAgentsCta(eligibility.reason);
     const noMatchAnalysis = await generateNoMatchAnalysis(
@@ -132,21 +151,23 @@ export async function POST(
     });
   }
 
+  const goalSignals = extractUserGoalSignals(bp);
   const catalogJson = JSON.stringify(catalogForPrompt());
-  const wantsMonitoring = (bp.primary_goals ?? []).some((g) =>
-    /monitor|one place|central/i.test(g),
-  );
+  const clusterJson = JSON.stringify(catalogClusterSummary());
+  const userGoalsBlock = userGoalsContextForPrompt(goalSignals);
+  const wantsMonitoring = goalSignals.wantsMonitoring;
 
-  const prompt = `Company domain: ${bp.domain ?? "unknown"}
-60-day goal: ${bp.sixty_day_goal ?? "not provided"}
-Primary goals: ${(bp.primary_goals ?? []).join(", ") || "none"}
-Custom goal: ${bp.custom_goal ?? "none"}
-User wants unified monitoring: ${wantsMonitoring ? "yes" : "no"}
-Field ops signals detected: ${eligibility.fieldOpsSignals.join(", ") || "limited"}
+  const prompt = `${userGoalsBlock}
+
+Company domain: ${bp.domain ?? "unknown"}
+User wants unified monitoring/analytics: ${wantsMonitoring ? "yes" : "no"}
+Facility ops signals detected on website: ${eligibility.fieldOpsSignals.join(", ") || "limited"}
 
 ${researchContextForPrompt(research)}
 
-Agent catalog: ${catalogJson}
+Agent clusters (49 agents total): ${clusterJson}
+
+Full agent catalog: ${catalogJson}
 
 Return JSON:
 {
@@ -156,24 +177,35 @@ Return JSON:
       "name": "agent name",
       "relevanceScore": 0.0-1.0,
       "problemSolved": "specific problem for THIS company",
-      "goalMapping": "how this maps to their 60-day goal",
-      "description": "why this fits their website/industry",
-      "requirementReason": "why this is a genuine requirement, not nice-to-have"
+      "goalMapping": "quote or paraphrase which user goal(s) this addresses — 60-day goal, primary goals, and/or custom goal",
+      "description": "why this fits their stated goals and operations",
+      "requirementReason": "evidence from user goals AND/OR website — user goals count as primary evidence"
     }
   ],
   "skippedReason": "required when agents array is empty — explain why none fit"
 }
 
+Scoring — evaluate ALL 49 agents. Apply in this priority order:
+1. USER GOALS (highest weight): 60-day goal, each selected primary goal, and custom goal.
+2. Outcome themes in free text (e.g. profit → billing/expense/efficiency agents; monitoring → oversight agents).
+3. Website research: refine and validate, not override explicit user goals.
+4. Cluster fit across all 12 clusters.
+5. notIdealFor: omit ONLY when clearly incompatible with BOTH website and user goals.
+6. Multiple agents per cluster: INCLUDE ALL with distinct use cases — do not collapse to one per cluster.
+
 Rules:
-- ONLY recommend agents when the company runs physical field operations (technicians, fleets, CMMS, on-site jobs).
-- If the company is SaaS, agency, GTM, RevOps, consulting, or software-only with NO field crews, return an empty agents array.
-- Do NOT stretch agent descriptions to fit unrelated businesses. Do NOT mention "facility management" unless the website shows it.
-- Zero agents is valid and preferred over weak matches. Do NOT pad recommendations.
-- Maximum 4 agents only when multiple strong fits exist.
-- relevanceScore 0.65+ only for real matches with website or goal evidence.
-- Do NOT recommend Jarvis unless 2+ other agents match OR user wants unified monitoring.
-- Use exact catalog ids only.
-- If returning zero agents, skippedReason must clearly state why (e.g. wrong industry, no field ops, goal mismatch).`;
+- Return EVERY agent with any plausible use case (relevanceScore 0.35+). There is NO maximum count.
+- NEVER ignore user-stated goals. If primary goals map to clusters, include ALL agents in those clusters unless notIdealFor clearly blocks them.
+- Translate business outcomes in the 60-day goal (e.g. "make profit") into operational agents — cite the translation in goalMapping.
+- ONLY skip an individual agent when it has zero use case for this company. ONLY return an empty array when the company is pure SaaS/agency/GTM with NO operational goals AND no website ops signals.
+- Do NOT force-fit agents with no use case. Do NOT omit agents with even a partial use case.
+- relevanceScore guide: 0.85+ strong fit, 0.65–0.84 good fit, 0.35–0.64 partial fit worth considering.
+- Include monica when multiple operational agents apply OR user is deploying across clusters.
+- Include harvey when user wants monitoring OR selected fleet/jobs visibility OR multiple operational agents apply.
+- Include claire, seth, evan when compliance/audit/SLA/escalation needs appear in goals or website.
+- Agents in priority clusters from user goals: ${goalSignals.agentHints.join(", ") || "derive from goals"} — include each unless clearly blocked.
+- Use exact catalog ids only (linda, rae, pete, molly, vera, ace, cal, beau, clark, nora, rico, ford, gus, quinn, neil, drew, omar, brook, glen, renata, june, nico, wade, finn, max, dale, maya, lena, rose, sam, jennie, toby, iris, skip, zara, vic, gina, cole, emma, stella, harvey, brent, nate, wren, chip, monica, claire, seth, evan).
+- If returning zero agents, skippedReason must reference which user goals were considered and why they did not map to catalog agents.`;
 
   let recommended: RecommendedAgentDetail[] = [];
   let skippedReason: string | undefined;
@@ -184,21 +216,28 @@ Rules:
         {
           role: "system",
           content:
-            "You recommend specialized AI agents ONLY for companies with physical field operations (technicians, trucks, CMMS, job sites). For SaaS, agencies, and GTM companies without field crews, return empty agents with a clear skippedReason. Never force-fit. Return valid JSON only.",
+            "You recommend AI agents from Facility 19's full catalog of 49 agents across 12 clusters. User-stated goals are PRIMARY inputs. Evaluate every agent — return ALL with any plausible use case (score 0.35+). No maximum count. Include multiple agents per cluster when each has a distinct use case. Omit individual agents only when notIdealFor clearly blocks them. Return empty array only for pure SaaS/agency/GTM with no operational goals and no website ops signals. Never force-fit. Return valid JSON only.",
         },
         { role: "user", content: prompt },
       ],
       { json: true },
     );
     const parsed = JSON.parse(raw) as LlmResponse;
-    const result = validateRecommendations(parsed.agents ?? [], parsed.skippedReason);
-    recommended = result.agents;
+    const result = validateRecommendations(
+      parsed.agents ?? [],
+      parsed.skippedReason,
+      goalSignals.agentHints,
+    );
+    recommended = augmentRecommendations(
+      boostHintScores(result.agents, goalSignals.agentHints),
+      goalSignals,
+    );
     skippedReason =
-      result.skippedReason ??
-      (recommended.length === 0
-        ? parsed.skippedReason ??
-          "None of our field-operations agents match your business based on your website and goals."
-        : undefined);
+      recommended.length === 0
+        ? result.skippedReason ??
+          parsed.skippedReason ??
+          "None of our Facility 19 agents match your business based on your website and goals."
+        : undefined;
   } catch {
     recommended = [];
     skippedReason = "Could not generate recommendations. Try refreshing.";
@@ -227,6 +266,7 @@ Rules:
     recommendation_skipped_reason: skippedReason,
     no_match_analysis: noMatchAnalysis,
     agent_matching_completed_at: new Date().toISOString(),
+    agent_matching_version: AGENT_MATCHING_VERSION,
   });
 
   return NextResponse.json({

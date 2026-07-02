@@ -3,6 +3,7 @@ import { jsPDF } from "jspdf";
 import { getCatalogAgent } from "@/lib/agent-catalog";
 import { createClient } from "@/lib/supabase/server";
 import { getOwnedWorkspace } from "@/lib/workspace-api";
+import { visionRoadmapToMarkdown } from "@/lib/vision-roadmap";
 
 export async function GET(
   _request: Request,
@@ -23,7 +24,9 @@ export async function GET(
   }
 
   const bp = ws.business_profile ?? {};
-  const markdown = bp.vision_roadmap ?? "Vision roadmap not yet generated.";
+  const body = bp.vision_roadmap_doc
+    ? visionRoadmapToMarkdown(bp.vision_roadmap_doc)
+    : (bp.vision_roadmap ?? "Vision roadmap not yet generated.");
   const agentNames = (bp.selected_agent_ids ?? [])
     .map((aid) => getCatalogAgent(aid)?.name)
     .filter(Boolean)
@@ -31,7 +34,7 @@ export async function GET(
 
   const doc = new jsPDF();
   const lines = doc.splitTextToSize(
-    `Facility 19 — Roadmap to 100x\n${ws.name}\n\n${markdown}\n\nAgent package: ${agentNames}`,
+    `Facility 19 — Roadmap to 100x\n${ws.name}\n\n${body}\n\nAgent package: ${agentNames}`,
     180,
   );
   doc.text(lines, 14, 20);

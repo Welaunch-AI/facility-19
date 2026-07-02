@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireProfile } from "@/lib/auth-server";
 import type { BusinessProfile } from "@/lib/workspaces";
 import { hasRecommendedAgents } from "@/lib/workspaces";
+import { hasVisionRoadmapDoc } from "@/lib/vision-roadmap";
 import { RoadmapClient } from "./roadmap-client";
 import "../../../app-shell.css";
 import { AppShellBodyUnlock } from "@/components/app-shell-body-unlock";
@@ -31,7 +32,9 @@ export default async function RoadmapPage({
       <RoadmapClient
         workspaceId={id}
         workspaceName={workspace.name}
-        initialMarkdown={bp.vision_roadmap ?? null}
+        initialDoc={
+          hasVisionRoadmapDoc(bp) ? bp.vision_roadmap_doc ?? null : null
+        }
         agentsMatched={hasRecommendedAgents(bp)}
       />
     </>

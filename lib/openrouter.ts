@@ -15,6 +15,10 @@ export function getResearchModel() {
   return process.env.OPENROUTER_RESEARCH_MODEL ?? getDefaultModel();
 }
 
+export function getRoadmapModel() {
+  return process.env.OPENROUTER_ROADMAP_MODEL ?? "anthropic/claude-sonnet-4";
+}
+
 export async function chatCompletion(
   messages: ChatMessage[],
   options?: ChatCompletionOptions,

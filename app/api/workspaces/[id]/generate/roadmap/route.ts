@@ -1,10 +1,21 @@
 import { NextResponse } from "next/server";
 import { getCatalogAgent } from "@/lib/agent-catalog";
 import { researchContextForPrompt } from "@/lib/agent-matching";
-import { chatCompletion } from "@/lib/openrouter";
+import { chatCompletion, getRoadmapModel } from "@/lib/openrouter";
+import {
+  extractUserGoalSignals,
+  userGoalsContextForPrompt,
+} from "@/lib/user-goal-signals";
 import { createClient } from "@/lib/supabase/server";
 import { hasRecommendedAgents } from "@/lib/workspaces";
 import { getOwnedWorkspace, updateWorkspaceProfile } from "@/lib/workspace-api";
+import {
+  normalizeVisionRoadmap,
+  roadmapPromptSchema,
+  visionRoadmapToMarkdown,
+  VISION_ROADMAP_VERSION,
+  type VisionRoadmapDocument,
+} from "@/lib/vision-roadmap";
 
 export async function POST(
   _request: Request,
@@ -29,6 +40,7 @@ export async function POST(
   if (!hasRecommendedAgents(bp)) {
     return NextResponse.json({
       skipped: true,
+      doc: null,
       markdown: null,
       reason:
         bp.recommendation_skipped_reason ??
@@ -37,61 +49,89 @@ export async function POST(
   }
 
   const selectedIds = bp.selected_agent_ids ?? [];
+  const recommendedDetails = bp.recommended_details ?? [];
   const agents = selectedIds
-    .map((id) => getCatalogAgent(id))
-    .filter(Boolean)
-    .map(
-      (a) =>
-        `${a!.name} (${a!.role}): ${a!.description}. Automates: ${a!.automates}`,
-    );
+    .map((id) => {
+      const catalog = getCatalogAgent(id);
+      const rec = recommendedDetails.find((r) => r.id === id);
+      if (!catalog) return null;
+      return {
+        id: catalog.id,
+        name: catalog.name,
+        role: catalog.role,
+        description: catalog.description,
+        problemSolved: rec?.problemSolved ?? catalog.automates,
+        goalMapping: rec?.goalMapping ?? "",
+      };
+    })
+    .filter(Boolean);
 
   const hasAgents = agents.length > 0;
+  const goalSignals = extractUserGoalSignals(bp);
 
-  const prompt = `Write a personalized "Roadmap to 100x" vision document in markdown for ${ws.name}.
+  const prompt = `Create a personalized "Roadmap to 100x" vision document for ${ws.name}.
 
 Domain: ${bp.domain ?? "unknown"}
-60-day goal: ${bp.sixty_day_goal ?? "not provided"}
-Primary goals: ${(bp.primary_goals ?? []).join(", ") || "none"}
-Custom goal: ${bp.custom_goal ?? "none"}
+Company: ${ws.name}
+
+${userGoalsContextForPrompt(goalSignals)}
 
 ${researchContextForPrompt(bp.research)}
 
-${hasAgents ? `Selected agents (ONLY mention these—do not invent others):\n${agents.join("\n")}` : "No agents selected. Do NOT mention or invent any agents. Focus on operational baseline and phased plan from their goals and website."}
+${
+  hasAgents
+    ? `Selected agents (ONLY use these ids — do not invent others):
+${agents.map((a) => `- id: ${a!.id} | ${a!.name} (${a!.role}) | ${a!.description} | Maps to goal: ${a!.goalMapping || a!.problemSolved}`).join("\n")}`
+    : "No agents selected. agents array must be empty."
+}
+
+Full recommended agent details from matching:
+${JSON.stringify(recommendedDetails, null, 2)}
 
 Instructions:
-- Be specific to THIS company. Cite signals from their website research and 60-day goal.
-- Do NOT genericize. Do NOT mention agents that were not selected.
-- Quote or paraphrase their 60-day goal in a dedicated section.
+- Be specific to THIS company — cite their website, industry, and stated goals.
+- Write for a founder/operator who needs a clear visual journey: today → 60-day goal → agents → timeline → outcomes.
+- Pain points must come from real signals (dispatch, compliance, billing, technicians, etc.).
+- Tie profit/revenue goals to operational levers (efficiency, billing, labor cost, retention).
+- Phases must show logical deployment order — foundation agents first, then scale, then optimize.
+- Metrics must be realistic and tied to their 60-day goal.
 
-Include these markdown sections:
-1. Where you are today (1x baseline) — grounded in research
-2. Your 60-day north star — tied to their stated goal
-${hasAgents ? "3. Your agent package — each selected agent tied to a specific pain point from their operations\n4. 30 / 60 / 90 day phased timeline\n5. Measurable outcomes and headline metric" : "3. 30 / 60 / 90 day phased timeline\n4. Measurable outcomes and headline metric"}`;
+${roadmapPromptSchema(hasAgents)}`;
 
-  let markdown: string;
+  let doc: VisionRoadmapDocument;
+
   try {
-    markdown = await chatCompletion([
-      {
-        role: "system",
-        content:
-          "You write strategic operations roadmaps for B2B founders in field service and facility management. Use markdown headings. Be specific—never generic boilerplate.",
-      },
-      { role: "user", content: prompt },
-    ]);
+    const raw = await chatCompletion(
+      [
+        {
+          role: "system",
+          content:
+            "You are a strategic operations consultant for Facility 19. You produce structured vision roadmaps for field service and facility management companies. Return valid JSON only. Be specific — never generic boilerplate. Every pain point and outcome must reference this company's actual operations.",
+        },
+        { role: "user", content: prompt },
+      ],
+      { json: true, model: getRoadmapModel() },
+    );
+    doc = normalizeVisionRoadmap(
+      JSON.parse(raw) as Partial<VisionRoadmapDocument>,
+      bp,
+      ws.name,
+      selectedIds,
+    );
   } catch {
-    markdown = `# Roadmap to 100x — ${ws.name}\n\n## Where you are today\n${bp.research?.summary ?? bp.domain ?? "Your operations"}\n\n## Your 60-day north star\n${bp.sixty_day_goal ?? "Operational improvement"}\n\n${
-      hasAgents
-        ? `## Your agent package\n${agents.join("\n")}`
-        : "## Phased plan\nFocus on goals from your onboarding interview."
-    }\n\n## 30 / 60 / 90 days\nPhased deployment aligned to your stated goals.`;
+    doc = normalizeVisionRoadmap({}, bp, ws.name, selectedIds);
   }
+
+  const markdown = visionRoadmapToMarkdown(doc);
 
   await updateWorkspaceProfile(supabase, workspaceId, {
     vision_roadmap: markdown,
+    vision_roadmap_doc: doc,
+    vision_roadmap_version: VISION_ROADMAP_VERSION,
     journey_stage: "roadmap",
   });
 
-  return NextResponse.json({ markdown });
+  return NextResponse.json({ doc, markdown });
 }
 
 export async function GET(
@@ -112,9 +152,12 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  const bp = ws.business_profile ?? {};
+
   return NextResponse.json({
-    markdown: ws.business_profile?.vision_roadmap ?? null,
-    agents: (ws.business_profile?.selected_agent_ids ?? [])
+    doc: bp.vision_roadmap_doc ?? null,
+    markdown: bp.vision_roadmap ?? null,
+    agents: (bp.selected_agent_ids ?? [])
       .map((aid) => getCatalogAgent(aid))
       .filter(Boolean),
   });

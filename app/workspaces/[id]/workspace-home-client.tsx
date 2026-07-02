@@ -162,8 +162,8 @@ export function WorkspaceHomeClient({
             </h2>
             <p className="mt-3 text-[15px] text-[#5E6472]">
               {hasAgents
-                ? `AI-selected field-operations agents mapped to your 60-day goal${businessProfile.domain ? ` for ${businessProfile.domain}` : ""}.`
-                : "We only suggest agents when your website shows physical field operations."}
+                ? `${recommended.length} agents matched to your 60-day goal and priorities${businessProfile.domain ? ` for ${businessProfile.domain}` : ""}.`
+                : "We match agents from our 49-agent catalog to your 60-day goal and selected priorities — not just your website."}
             </p>
             {!hasAgents && !loadingRec ? <CustomAgentsCta className="mt-4 text-[15px] text-[#5E6472]" /> : null}
             <BrandButton

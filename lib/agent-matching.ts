@@ -1,12 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { extractUserGoalSignals } from "@/lib/user-goal-signals";
 import { getOwnedWorkspace } from "@/lib/workspace-api";
-import type { CompanyProfile, WorkspaceResearch } from "@/lib/workspaces";
+import type { BusinessProfile, CompanyProfile, WorkspaceResearch } from "@/lib/workspaces";
 
 const RESEARCH_POLL_MS = 500;
 const RESEARCH_MAX_WAIT_MS = 8000;
 
-/** Companies that need physical field ops evidence before any agent is suggested */
-const NON_FIELD_OPS_PATTERNS = [
+/** Companies without facility / field operations evidence */
+const NON_FACILITY_OPS_PATTERNS = [
   /\bsaas\b/i,
   /\bsoftware\b/i,
   /\bplatform\b/i,
@@ -15,39 +16,57 @@ const NON_FIELD_OPS_PATTERNS = [
   /\bgtm\b/i,
   /\bgo-to-market\b/i,
   /\brevops?\b/i,
-  /\bmarketing\b/i,
+  /\bmarketing agency\b/i,
   /\bventure\b/i,
-  /\bstartup\b/i,
+  /\bstartup studio\b/i,
   /\bedtech\b/i,
   /\bfintech\b/i,
-  /\bapp\b/i,
-  /\bcloud\b/i,
-  /\bapi\b/i,
+  /\bapp studio\b/i,
   /\bproduct studio\b/i,
   /\bautomation agency\b/i,
 ];
 
-const FIELD_OPS_SIGNAL_PATTERNS = [
+const FACILITY_OPS_SIGNAL_PATTERNS = [
   /\btechnician/i,
   /\bfleet\b/i,
   /\btruck/i,
   /\bcmms\b/i,
   /\bwork order/i,
-  /\bdispatch(?!ing software)/i,
+  /\bdispatch/i,
   /\bfield service/i,
   /\bjob site/i,
   /\bhvac\b/i,
   /\bplumb/i,
   /\bmaintenance crew/i,
-  /\bintellishift\b/i,
-  /\brail redi\b/i,
   /\bgeofenc/i,
-  /\binspection schedule/i,
+  /\binspection/i,
+  /\bviolation/i,
   /\bfacility management/i,
   /\bbuilding maintenance/i,
   /\bproperty management\b/i,
   /\bservice truck/i,
   /\bfleet gps\b/i,
+  /\bsubcontractor/i,
+  /\bvendor compliance/i,
+  /\bcertificate of insurance\b/i,
+  /\bcoi\b/i,
+  /\bpayroll/i,
+  /\bovertime/i,
+  /\binvoice reconcil/i,
+  /\baccounts receivable\b/i,
+  /\bar collections\b/i,
+  /\bpreventive maintenance\b/i,
+  /\basset lifecycle/i,
+  /\bparts inventory\b/i,
+  /\bnte\b/i,
+  /\bnot-to-exceed\b/i,
+  /\bepa\b/i,
+  /\bosha\b/i,
+  /\bfdny\b/i,
+  /\bcustomer retention\b/i,
+  /\bhelp desk\b/i,
+  /\bworkforce planning\b/i,
+  /\brecruiting technicians\b/i,
 ];
 
 function collectResearchText(research?: WorkspaceResearch, domain?: string) {
@@ -78,10 +97,23 @@ export type FieldOpsEligibility = {
   fieldOpsSignals: string[];
 };
 
+/** @deprecated alias — use assessFacilityOpsEligibility */
+export type FacilityOpsEligibility = FieldOpsEligibility;
+
+export function assessFacilityOpsEligibility(
+  research?: WorkspaceResearch,
+  domain?: string,
+  userGoals?: Pick<BusinessProfile, "sixty_day_goal" | "primary_goals" | "custom_goal">,
+): FieldOpsEligibility {
+  return assessFieldOpsEligibility(research, domain, userGoals);
+}
+
 export function assessFieldOpsEligibility(
   research?: WorkspaceResearch,
   domain?: string,
+  userGoals?: Pick<BusinessProfile, "sixty_day_goal" | "primary_goals" | "custom_goal">,
 ): FieldOpsEligibility {
+  const goalSignals = userGoals ? extractUserGoalSignals(userGoals) : null;
   const corpus = collectResearchText(research, domain);
   const lower = corpus.toLowerCase();
 
@@ -95,24 +127,30 @@ export function assessFieldOpsEligibility(
     "software",
     "marketing",
   ];
-  const fieldCompanyTypes = ["field_service", "facility_management"];
+  const fieldCompanyTypes = [
+    "field_service",
+    "facility_management",
+    "property_management",
+    "building_maintenance",
+  ];
 
   const typeIsNonField = nonFieldCompanyTypes.some((t) => companyType.includes(t));
   const typeIsField = fieldCompanyTypes.some((t) => companyType.includes(t));
 
   const nonFieldOpsDetected =
-    typeIsNonField || NON_FIELD_OPS_PATTERNS.some((p) => p.test(corpus));
-  const matchedSignals = FIELD_OPS_SIGNAL_PATTERNS.filter((p) => p.test(corpus)).map(
-    (p) => p.source.replace(/\\b/g, "").replace(/\\s\*/g, "").slice(0, 40),
-  );
+    typeIsNonField || NON_FACILITY_OPS_PATTERNS.some((p) => p.test(corpus));
+  const matchedSignals = FACILITY_OPS_SIGNAL_PATTERNS.filter((p) =>
+    p.test(corpus),
+  ).map((p) => p.source.replace(/\\b/g, "").replace(/\\s\*/g, "").slice(0, 48));
+
+  const strongFieldKeywords =
+    /\b(field service|cmms|technician|fleet|work order|hvac|facility management|property management|building maintenance|dispatch|inspection|subcontractor)\b/i;
 
   const hasFieldOpsEvidence =
     typeIsField ||
     matchedSignals.length >= 2 ||
-    (matchedSignals.length >= 1 &&
-      /\b(field service|cmms|technician|fleet|work order|hvac|facility management)\b/i.test(
-        lower,
-      ));
+    (matchedSignals.length >= 1 && strongFieldKeywords.test(lower)) ||
+    goalSignals?.indicatesFacilityOps === true;
 
   if (nonFieldOpsDetected && !hasFieldOpsEvidence) {
     const industry =
@@ -123,16 +161,19 @@ export function assessFieldOpsEligibility(
       eligible: false,
       nonFieldOpsDetected: true,
       fieldOpsSignals: matchedSignals,
-      reason: `Based on ${domain ? domain : "your website"}, you appear to be a ${industry} business (SaaS, agency, or GTM/RevOps). Our agents are built for physical field operations — technicians, fleets, CMMS work orders, and on-site compliance. We didn't find those signals on your site, so no agents are recommended. You can still continue to a vision roadmap focused on your 60-day goal.`,
+      reason: `Based on ${domain ? domain : "your website"}, you appear to be a ${industry} business (SaaS, agency, or GTM/RevOps) without facility or field-operations signals. Facility 19's 49 agents target dispatched crews, fleets, CMMS, compliance, vendors, billing, and customer operations — we didn't find those patterns, so no agents are recommended.`,
     };
   }
 
   if (!hasFieldOpsEvidence && corpus.length > 80) {
+    const goalSummary = goalSignals?.primaryGoals.length
+      ? ` You selected goals focused on ${goalSignals.clusterHints.slice(0, 3).join(", ") || "field operations"}, but we could not align them with agents without clearer operational context.`
+      : "";
     return {
       eligible: false,
       nonFieldOpsDetected: false,
       fieldOpsSignals: matchedSignals,
-      reason: `We analyzed ${domain ? domain : "your website"} but didn't find clear field-operations signals (technicians, fleets, CMMS, or on-site dispatch). These agents target companies running physical service crews. No agents are recommended — your vision roadmap will focus on your stated goals instead.`,
+      reason: `We analyzed ${domain ? domain : "your website"} but didn't find clear facility or field-operations signals (technicians, fleets, CMMS, inspections, vendors, or on-site dispatch).${goalSummary} No agents are recommended — your vision roadmap will focus on your stated goals instead.`,
     };
   }
 

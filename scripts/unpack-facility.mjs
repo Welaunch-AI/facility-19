@@ -928,6 +928,14 @@ function rewriteAriaUrlsInDir(dir) {
         `<div className="nav-mobile-ctas">\n            <a className="btn btn-primary" href={START_URL} onClick={close}>Create your workspace</a>\n            <a className="btn btn-ghost" href={BOOK_URL}`,
       );
       text = text.replace(
+        /\n          <a className="btn btn-primary" href=\{ARIA_URL\} style=\{\{ height: 40 \}\}>\n            Meet Aria <ArrowRight \/>\n          <\/a>/g,
+        "",
+      );
+      text = text.replace(
+        /\n            <a className="btn btn-primary" href=\{ARIA_URL\} onClick=\{close\}>\n              Meet Aria <ArrowRight \/>\n            <\/a>/g,
+        "",
+      );
+      text = text.replace(
         `{ l: 'Contact', h: '#contact' },\n        ]}/>`,
         `{ l: 'Contact', h: '#contact' },\n          { l: 'Privacy Policy', h: '/privacy' },\n          { l: 'Terms of Service', h: '/terms' },\n        ]}/>`,
       );
