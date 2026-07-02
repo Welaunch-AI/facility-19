@@ -63,6 +63,16 @@ body.facility-shell.partners-page {
   background: #fafaf8;
 }
 
+/* Allow scroll on workspace, onboarding, and other app-shell routes. */
+html.facility-html.app-shell-page,
+body.facility-shell.app-shell-page {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  height: 100% !important;
+  min-height: 100%;
+  background: #fafaf8;
+}
+
 /* Talk-to-Aria: soft “Lovable-style” orb rings behind the hang-up control */
 @keyframes voice-orb-ring {
   0%,

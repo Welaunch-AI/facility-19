@@ -9,9 +9,20 @@
   --line: #e5e4de;
   --line-2: #dad8d0;
   --danger: #b42318;
+  height: 100dvh;
   min-height: 100dvh;
+  max-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
   background: var(--paper);
   color: var(--ink);
+}
+
+/* Sign-in keeps a fixed viewport (video + robot layout). */
+.app-shell-root.sign-in-page {
+  overflow: hidden;
 }
 
 /* Let DottedSurface show through — solid fallback stays on body.app-shell-page */
