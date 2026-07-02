@@ -79,7 +79,7 @@ function AriaConsoleInner() {
 
   const connected = conversation.status === "connected";
   const isSpeaking = conversation.isSpeaking;
-  const isMuted = (conversation as { isMuted?: boolean }).isMuted ?? false;
+  const isMuted = conversation.isMuted ?? false;
 
   const orbState: "idle" | "listening" | "speaking" | "paused" = useMemo(() => {
     if (!connected) return "idle";
@@ -171,26 +171,21 @@ function AriaConsoleInner() {
     setPaused(false);
   }, [conversation]);
 
-  const toggleMute = useCallback(async () => {
+  const toggleMute = useCallback(() => {
     try {
-      const setMuted = (conversation as { setMuted?: (v: boolean) => Promise<void> }).setMuted;
-      if (setMuted) await setMuted(!isMuted);
+      conversation.setMuted(!isMuted);
     } catch (e) {
       console.error(e);
     }
   }, [conversation, isMuted]);
 
-  const togglePause = useCallback(async () => {
+  const togglePause = useCallback(() => {
     try {
-      const setMuted = (conversation as { setMuted?: (v: boolean) => Promise<void> }).setMuted;
-      const setVolume = (conversation as { setVolume?: (opts: { volume: number }) => Promise<void> }).setVolume;
       if (paused) {
-        if (setMuted) await setMuted(false);
-        if (setVolume) await setVolume({ volume: 1 });
+        conversation.setMuted(false);
         setPaused(false);
       } else {
-        if (setMuted) await setMuted(true);
-        if (setVolume) await setVolume({ volume: 0 });
+        conversation.setMuted(true);
         setPaused(true);
       }
     } catch (e) {
@@ -265,14 +260,14 @@ function AriaConsoleInner() {
                     label={isMuted ? "Unmute" : "Mute"}
                     active={isMuted}
                     activeColor="#ff5a3c"
-                    onClick={() => void toggleMute()}
+                    onClick={toggleMute}
                   >
                     {isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </ControlButton>
                   <ControlButton
                     label={paused ? "Resume" : "Pause"}
                     active={paused}
-                    onClick={() => void togglePause()}
+                    onClick={togglePause}
                   >
                     {paused ? (
                       <Play className="h-4 w-4 fill-current" />
@@ -297,12 +292,10 @@ function AriaConsoleInner() {
                 disabled={!connected}
                 onSend={(text) => {
                   pushMessage("user", text);
-                  const sendMsg = (conversation as { sendUserMessage?: (t: string) => void }).sendUserMessage;
-                  sendMsg?.(text);
+                  try { (conversation as unknown as { sendUserMessage: (t: string) => void }).sendUserMessage(text); } catch { /* noop */ }
                 }}
                 onActivity={() => {
-                  const sendActivity = (conversation as { sendUserActivity?: () => void }).sendUserActivity;
-                  sendActivity?.();
+                  try { (conversation as unknown as { sendUserActivity: () => void }).sendUserActivity(); } catch { /* noop */ }
                 }}
               />
             </div>
