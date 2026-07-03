@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { getSiteUrl } from "@/lib/site-url";
 
 export function StartSignIn() {
   const searchParams = useSearchParams();
@@ -25,7 +26,7 @@ export function StartSignIn() {
 
     try {
       const supabase = createClient();
-      const redirectTo = `${window.location.origin}/auth/callback?next=/workspaces`;
+      const redirectTo = `${getSiteUrl()}/auth/callback?next=/workspaces`;
 
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email: email.trim(),

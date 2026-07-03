@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { getSiteUrl } from "@/lib/site-url";
 import { PrimaryButton, ShellCard } from "@/components/app-shell";
 import { FacilityWordmark } from "@/components/facility-wordmark";
 import { LoadingInline } from "@/components/loading-spinner";
@@ -47,7 +48,7 @@ export function AuthForm() {
       const { error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent("/onboarding?step=1")}`,
+          redirectTo: `${getSiteUrl()}/auth/callback?next=${encodeURIComponent("/onboarding?step=1")}`,
         },
       });
       if (oauthError) throw oauthError;

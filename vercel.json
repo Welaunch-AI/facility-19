@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "f19-polsia.vercel.app" }],
+      "destination": "https://www.facility19.com/:path*",
+      "permanent": true
+    }
+  ]
+}
