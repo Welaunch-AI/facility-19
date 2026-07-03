@@ -31,7 +31,9 @@ export async function GET(request: Request) {
 
         const destination = profile
           ? getResumePath(profile as ProfileRow)
-          : "/onboarding?step=1";
+          : next.startsWith("/onboarding")
+            ? next
+            : "/onboarding?step=1";
 
         return NextResponse.redirect(`${origin}${destination}`);
       }

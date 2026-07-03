@@ -34,7 +34,7 @@ export function getJourneyPath(
 
 export function sanitizeNextPath(next: string | null) {
   if (!next || !next.startsWith("/") || next.startsWith("//")) {
-    return "/workspaces";
+    return "/onboarding?step=1";
   }
   return next;
 }

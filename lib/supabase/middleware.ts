@@ -4,6 +4,14 @@ import { ONBOARDING_COMPLETE_STEP } from "@/lib/workspaces";
 
 export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const code = request.nextUrl.searchParams.get("code");
+
+  // Supabase OAuth sometimes lands on Site URL (/) instead of /auth/callback.
+  if (code && pathname !== "/auth/callback") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/callback";
+    return NextResponse.redirect(url);
+  }
 
   const publicPaths = ["/", "/privacy", "/terms", "/partners", "/talk-to-aria"];
   if (publicPaths.includes(pathname)) {
