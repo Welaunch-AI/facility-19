@@ -41,7 +41,10 @@ export const metadata: Metadata = {
   description:
     "Facility19, AI employees for facility management. Enterprise-grade automation for your operations.",
   icons: {
-    icon: "/favicon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
     apple: "/favicon.png",
   },
 };
