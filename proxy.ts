@@ -11,8 +11,6 @@ export async function proxy(request: NextRequest) {
 
     if (url.pathname === "/" && url.searchParams.has("code")) {
       url.pathname = "/auth/callback";
-    } else if (url.pathname === "/") {
-      url.pathname = "/start";
     }
 
     return NextResponse.redirect(url);

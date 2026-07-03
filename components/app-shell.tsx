@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ElementType, ReactNode } from "react";
 import { FacilityWordmark } from "@/components/facility-wordmark";
 import { GlowCard } from "@/components/ui/spotlight-card";
+import { LogoutButton } from "@/components/logout-button";
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
@@ -67,7 +68,7 @@ export function AppHeader({
               <div className="mt-2">{subtitleEl}</div>
             ) : null}
           </div>
-          <div className="flex shrink-0 flex-col items-end gap-3">
+          <div className="flex shrink-0 flex-row items-center gap-3">
             {headerAction ? (
               <Link
                 href={headerAction.href}
@@ -76,6 +77,7 @@ export function AppHeader({
                 {headerAction.label}
               </Link>
             ) : null}
+            <LogoutButton />
             {backHref ? (
               <Link
                 href={backHref}

@@ -59,7 +59,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && pathname === "/start") {
+  if (user && (pathname === "/start" || pathname === "/")) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("onboarding_step, active_workspace_id, onboarding_answers")
