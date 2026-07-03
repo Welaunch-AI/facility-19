@@ -1,6 +1,5 @@
-/** Same mark + wordmark as the main landing page header (`public/facility`). */
-export const FACILITY_MARK_SRC =
-  "/facility/5c69784a-ce98-47bf-a5d6-6c5c62c4fe5d.png";
+/** Shared Facility19 mark + wordmark used across app-shell pages. */
+export const FACILITY_MARK_SRC = "/favicon.png";
 
 type FacilityWordmarkProps = {
   size?: number;

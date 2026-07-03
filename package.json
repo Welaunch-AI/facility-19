@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "facility:extract": "node scripts/extract-bundler.mjs",
-    "facility:unpack": "node scripts/unpack-facility.mjs"
+    "lint": "eslint"
   },
   "dependencies": {
     "@elevenlabs/react": "^1.1.1",

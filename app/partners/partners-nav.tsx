@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const LOGO_SRC = "/facility/5c69784a-ce98-47bf-a5d6-6c5c62c4fe5d.png";
+const LOGO_SRC = "/favicon.png";
 
 const NAV_LINKS = [
   { label: "Team", href: "/#agents" },
