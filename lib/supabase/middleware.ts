@@ -3,11 +3,24 @@ import { createServerClient } from "@supabase/ssr";
 import { ONBOARDING_COMPLETE_STEP } from "@/lib/workspaces";
 
 export async function updateSession(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  const publicPaths = ["/", "/privacy", "/terms", "/partners", "/talk-to-aria"];
+  if (publicPaths.includes(pathname)) {
+    return NextResponse.next({ request });
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
@@ -30,7 +43,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
   const protectedPrefixes = ["/workspaces", "/onboarding"];
 
   if (!user && protectedPrefixes.some((p) => pathname.startsWith(p))) {
