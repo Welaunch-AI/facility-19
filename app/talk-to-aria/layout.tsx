@@ -1,15 +1,35 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { defaultOpenGraph, pageJsonLdGraph } from "@/lib/seo";
 import { TalkBodyUnlock } from "./talk-body-unlock";
 
+const title = "Talk to Aria — Voice Conversation";
+const description =
+  "Talk to Aria: real-time voice conversation with Facility19's AI guide. Learn how AI agents handle dispatch, scheduling, and field operations.";
+
 export const metadata: Metadata = {
-  title: "F19 Agent | Voice Conversation | Facility19",
-  description:
-    "Talk to Aria: real-time voice conversation powered by ElevenLabs. Start from your browser.",
+  title,
+  description,
+  alternates: { canonical: "/talk-to-aria" },
   openGraph: {
-    title: "F19 Agent | Voice Conversation",
-    description: "Real-time voice conversations with Facility19.",
+    ...defaultOpenGraph,
+    title: "Talk to Aria | Facility19",
+    description,
+    url: "/talk-to-aria",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Talk to Aria | Facility19",
+    description,
+    images: [defaultOpenGraph.images[0].url],
   },
 };
+
+const talkJsonLd = pageJsonLdGraph({
+  name: title,
+  description,
+  path: "/talk-to-aria",
+});
 
 export default function TalkToAriaLayout({
   children,
@@ -18,6 +38,7 @@ export default function TalkToAriaLayout({
 }>) {
   return (
     <>
+      <JsonLd data={talkJsonLd} />
       <TalkBodyUnlock />
       {/* Fraunces serif display font for Aria console */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />

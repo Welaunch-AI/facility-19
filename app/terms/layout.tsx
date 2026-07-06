@@ -1,16 +1,35 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { defaultOpenGraph, pageJsonLdGraph } from "@/lib/seo";
 import { TermsBodyUnlock } from "./terms-body-unlock";
 
+const title = "Terms of Service";
+const description =
+  "Terms of Service and End-User License Agreement for the Facility 19 platform.";
+
 export const metadata: Metadata = {
-  title: "Terms of Service | Facility19",
-  description:
-    "Terms of Service and End-User License Agreement for the Facility 19 platform.",
+  title,
+  description,
+  alternates: { canonical: "/terms" },
   openGraph: {
-    title: "Terms of Service | Facility19",
-    description:
-      "Terms of Service and End-User License Agreement for the Facility 19 platform.",
+    ...defaultOpenGraph,
+    title: `${title} | Facility19`,
+    description,
+    url: "/terms",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${title} | Facility19`,
+    description,
+    images: [defaultOpenGraph.images[0].url],
   },
 };
+
+const termsJsonLd = pageJsonLdGraph({
+  name: title,
+  description,
+  path: "/terms",
+});
 
 export default function TermsLayout({
   children,
@@ -19,6 +38,7 @@ export default function TermsLayout({
 }>) {
   return (
     <>
+      <JsonLd data={termsJsonLd} />
       <script
         dangerouslySetInnerHTML={{
           __html:

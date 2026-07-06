@@ -13,7 +13,14 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const publicPaths = ["/privacy", "/terms", "/partners", "/talk-to-aria"];
+  const publicPaths = [
+    "/privacy",
+    "/terms",
+    "/partners",
+    "/talk-to-aria",
+    "/sitemap.xml",
+    "/robots.txt",
+  ];
   if (publicPaths.includes(pathname)) {
     return NextResponse.next({ request });
   }
