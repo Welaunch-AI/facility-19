@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MarketingFooter } from "@/components/marketing-footer";
 
 const toc = [
   { id: "services", label: "Services Description" },
@@ -383,17 +384,7 @@ export default function TermsPage() {
         </div>
       </main>
 
-      <footer className="border-t border-[#E5E4DE] py-8">
-        <div className="mx-auto flex max-w-[760px] flex-col gap-2 px-7 text-[13px] text-[#5E6472] sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 ARB Global LLC · Facility19</span>
-          <Link
-            href="/"
-            className="transition-colors hover:text-[#0A0A0B]"
-          >
-            facility19.com
-          </Link>
-        </div>
-      </footer>
+      <MarketingFooter />
     </div>
   );
 }

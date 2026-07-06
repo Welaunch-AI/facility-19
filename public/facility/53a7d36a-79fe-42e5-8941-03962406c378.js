@@ -72,6 +72,7 @@ function Nav() {
           <a href="#pricing">Pricing</a>
           <a href="#contact">Contact</a>
           <a href="/partners">Partners</a>
+          <a href="/blog">Blog</a>
         </div>
         <div className="nav-cta">
           <a className="btn btn-primary nav-cta-start" href={START_URL} style={{ height: 40 }} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
@@ -96,6 +97,7 @@ function Nav() {
           <a href="#pricing" onClick={close}>Pricing</a>
           <a href="#contact" onClick={close}>Contact</a>
           <a href="/partners" onClick={close}>Partners</a>
+          <a href="/blog" onClick={close}>Blog</a>
           <div className="nav-mobile-ctas">
             <a className="btn btn-primary" href={START_URL} onClick={close} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
             <a className="btn btn-ghost" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
@@ -128,6 +130,7 @@ function Footer() {
         <FooterCol title="Company" items={[
           { l: 'Proof', h: '#proof' },
           { l: 'Contact', h: '#contact' },
+          { l: 'Blog', h: '/blog' },
           { l: 'Privacy Policy', h: '/privacy' },
           { l: 'Terms of Service', h: '/terms' },
         ]}/>

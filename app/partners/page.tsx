@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Reveal } from "@/components/Reveal";
+import { MarketingFooter } from "@/components/marketing-footer";
 import { PARTNERS_FAQS } from "@/lib/partners-faqs";
 import { PartnersNav } from "./partners-nav";
 
@@ -525,53 +525,6 @@ function CalEmbed() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="relative">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-6 py-12 md:flex-row md:items-center">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-base font-semibold tracking-tight text-ink">
-              facility<span className="text-brand">19</span>
-            </span>
-          </div>
-          <p className="mt-3 text-sm text-ink-muted">
-            Built for the people who run the field.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-6 text-sm text-ink-muted">
-          <a href="#program" className="hover:text-ink">
-            Program
-          </a>
-          <a href="#how" className="hover:text-ink">
-            How it works
-          </a>
-          <a href="#proof" className="hover:text-ink">
-            Proof
-          </a>
-          <a href="#faq" className="hover:text-ink">
-            FAQ
-          </a>
-          <Link href="/terms" className="hover:text-ink">
-            Terms
-          </Link>
-          <Link href="/privacy" className="hover:text-ink">
-            Privacy
-          </Link>
-          <a
-            href="https://facility19.ai"
-            className="hover:text-ink"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            facility19.ai
-          </a>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 export default function PartnersPage() {
   return (
     <div className="partners-page-root min-h-screen">
@@ -586,7 +539,7 @@ export default function PartnersPage() {
         <FAQ />
         <CalEmbed />
       </main>
-      <Footer />
+      <MarketingFooter />
     </div>
   );
 }
