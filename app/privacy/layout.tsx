@@ -1,16 +1,35 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
+import { defaultOpenGraph, pageJsonLdGraph } from "@/lib/seo";
 import { PrivacyBodyUnlock } from "./privacy-body-unlock";
 
+const title = "Privacy Policy";
+const description =
+  "How Facility 19 (WeLaunch Inc.) collects, uses, and protects your information.";
+
 export const metadata: Metadata = {
-  title: "Privacy Policy | Facility19",
-  description:
-    "How Facility 19 (WeLaunch Inc.) collects, uses, and protects your information.",
+  title,
+  description,
+  alternates: { canonical: "/privacy" },
   openGraph: {
-    title: "Privacy Policy | Facility19",
-    description:
-      "How Facility 19 (WeLaunch Inc.) collects, uses, and protects your information.",
+    ...defaultOpenGraph,
+    title: `${title} | Facility19`,
+    description,
+    url: "/privacy",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${title} | Facility19`,
+    description,
+    images: [defaultOpenGraph.images[0].url],
   },
 };
+
+const privacyJsonLd = pageJsonLdGraph({
+  name: title,
+  description,
+  path: "/privacy",
+});
 
 export default function PrivacyLayout({
   children,
@@ -19,6 +38,7 @@ export default function PrivacyLayout({
 }>) {
   return (
     <>
+      <JsonLd data={privacyJsonLd} />
       <script
         dangerouslySetInnerHTML={{
           __html:

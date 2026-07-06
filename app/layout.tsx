@@ -3,6 +3,15 @@ import fs from "node:fs";
 import path from "node:path";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { JsonLd } from "@/components/json-ld";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+  absoluteUrl,
+  defaultOpenGraph,
+  siteJsonLdGraph,
+} from "@/lib/seo";
 import "./globals.css";
 
 const zoominfoEmbed = fs
@@ -37,9 +46,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Facility19, AI employees for facility management",
-  description:
-    "Facility19, AI employees for facility management. Enterprise-grade automation for your operations.",
+  metadataBase: new URL(absoluteUrl()),
+  title: {
+    default: `${SITE_NAME}, ${SITE_TAGLINE}`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+    types: {
+      "text/plain": "/llms.txt",
+    },
+  },
+  openGraph: {
+    ...defaultOpenGraph,
+    title: `${SITE_NAME}, ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME}, ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    images: [defaultOpenGraph.images[0].url],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -67,6 +102,7 @@ export default function RootLayout({
       className={`facility-html ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full facility-shell">
+        <JsonLd data={siteJsonLdGraph()} />
         <noscript>
           <img
             height="1"
