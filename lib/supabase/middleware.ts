@@ -74,12 +74,13 @@ export async function updateSession(request: NextRequest) {
       .maybeSingle();
 
     const url = request.nextUrl.clone();
-    if (!profile || profile.onboarding_step < ONBOARDING_COMPLETE_STEP) {
+    if (profile?.active_workspace_id) {
+      // Existing user with a workspace — go straight there, never re-onboard.
+      url.pathname = `/workspaces/${profile.active_workspace_id}`;
+    } else if (!profile || profile.onboarding_step < ONBOARDING_COMPLETE_STEP) {
       const step = profile?.onboarding_step ?? 1;
       url.pathname = "/onboarding";
       url.searchParams.set("step", String(Math.min(5, Math.max(1, step))));
-    } else if (profile.active_workspace_id) {
-      url.pathname = `/workspaces/${profile.active_workspace_id}`;
     } else {
       url.pathname = "/workspaces";
     }

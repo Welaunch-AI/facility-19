@@ -2,18 +2,22 @@ import type { BusinessProfile, ProfileRow } from "@/lib/workspaces";
 import { ONBOARDING_COMPLETE_STEP } from "@/lib/workspaces";
 
 export function getResumePath(profile: ProfileRow, workspaceId?: string | null) {
+  const wsId = workspaceId ?? profile.active_workspace_id;
+
+  // If they already have a workspace, always send them there — never re-onboard.
+  if (wsId) {
+    const stage = (profile.onboarding_answers as { journey_stage?: string })
+      ?.journey_stage;
+    return getJourneyPath(wsId, stage as BusinessProfile["journey_stage"]);
+  }
+
+  // No workspace yet — resume or start onboarding.
   if (profile.onboarding_step < ONBOARDING_COMPLETE_STEP) {
     const step = Math.max(1, Math.min(5, profile.onboarding_step));
     return `/onboarding?step=${step}`;
   }
 
-  const wsId = workspaceId ?? profile.active_workspace_id;
-  if (!wsId) return "/onboarding?step=5";
-
-  const stage = (profile.onboarding_answers as { journey_stage?: string })
-    ?.journey_stage;
-
-  return getJourneyPath(wsId, stage as BusinessProfile["journey_stage"]);
+  return "/onboarding?step=5";
 }
 
 export function getJourneyPath(
