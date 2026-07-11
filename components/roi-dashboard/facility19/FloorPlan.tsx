@@ -2,10 +2,10 @@ import { Building2 } from "lucide-react";
 import { useFacility19, type ZoneStatus } from "@/lib/roi-dashboard/facility19/store";
 import { ExplainTip } from "./ExplainTip";
 
-const statusFill: Record<ZoneStatus, string> = {
-  ok: "floor-zone--ok",
-  watch: "floor-zone--watch",
-  alert: "floor-zone--alert",
+const statusStyle: Record<ZoneStatus, { fill: string; stroke: string }> = {
+  ok:    { fill: "rgba(16, 185, 129, 0.15)",  stroke: "rgba(16, 185, 129, 0.45)" },
+  watch: { fill: "rgba(245, 158, 11, 0.18)",  stroke: "rgba(245, 158, 11, 0.55)" },
+  alert: { fill: "rgba(239, 68,  68,  0.15)", stroke: "rgba(239, 68,  68,  0.55)" },
 };
 
 export function FloorPlan() {
@@ -33,7 +33,8 @@ export function FloorPlan() {
               <rect
                 key={z.id}
                 x={z.x} y={z.y} width={z.w} height={z.h} rx={1.2}
-                className={`${statusFill[z.status]} transition-all`}
+                fill={statusStyle[z.status].fill}
+                stroke={statusStyle[z.status].stroke}
                 strokeWidth={0.4}
               />
             ))}
