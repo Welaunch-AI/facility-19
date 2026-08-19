@@ -315,20 +315,25 @@ function mapPageToMeta(page: PageObjectResponse): BlogPostMeta {
 }
 
 async function queryPublishedPages() {
-  const notion = getClient();
-  const dataSourceId = await getDataSourceId(notion);
+  try {
+    const notion = getClient();
+    const dataSourceId = await getDataSourceId(notion);
 
-  // Fetch all rows, then filter client-side so "Publish" / "Published" both work
-  // and missing Date sorts don't break the query.
-  const rows = await collectPaginatedAPI(notion.dataSources.query, {
-    data_source_id: dataSourceId,
-  });
+    // Fetch all rows, then filter client-side so "Publish" / "Published" both work
+    // and missing Date sorts don't break the query.
+    const rows = await collectPaginatedAPI(notion.dataSources.query, {
+      data_source_id: dataSourceId,
+    });
 
-  return rows
-    .filter(isFullPage)
-    .filter(isPublishedPage)
-    .map(mapPageToMeta)
-    .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
+    return rows
+      .filter(isFullPage)
+      .filter(isPublishedPage)
+      .map(mapPageToMeta)
+      .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
+  } catch (error) {
+    console.error("[notion] failed to load published posts", error);
+    return [];
+  }
 }
 
 function isPublishedPage(page: PageObjectResponse) {
@@ -363,34 +368,39 @@ export async function getBlogSlugs(): Promise<string[]> {
 }
 
 async function queryPostBySlug(slug: string): Promise<BlogPost | null> {
-  const posts = await loadPublishedPosts();
-  const meta = posts.find((post) => post.slug === slug);
-  if (!meta) return null;
+  try {
+    const posts = await loadPublishedPosts();
+    const meta = posts.find((post) => post.slug === slug);
+    if (!meta) return null;
 
-  const notion = getClient();
-  const blocks = await collectPaginatedAPI(notion.blocks.children.list, {
-    block_id: meta.id,
-  });
+    const notion = getClient();
+    const blocks = await collectPaginatedAPI(notion.blocks.children.list, {
+      block_id: meta.id,
+    });
 
-  const fullBlocks = blocks.filter(isFullBlock);
+    const fullBlocks = blocks.filter(isFullBlock);
 
-  // Resolve one level of nested children for lists/toggles
-  const withChildren: BlogBlock[] = [];
-  for (const block of fullBlocks) {
-    if (block.has_children && shouldExpandChildren(block.type)) {
-      const children = await collectPaginatedAPI(notion.blocks.children.list, {
-        block_id: block.id,
-      });
-      withChildren.push({
-        ...block,
-        children: children.filter(isFullBlock),
-      });
-    } else {
-      withChildren.push(block);
+    // Resolve one level of nested children for lists/toggles
+    const withChildren: BlogBlock[] = [];
+    for (const block of fullBlocks) {
+      if (block.has_children && shouldExpandChildren(block.type)) {
+        const children = await collectPaginatedAPI(notion.blocks.children.list, {
+          block_id: block.id,
+        });
+        withChildren.push({
+          ...block,
+          children: children.filter(isFullBlock),
+        });
+      } else {
+        withChildren.push(block);
+      }
     }
-  }
 
-  return { ...meta, blocks: withChildren };
+    return { ...meta, blocks: withChildren };
+  } catch (error) {
+    console.error("[notion] failed to load post", slug, error);
+    return null;
+  }
 }
 
 const loadPostBySlug = unstable_cache(

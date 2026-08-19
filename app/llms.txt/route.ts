@@ -1,6 +1,6 @@
 import { getLlmsTxt } from "@/lib/llms";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   return new Response(await getLlmsTxt(), {

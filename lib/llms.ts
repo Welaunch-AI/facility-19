@@ -8,7 +8,10 @@ const PUBLIC_SITE = "welaunch.ai";
 
 export async function getLlmsTxt(): Promise<string> {
   const baseUrl = getServerSiteUrl();
-  const posts = await getPublishedPosts();
+  const posts = await getPublishedPosts().catch((error) => {
+    console.error("[llms.txt] failed to load blog posts", error);
+    return [];
+  });
 
   const blogIndex = posts
     .map((post) => `- [${post.title}](${baseUrl}/blog/${post.slug})`)
