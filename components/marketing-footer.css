@@ -120,14 +120,6 @@
 .marketing-footer .nav-logo-mark {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--footer-f-display);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-}
-
-.marketing-footer .nav-logo-mark .nineteen {
-  color: var(--footer-brand);
 }
 
 @media (max-width: 1024px) {

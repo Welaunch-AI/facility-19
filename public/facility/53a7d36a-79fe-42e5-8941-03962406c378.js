@@ -22,13 +22,12 @@ function prefetchStartRoute() {
   add('prefetch', SPLINE_SCENE, 'fetch');
   fetch(SPLINE_SCENE, { mode: 'cors' }).catch(function () {});
 }
-const BOOK_URL = 'https://cal.com/aviral-bhutani-facility19/discovery-call';
+const BOOK_URL = 'https://cal.com/aviralbhutani/welaunch.ai';
 
 function Wordmark({ size = 22 }) {
   return (
-    <span className="nav-logo-mark" style={{ fontSize: size, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-      <img src={(window.__resources && window.__resources.f19Mark) || "assets/facility19-mark.png"} alt="" style={{ height: size * 1.9, width: 'auto', display: 'block', mixBlendMode: 'multiply' }} />
-      <span style={{ display: 'inline-flex' }}><span>Facility</span><span className="nineteen">19</span></span>
+    <span className="nav-logo-mark" style={{ display: 'inline-flex', alignItems: 'center' }}>
+      <img src="/logo/welaunch-logo-black.svg" alt="WeLaunch" style={{ height: size, width: 'auto', display: 'block' }} />
     </span>
   );
 }
@@ -62,7 +61,7 @@ function Nav() {
   return (
     <nav className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' is-open' : '')}>
       <div className="wrap nav-inner">
-        <a className="nav-logo" href="#top" aria-label="Facility19" onClick={close}>
+        <a className="nav-logo" href="#top" aria-label="WeLaunch" onClick={close}>
           <Wordmark />
         </a>
         <div className="nav-links">
@@ -71,8 +70,8 @@ function Nav() {
           <a href="#proof">Proof</a>
           <a href="#pricing">Pricing</a>
           <a href="#contact">Contact</a>
-          <a href="/partners">Partners</a>
           <a href="/blog">Blog</a>
+          <a href="/partners">Partners</a>
         </div>
         <div className="nav-cta">
           <a className="btn btn-primary nav-cta-start" href={START_URL} style={{ height: 40 }} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
@@ -96,8 +95,8 @@ function Nav() {
           <a href="#proof" onClick={close}>Proof</a>
           <a href="#pricing" onClick={close}>Pricing</a>
           <a href="#contact" onClick={close}>Contact</a>
-          <a href="/partners" onClick={close}>Partners</a>
           <a href="/blog" onClick={close}>Blog</a>
+          <a href="/partners" onClick={close}>Partners</a>
           <div className="nav-mobile-ctas">
             <a className="btn btn-primary" href={START_URL} onClick={close} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
             <a className="btn btn-ghost" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
@@ -130,7 +129,6 @@ function Footer() {
         <FooterCol title="Company" items={[
           { l: 'Proof', h: '#proof' },
           { l: 'Contact', h: '#contact' },
-          { l: 'Blog', h: '/blog' },
           { l: 'Privacy Policy', h: '/privacy' },
           { l: 'Terms of Service', h: '/terms' },
         ]}/>
@@ -141,7 +139,7 @@ function Footer() {
         ]}/>
       </div>
       <div className="wrap" style={{ marginTop: 72, paddingTop: 28, borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'var(--slate)' }}>
-        <span>© 2026 ARB Global LLC · Facility19</span>
+        <span>© 2026 ARB Global LLC · WeLaunch</span>
         <span className="mono" style={{ letterSpacing: '0.06em' }}>v3.2 · Built in America</span>
       </div>
     </footer>
@@ -290,7 +288,7 @@ function AriaBubble() {
             }}>AR</div>
             <div>
               <div style={{ fontSize: 15, fontWeight: 500 }}>Hi, I'm Aria.</div>
-              <div className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>The front door at Facility19</div>
+              <div className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>The front door at WeLaunch</div>
             </div>
           </div>
           <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-2)' }}>

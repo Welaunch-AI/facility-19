@@ -54,10 +54,14 @@ export function StartSignIn() {
         <div className="max-w-[520px] lg:flex-1">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[#5E6472] transition-opacity hover:opacity-70"
+            className="inline-flex items-center transition-opacity hover:opacity-70"
+            aria-label="WeLaunch"
           >
-            <span className="inline-block h-2 w-2 rounded-full bg-[#6B7BFF]" />
-            Facility 19
+            <img
+              src="/logo/welaunch-logo-black.svg"
+              alt="WeLaunch"
+              className="h-6 w-auto"
+            />
           </Link>
 
           <h1 className="mt-10 text-[clamp(36px,4.5vw,52px)] font-medium leading-[1.08] tracking-[-0.03em]">
@@ -65,7 +69,7 @@ export function StartSignIn() {
           </h1>
 
           <p className="mt-6 max-w-[460px] text-[17px] leading-[1.6] text-[#5E6472]">
-            Sign in to start the multi-turn business interview. Facility 19 will
+            Sign in to start the multi-turn business interview. WeLaunch will
             ask follow-ups, build your workspace, and orchestrate your
             back-office agents.
           </p>
@@ -74,7 +78,7 @@ export function StartSignIn() {
         <div className="mt-14 w-full max-w-[420px] lg:mt-0 lg:flex-shrink-0">
           <div className="rounded-2xl border border-[#E5E4DE] bg-white p-8 shadow-[0_1px_2px_rgba(10,10,11,0.04)] md:p-10">
             <h2 className="text-[22px] font-medium tracking-[-0.02em]">
-              Sign in to Facility 19
+              Sign in to WeLaunch
             </h2>
             <p className="mt-2 text-[15px] leading-relaxed text-[#5E6472]">
               {sent

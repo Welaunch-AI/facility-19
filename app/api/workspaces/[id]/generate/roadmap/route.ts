@@ -44,7 +44,7 @@ export async function POST(
       markdown: null,
       reason:
         bp.recommendation_skipped_reason ??
-        "No Facility 19 agents matched your business — vision roadmap was not generated.",
+        "No WeLaunch agents matched your business — vision roadmap was not generated.",
     });
   }
 
@@ -106,7 +106,7 @@ ${roadmapPromptSchema(hasAgents)}`;
         {
           role: "system",
           content:
-            "You are a strategic operations consultant for Facility 19. You produce structured vision roadmaps for field service and facility management companies. Return valid JSON only. Be specific — never generic boilerplate. Every pain point and outcome must reference this company's actual operations.",
+            "You are a strategic operations consultant for WeLaunch. You produce structured vision roadmaps for field service and facility management companies. Return valid JSON only. Be specific — never generic boilerplate. Every pain point and outcome must reference this company's actual operations.",
         },
         { role: "user", content: prompt },
       ],

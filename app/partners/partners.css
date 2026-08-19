@@ -59,6 +59,12 @@
   height: 68px;
 }
 
+.partners-page-root .nav .wrap {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+}
+
 .partners-page-root .nav-logo {
   display: flex;
   align-items: center;
@@ -68,15 +74,6 @@
 .partners-page-root .nav-logo-mark {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--f-display);
-  font-weight: 600;
-  font-size: 22px;
-  letter-spacing: -0.03em;
-}
-
-.partners-page-root .nav-logo-mark .nineteen {
-  color: var(--brand);
 }
 
 .partners-page-root .nav-links {
@@ -231,8 +228,6 @@
   flex-direction: column;
   gap: 4px;
   padding: 24px 28px 40px;
-  max-width: var(--maxw);
-  margin: 0 auto;
 }
 
 .partners-page-root .nav-mobile-inner a {
@@ -300,6 +295,10 @@
 
 .partners-page-root .text-ink-muted {
   color: var(--ink-muted);
+}
+
+.partners-page-root .text-ink-2 {
+  color: var(--ink-2);
 }
 
 .partners-page-root .bg-brand-soft {

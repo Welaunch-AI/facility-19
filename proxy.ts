@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
   if (host === "f19-polsia.vercel.app") {
     const url = request.nextUrl.clone();
     url.protocol = "https:";
-    url.hostname = "www.facility19.com";
+    url.hostname = "www.welaunch.ai";
     url.port = "";
 
     if (url.pathname === "/" && url.searchParams.has("code")) {
@@ -21,6 +21,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon\\.ico|favicon.png|facility|api|sitemap\\.xml|robots\\.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon\\.ico|favicon.png|facility|api|sitemap\\.xml|robots\\.txt|llms\\.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

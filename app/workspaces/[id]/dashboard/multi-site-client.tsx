@@ -113,7 +113,7 @@ function MultiSiteDashboard() {
         </section>
 
         <footer className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
-          <div className="font-mono uppercase tracking-wider">Facility19 · Multi-Site Retail Chain · v0.1</div>
+          <div className="font-mono uppercase tracking-wider">WeLaunch · Multi-Site Retail Chain · v0.1</div>
           <div>Connected to UtilizeCore · last sync 8 sec ago</div>
         </footer>
       </main>

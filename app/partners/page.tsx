@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Reveal } from "@/components/Reveal";
 import { MarketingFooter } from "@/components/marketing-footer";
 import { PARTNERS_FAQS } from "@/lib/partners-faqs";
+import { CAL_DEMO_URL, CAL_EMBED_URL } from "@/lib/cal-demo-link";
 import { PartnersNav } from "./partners-nav";
 
 function Hero() {
@@ -24,7 +25,7 @@ function Hero() {
             className="eyebrow eyebrow-dot"
             style={{ animation: "fade-in 0.6s ease-out both" }}
           >
-            Facility19 Partner Program
+            WeLaunch Partner Program
           </span>
           <h1
             className="mt-6 text-balance text-5xl font-semibold leading-[1.02] tracking-tight text-ink md:text-7xl"
@@ -117,7 +118,7 @@ function WhatWeDo() {
                   Live deployments
                 </div>
                 <div className="font-mono text-xs text-ink-muted">
-                  facility19 · today
+                  welaunch · today
                 </div>
               </div>
               <ul className="divide-y divide-line">
@@ -473,10 +474,6 @@ function FAQ() {
   );
 }
 
-const CAL_URL =
-  "https://app.cal.com/aviral-bhutani-facility19/facility19-partner-program";
-const CAL_EMBED_URL = `${CAL_URL}?embed=true&layout=month_view`;
-
 function CalEmbed() {
   return (
     <section id="apply" className="section-fade-top relative bg-surface-2">
@@ -501,7 +498,7 @@ function CalEmbed() {
         <div className="mt-12">
           <div className="card-soft overflow-hidden p-1 md:p-1">
             <iframe
-              title="Book a facility19 partner call"
+              title="Book a WeLaunch partner call"
               src={CAL_EMBED_URL}
               className="w-full rounded-xl bg-surface"
               style={{ width: "100%", height: "750px", border: 0 }}
@@ -511,7 +508,7 @@ function CalEmbed() {
           <p className="mt-4 text-center text-sm text-ink-muted">
             Calendar not loading?{" "}
             <a
-              href={CAL_URL}
+              href={CAL_DEMO_URL}
               className="font-medium text-brand hover:text-ink"
               target="_blank"
               rel="noopener noreferrer"

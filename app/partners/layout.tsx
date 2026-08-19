@@ -10,7 +10,7 @@ import "./partners.css";
 
 const title = "Partner Program — Get paid for introductions";
 const description =
-  "Earn 25% of month one and 10% residual for a year. Introduce FM and home service operators to Facility19. No selling. Just introductions.";
+  "Earn 25% of month one and 10% residual for a year. Introduce FM and home service operators to WeLaunch. No selling. Just introductions.";
 
 export const metadata: Metadata = {
   title,
@@ -18,14 +18,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/partners" },
   openGraph: {
     ...defaultOpenGraph,
-    title: "Facility19 Partner Program",
+    title: "WeLaunch Partner Program",
     description:
       "If you know facility management or home services, your network is worth something. Apply to partner.",
     url: "/partners",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Facility19 Partner Program",
+    title: "WeLaunch Partner Program",
     description,
     images: [defaultOpenGraph.images[0].url],
   },
@@ -35,7 +35,7 @@ const partnersJsonLd = pageJsonLdGraph(
   { name: title, description, path: "/partners" },
   [
     serviceJsonLd({
-      name: "Facility19 Partner Program",
+      name: "WeLaunch Partner Program",
       description,
       path: "/partners",
     }),

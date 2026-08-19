@@ -18,7 +18,6 @@ const PRODUCT_LINKS: FooterLink[] = [
 const COMPANY_LINKS: FooterLink[] = [
   { label: "Proof", href: "/#proof" },
   { label: "Contact", href: "/#contact" },
-  { label: "Blog", href: "/blog" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
 ];
@@ -77,7 +76,7 @@ export function MarketingFooter() {
         <FooterCol title="Get started" items={GET_STARTED_LINKS} />
       </div>
       <div className="wrap marketing-footer-bottom">
-        <span>© 2026 ARB Global LLC · Facility19</span>
+        <span>© 2026 ARB Global LLC · WeLaunch</span>
         <span className="mono">v3.2 · Built in America</span>
       </div>
     </footer>

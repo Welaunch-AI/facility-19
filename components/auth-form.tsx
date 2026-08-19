@@ -134,7 +134,7 @@ export function AuthForm() {
         }`}
       >
         <div className="sign-in-left">
-          <Link href="/" className="sign-in-logo" aria-label="Facility19">
+          <Link href="/" className="sign-in-logo" aria-label="WeLaunch">
             <FacilityWordmark className="sign-in-wordmark" />
           </Link>
           <div className="sign-in-headline-spacer" aria-hidden />
@@ -147,7 +147,7 @@ export function AuthForm() {
         <div className="sign-in-right">
           <ShellCard className="sign-in-card w-full max-w-[440px] p-7 md:p-8">
             <h2 className="text-[22px] font-medium tracking-[-0.02em] text-[#F5F5F3]">
-              {mode === "signup" ? "Create your account" : "Sign in to Facility 19"}
+              {mode === "signup" ? "Create your account" : "Sign in to WeLaunch"}
             </h2>
             <p className="mt-2 text-[15px] leading-relaxed text-[#9CA3AF]">
               {sent

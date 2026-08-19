@@ -1,4 +1,4 @@
-// Shared data for Facility19 — V2 copy (anonymized, no platform names)
+// Shared data for WeLaunch — V2 copy (anonymized, no platform names)
 
 const AGENTS = [
   {

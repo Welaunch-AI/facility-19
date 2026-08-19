@@ -540,24 +540,11 @@ textarea.app-shell-input {
 .facility-wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  color: var(--ink);
 }
 
 .facility-wordmark-icon {
   width: auto;
   display: block;
-  mix-blend-mode: multiply;
-}
-
-.facility-wordmark-text {
-  display: inline-flex;
-}
-
-.facility-wordmark-nineteen {
-  color: var(--brand);
 }
 
 .sign-in-headline-layer {
@@ -629,7 +616,7 @@ textarea.app-shell-input {
 }
 
 .sign-in-wordmark {
-  align-items: flex-end;
+  align-items: center;
 }
 
 .sign-in-right-image-panel {

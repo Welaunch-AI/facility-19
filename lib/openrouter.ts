@@ -32,8 +32,8 @@ export async function chatCompletion(
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": "https://facility19.com",
-      "X-Title": "Facility19",
+      "HTTP-Referer": "https://www.welaunch.ai",
+      "X-Title": "WeLaunch",
     },
     body: JSON.stringify({
       model,

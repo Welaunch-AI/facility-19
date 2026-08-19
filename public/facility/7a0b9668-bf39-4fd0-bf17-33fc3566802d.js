@@ -46,7 +46,7 @@ function TweaksPanel({ open, tweaks, onChange }) {
           <span className="live-dot" />
           <span style={{ fontFamily: 'var(--f-display)', fontWeight: 500, fontSize: 14 }}>Tweaks</span>
         </div>
-        <span className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Facility19</span>
+        <span className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>WeLaunch</span>
       </div>
       <div style={{ padding: 18, display: 'grid', gap: 20 }}>
         {options.map(group => (

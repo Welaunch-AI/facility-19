@@ -417,7 +417,7 @@ function Pricing() {
         </div>
         <RevealP>
           <p className="mono" style={{ textAlign: 'center', fontSize: 12, color: 'var(--slate)', marginTop: 40, letterSpacing: '0.04em' }}>
-            All plans include setup, integration, monitoring, and weekly iteration by the Facility19 ops team.
+            All plans include setup, integration, monitoring, and weekly iteration by the WeLaunch ops team.
           </p>
         </RevealP>
       </div>

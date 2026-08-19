@@ -118,7 +118,7 @@ function FieldDashboard() {
         </section>
 
         <footer className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
-          <div className="font-mono uppercase tracking-wider">Facility19 · Field Service · v0.1</div>
+          <div className="font-mono uppercase tracking-wider">WeLaunch · Field Service · v0.1</div>
           <div>Connected to ServiceTitan · QuickBooks synced 6 sec ago</div>
         </footer>
       </main>

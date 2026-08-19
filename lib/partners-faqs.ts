@@ -1,7 +1,7 @@
 export const PARTNERS_FAQS = [
   {
     q: "Do I need to sell anything?",
-    a: "No. Your job is the introduction. Once you make the connection, Facility19 runs the entire sales process. You're copied on the first response and then handed off cleanly.",
+    a: "No. Your job is the introduction. Once you make the connection, WeLaunch runs the entire sales process. You're copied on the first response and then handed off cleanly.",
   },
   {
     q: "What qualifies me to be a partner?",
@@ -24,7 +24,7 @@ export const PARTNERS_FAQS = [
     a: "Most partners make their first referral within 21 days of joining. Close rates on warm introductions run above 35%.",
   },
   {
-    q: "What industries are Facility19 clients in?",
+    q: "What industries are WeLaunch clients in?",
     a: "Fire protection, pest control, HVAC, cleaning, plumbing, facility management, and any field service business running technicians on work orders.",
   },
   {

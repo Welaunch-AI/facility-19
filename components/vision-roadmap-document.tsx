@@ -24,7 +24,7 @@ export function VisionRoadmapDocumentView({
   return (
     <article className="vision-roadmap">
       <header className="vision-roadmap-hero">
-        <p className="vision-roadmap-eyebrow">Facility 19 - Vision Roadmap</p>
+        <p className="vision-roadmap-eyebrow">WeLaunch - Vision Roadmap</p>
         <h1 className="vision-roadmap-title">{doc.title}</h1>
         <p className="vision-roadmap-company">{doc.companyName}</p>
         {doc.domain ? (

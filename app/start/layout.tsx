@@ -5,9 +5,9 @@ import { ROBOT_SCENE_URL, SPLINE_ORIGIN } from "@/lib/spline-sign-in";
 import { StartBodyUnlock } from "./start-body-unlock";
 
 export const metadata: Metadata = {
-  title: "Sign in | Facility19",
+  title: "Sign in | WeLaunch",
   description:
-    "Create your workspace or sign in to Facility 19 to start the multi-turn business interview.",
+    "Create your workspace or sign in to WeLaunch to start the multi-turn business interview.",
 };
 
 export default function StartLayout({

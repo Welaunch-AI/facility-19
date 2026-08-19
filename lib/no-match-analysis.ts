@@ -39,7 +39,7 @@ function fallbackAnalysis(
 
   const whyNotFacility19 =
     displaySkippedReason(skippedReason) ??
-    `Facility 19's pre-built agents target physical field operations — technicians, fleets, CMMS work orders, and on-site compliance. We didn't find those patterns on ${domain}, so our standard agent catalog isn't a fit.`;
+    `WeLaunch's pre-built agents target physical field operations — technicians, fleets, CMMS work orders, and on-site compliance. We didn't find those patterns on ${domain}, so our standard agent catalog isn't a fit.`;
 
   const customAgents = buildFallbackAgents(industry, goal, bp.primary_goals ?? [], signals);
 
@@ -92,7 +92,7 @@ export async function generateNoMatchAnalysis(
         {
           role: "system",
           content:
-            "You analyze companies for AI agent fit. Facility 19 ships 49 pre-built agents across facility management, field operations, fleet, compliance, vendors, billing, and customer service. When a company is NOT a fit, explain why — explicitly referencing what the user stated in onboarding goals — and propose 2-4 custom AI agents tailored to THEIR actual business. Return valid JSON only.",
+            "You analyze companies for AI agent fit. WeLaunch ships 49 pre-built agents across facility management, field operations, fleet, compliance, vendors, billing, and customer service. When a company is NOT a fit, explain why — explicitly referencing what the user stated in onboarding goals — and propose 2-4 custom AI agents tailored to THEIR actual business. Return valid JSON only.",
         },
         {
           role: "user",
@@ -106,7 +106,7 @@ ${researchContextForPrompt(bp.research)}
 Return JSON:
 {
   "websiteSummary": "2-3 sentences on what this company does based on the website research — specific, not generic",
-  "whyNotFacility19": "2-3 sentences explaining why Facility 19's 49-agent catalog does not apply — reference their business model AND which user goals could not be mapped to catalog agents",
+  "whyNotFacility19": "2-3 sentences explaining why WeLaunch's 49-agent catalog does not apply — reference their business model AND which user goals could not be mapped to catalog agents",
   "customAgents": [
     {
       "name": "Agent name (e.g. Pipeline Agent, Content Agent)",
@@ -120,7 +120,7 @@ Return JSON:
 Rules:
 - customAgents: 2-4 items, each grounded in user goals first, then website research
 - mapsToGoal must cite specific user-stated goals, not generic placeholders
-- Do NOT suggest Facility 19 catalog agents (Linda, Ace, Harvey, Monica, etc.)
+- Do NOT suggest WeLaunch catalog agents (Linda, Ace, Harvey, Monica, etc.)
 - Be specific to their industry (SaaS, agency, EdTech, GTM, etc.)
 - whyNotFacility19 must be clear and non-judgmental`,
         },

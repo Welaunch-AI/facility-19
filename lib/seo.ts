@@ -1,26 +1,26 @@
 import { getServerSiteUrl } from "@/lib/site-url";
+import { CAL_DEMO_URL } from "@/lib/cal-demo-link";
+import { WELAUNCH_WORDMARK_BLACK } from "@/lib/welaunch-brand";
 
-export const SITE_NAME = "Facility19";
+export const SITE_NAME = "WeLaunch";
 export const SITE_LEGAL_NAME = "ARB Global LLC";
 export const SITE_PARENT_ORG = "WeLaunch Inc.";
 export const SITE_TAGLINE = "AI employees for facility management";
 
 export const SITE_DESCRIPTION =
-  "Facility19 deploys AI agents for dispatch, scheduling, compliance, vendor management, and field operations. Live at RAEL Fire Safety and ProForce Pest Control. Integrates with your existing CMMS, GPS, and work order stack.";
+  "WeLaunch deploys AI agents for dispatch, scheduling, compliance, vendor management, and field operations. Live at RAEL Fire Safety and ProForce Pest Control. Integrates with your existing CMMS, GPS, and work order stack.";
 
 export const SITE_DEFINITION =
-  "Facility19 is an AI operating system for facility management and field service operations. The platform deploys AI agents that handle dispatch, scheduling, compliance, vendor management, inventory, and customer communications around the clock. Facility19 integrates with existing tech stacks—work order systems, CMMS platforms, GPS, accounting, and telephony—rather than replacing them. Live deployments include RAEL Fire Safety (40 field technicians with GPS-verified job site visibility) and ProForce Pest Control. Operators typically go live in under five weeks from contract signing. Each AI agent runs a specific process such as dispatch coordination, after-hours intake, procurement, or documentation.";
+  "WeLaunch is an AI operating system for facility management and field service operations. The platform deploys AI agents that handle dispatch, scheduling, compliance, vendor management, inventory, and customer communications around the clock. WeLaunch integrates with existing tech stacks—work order systems, CMMS platforms, GPS, accounting, and telephony—rather than replacing them. Live deployments include RAEL Fire Safety (40 field technicians with GPS-verified job site visibility) and ProForce Pest Control. Operators typically go live in under five weeks from contract signing. Each AI agent runs a specific process such as dispatch coordination, after-hours intake, procurement, or documentation.";
 
 export const OG_IMAGE_PATH = "/og-image.png";
+export const SITE_LOGO_PATH = WELAUNCH_WORDMARK_BLACK;
 
-export const SITE_SAME_AS = [
-  "https://facility19.ai",
-  "https://cal.com/aviral-bhutani-facility19/discovery-call",
-] as const;
+export const SITE_SAME_AS = [CAL_DEMO_URL] as const;
 
 export const SITE_CONTACT = {
-  url: "https://facility19.com",
-  email: "hello@facility19.com",
+  url: "https://www.welaunch.ai",
+  email: "Support@welaunch.ai",
 } as const;
 
 type JsonLd = Record<string, unknown>;
@@ -39,7 +39,7 @@ export function organizationJsonLd(): JsonLd {
     name: SITE_NAME,
     legalName: SITE_LEGAL_NAME,
     url,
-    logo: absoluteUrl(OG_IMAGE_PATH),
+    logo: absoluteUrl(SITE_LOGO_PATH),
     description: SITE_DEFINITION,
     foundingDate: "2024",
     areaServed: "US",
@@ -55,8 +55,9 @@ export function organizationJsonLd(): JsonLd {
     sameAs: [...SITE_SAME_AS],
     contactPoint: {
       "@type": "ContactPoint",
-      contactType: "sales",
-      url: "https://cal.com/aviral-bhutani-facility19/discovery-call",
+      contactType: "customer support",
+      email: SITE_CONTACT.email,
+      url: CAL_DEMO_URL,
       availableLanguage: "English",
     },
   };
@@ -100,7 +101,7 @@ export function softwareApplicationJsonLd(): JsonLd {
       price: "0",
       priceCurrency: "USD",
       description: "Contact for enterprise pricing",
-      url: "https://cal.com/aviral-bhutani-facility19/discovery-call",
+      url: CAL_DEMO_URL,
     },
   };
 }

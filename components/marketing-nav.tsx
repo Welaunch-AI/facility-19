@@ -4,26 +4,12 @@ import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { CAL_DEMO_URL } from "@/lib/cal-demo-link";
 import { MARKETING_NAV_LINKS } from "@/lib/site-nav";
-
-const LOGO_SRC = "/favicon.png";
+import { WeLaunchLogo } from "@/components/welaunch-logo";
 
 export function Wordmark({ size = 22 }: { size?: number }) {
   return (
-    <span className="nav-logo-mark" style={{ fontSize: size }}>
-      <img
-        src={LOGO_SRC}
-        alt=""
-        style={{
-          height: size * 1.9,
-          width: "auto",
-          display: "block",
-          mixBlendMode: "multiply",
-        }}
-      />
-      <span style={{ display: "inline-flex" }}>
-        <span>Facility</span>
-        <span className="nineteen">19</span>
-      </span>
+    <span className="nav-logo-mark">
+      <WeLaunchLogo height={size} />
     </span>
   );
 }
@@ -107,7 +93,7 @@ export function MarketingNav({ currentPath, cta, mobileCta }: MarketingNavProps)
         <Link
           className="nav-logo"
           href="/"
-          aria-label="Facility19"
+          aria-label="WeLaunch"
           onClick={close}
         >
           <Wordmark />

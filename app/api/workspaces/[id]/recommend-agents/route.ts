@@ -216,7 +216,7 @@ Rules:
         {
           role: "system",
           content:
-            "You recommend AI agents from Facility 19's full catalog of 49 agents across 12 clusters. User-stated goals are PRIMARY inputs. Evaluate every agent — return ALL with any plausible use case (score 0.35+). No maximum count. Include multiple agents per cluster when each has a distinct use case. Omit individual agents only when notIdealFor clearly blocks them. Return empty array only for pure SaaS/agency/GTM with no operational goals and no website ops signals. Never force-fit. Return valid JSON only.",
+            "You recommend AI agents from WeLaunch's full catalog of 49 agents across 12 clusters. User-stated goals are PRIMARY inputs. Evaluate every agent — return ALL with any plausible use case (score 0.35+). No maximum count. Include multiple agents per cluster when each has a distinct use case. Omit individual agents only when notIdealFor clearly blocks them. Return empty array only for pure SaaS/agency/GTM with no operational goals and no website ops signals. Never force-fit. Return valid JSON only.",
         },
         { role: "user", content: prompt },
       ],
@@ -236,7 +236,7 @@ Rules:
       recommended.length === 0
         ? result.skippedReason ??
           parsed.skippedReason ??
-          "None of our Facility 19 agents match your business based on your website and goals."
+          "None of our WeLaunch agents match your business based on your website and goals."
         : undefined;
   } catch {
     recommended = [];

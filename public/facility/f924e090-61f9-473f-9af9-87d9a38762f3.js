@@ -192,7 +192,7 @@ function TechStack() {
               You've got the tech stack. <span style={{ color: 'var(--slate)' }}>Nobody's running it.</span>
             </h2>
             <p style={{ marginTop: 24, fontSize: 16, lineHeight: 1.6, color: 'var(--ink-2)' }}>
-              Every FM operation is different. Different platforms. Different workflows. Different integrations built up over years. You've invested in the tools, and you're paying for them every month.
+              Every operator is different. Different platforms. Different workflows. Different integrations built up over years. You've invested in the tools, and you're paying for them every month.
             </p>
             <p style={{ marginTop: 16, fontSize: 16, lineHeight: 1.6, color: 'var(--slate)' }}>
               But your dispatchers are still toggling between screens. Your invoices are still getting rubber-stamped by hand. Your back office is still drowning in coordination work that your tech stack was supposed to eliminate.
@@ -206,7 +206,7 @@ function TechStack() {
                 The tools were never the problem. The missing employee was.
               </div>
               <p style={{ marginTop: 10, fontSize: 14, color: 'var(--slate)', lineHeight: 1.55 }}>
-                Facility19 connects to whatever you're already running. No rip-and-replace. No new platform to learn. We plug our agents into your existing stack and put them to work.
+                WeLaunch connects to whatever you're already running. No rip-and-replace. No new platform to learn. We plug our agents into your existing stack and put them to work.
               </p>
             </div>
             <a className="btn btn-ghost" href={ARIA_URL_S} style={{ marginTop: 28 }}>
@@ -238,8 +238,8 @@ function ThreeKinds() {
     {
       tag: 'This one is new',
       title: 'AI employees',
-      body: "The third hire. One job. Done right. Works 24/7. Never quits. Never calls in sick. Never asks for PTO the week of your biggest job. That's Facility19.",
-      meta: ['Facility19', 'Monthly retainer', '24/7'],
+      body: "The third hire. One job. Done right. Works 24/7. Never quits. Never calls in sick. Never asks for PTO the week of your biggest job. That's WeLaunch.",
+      meta: ['WeLaunch', 'Monthly retainer', '24/7'],
       icon: 'ai',
       brand: true,
     },
@@ -923,7 +923,7 @@ function StackDiagram() {
             })()}
           </svg>
 
-          {/* Hub, the Facility19 agent receiving + response card */}
+          {/* Hub, the WeLaunch agent receiving + response card */}
           <div className="f19-stack-hub-inner" style={{
             position: 'absolute',
             right: 8,

@@ -1,5 +1,8 @@
-/** Shared Facility19 mark + wordmark used across app-shell pages. */
-export const FACILITY_MARK_SRC = "/favicon.png";
+/** Shared WeLaunch wordmark used across app-shell pages. */
+import { WeLaunchLogo } from "@/components/welaunch-logo";
+import { WELAUNCH_MARK_BLACK } from "@/lib/welaunch-brand";
+
+export const FACILITY_MARK_SRC = WELAUNCH_MARK_BLACK;
 
 type FacilityWordmarkProps = {
   size?: number;
@@ -11,21 +14,8 @@ export function FacilityWordmark({
   className = "",
 }: FacilityWordmarkProps) {
   return (
-    <span
-      className={`facility-wordmark ${className}`.trim()}
-      style={{ fontSize: size }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={FACILITY_MARK_SRC}
-        alt=""
-        className="facility-wordmark-icon"
-        style={{ height: size * 1.9 }}
-      />
-      <span className="facility-wordmark-text">
-        <span>Facility</span>
-        <span className="facility-wordmark-nineteen">19</span>
-      </span>
+    <span className={`facility-wordmark ${className}`.trim()}>
+      <WeLaunchLogo height={size} className="facility-wordmark-icon" />
     </span>
   );
 }

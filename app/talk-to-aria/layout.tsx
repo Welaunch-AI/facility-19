@@ -5,7 +5,7 @@ import { TalkBodyUnlock } from "./talk-body-unlock";
 
 const title = "Talk to Aria — Voice Conversation";
 const description =
-  "Talk to Aria: real-time voice conversation with Facility19's AI guide. Learn how AI agents handle dispatch, scheduling, and field operations.";
+  "Talk to Aria: real-time voice conversation with WeLaunch's AI guide. Learn how AI agents handle dispatch, scheduling, and field operations.";
 
 export const metadata: Metadata = {
   title,
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/talk-to-aria" },
   openGraph: {
     ...defaultOpenGraph,
-    title: "Talk to Aria | Facility19",
+    title: "Talk to Aria | WeLaunch",
     description,
     url: "/talk-to-aria",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Talk to Aria | Facility19",
+    title: "Talk to Aria | WeLaunch",
     description,
     images: [defaultOpenGraph.images[0].url],
   },

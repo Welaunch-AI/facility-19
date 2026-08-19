@@ -161,7 +161,7 @@ export function assessFieldOpsEligibility(
       eligible: false,
       nonFieldOpsDetected: true,
       fieldOpsSignals: matchedSignals,
-      reason: `Based on ${domain ? domain : "your website"}, you appear to be a ${industry} business (SaaS, agency, or GTM/RevOps) without facility or field-operations signals. Facility 19's 49 agents target dispatched crews, fleets, CMMS, compliance, vendors, billing, and customer operations — we didn't find those patterns, so no agents are recommended.`,
+      reason: `Based on ${domain ? domain : "your website"}, you appear to be a ${industry} business (SaaS, agency, or GTM/RevOps) without facility or field-operations signals. WeLaunch's 49 agents target dispatched crews, fleets, CMMS, compliance, vendors, billing, and customer operations — we didn't find those patterns, so no agents are recommended.`,
     };
   }
 

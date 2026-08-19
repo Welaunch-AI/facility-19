@@ -5,7 +5,7 @@ import { PrivacyBodyUnlock } from "./privacy-body-unlock";
 
 const title = "Privacy Policy";
 const description =
-  "How Facility 19 (WeLaunch Inc.) collects, uses, and protects your information.";
+  "How WeLaunch (WeLaunch Inc.) collects, uses, and protects your information.";
 
 export const metadata: Metadata = {
   title,
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
   openGraph: {
     ...defaultOpenGraph,
-    title: `${title} | Facility19`,
+    title: `${title} | WeLaunch`,
     description,
     url: "/privacy",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${title} | Facility19`,
+    title: `${title} | WeLaunch`,
     description,
     images: [defaultOpenGraph.images[0].url],
   },

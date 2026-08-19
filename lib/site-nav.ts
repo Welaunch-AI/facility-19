@@ -9,6 +9,6 @@ export const MARKETING_NAV_LINKS: MarketingNavLink[] = [
   { label: "Proof", href: "/#proof" },
   { label: "Pricing", href: "/#pricing" },
   { label: "Contact", href: "/#contact" },
-  { label: "Partners", href: "/partners" },
   { label: "Blog", href: "/blog" },
+  { label: "Partners", href: "/partners" },
 ];

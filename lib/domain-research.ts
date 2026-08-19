@@ -82,7 +82,7 @@ export async function fetchDomainContent(domain: string): Promise<DomainFetchRes
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { "User-Agent": "Facility19-Research/1.0" },
+      headers: { "User-Agent": "WeLaunch-Research/1.0" },
       redirect: "follow",
     });
     clearTimeout(timeout);

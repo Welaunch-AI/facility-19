@@ -43,7 +43,7 @@ function LiveTicker() {
             Live operations feed
           </span>
         </div>
-        <span className="mono" style={{ fontSize: 11, color: 'var(--slate-2)' }}>facility19 · today</span>
+        <span className="mono" style={{ fontSize: 11, color: 'var(--slate-2)' }}>welaunch · today</span>
       </div>
       <div style={{ padding: '8px 0' }}>
         {items.map((it, i) => (
@@ -163,7 +163,7 @@ function Hero({ agents, variant = 'roster' }) {
           <RevealH delay={80}>
             <h1 className="display-xxl" style={{ marginTop: 8 }}>
               The industry just got a new kind of worker.<br/>
-              <span style={{ color: 'var(--brand-ink)' }}>Meet your AI team.</span>
+              <span style={{ color: 'var(--brand-ink)' }}>We launch your AI team.</span>
             </h1>
           </RevealH>
           <RevealH delay={160}>

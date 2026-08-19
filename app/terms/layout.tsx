@@ -5,7 +5,7 @@ import { TermsBodyUnlock } from "./terms-body-unlock";
 
 const title = "Terms of Service";
 const description =
-  "Terms of Service and End-User License Agreement for the Facility 19 platform.";
+  "Terms of Service and End-User License Agreement for the WeLaunch platform.";
 
 export const metadata: Metadata = {
   title,
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/terms" },
   openGraph: {
     ...defaultOpenGraph,
-    title: `${title} | Facility19`,
+    title: `${title} | WeLaunch`,
     description,
     url: "/terms",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${title} | Facility19`,
+    title: `${title} | WeLaunch`,
     description,
     images: [defaultOpenGraph.images[0].url],
   },

@@ -1,5 +1,4 @@
-export const CAL_DEMO_URL =
-  "https://cal.com/aviral-bhutani-facility19/discovery-call";
+export const CAL_DEMO_URL = "https://cal.com/aviralbhutani/welaunch.ai";
 
 type CalPrefill = {
   name: string;

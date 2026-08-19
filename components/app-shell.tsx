@@ -57,7 +57,7 @@ export function AppHeader({
             <Link
               href="/"
               className="inline-flex hover:opacity-70"
-              aria-label="Facility19"
+              aria-label="WeLaunch"
             >
               <FacilityWordmark />
             </Link>

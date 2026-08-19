@@ -63,7 +63,7 @@ export function buildVisionRoadmapPdf(
   const pdf = new jsPDF({ unit: "mm", format: "a4" });
   const cursor: PdfCursor = { doc: pdf, y: MARGIN_TOP };
 
-  writeLine(cursor, "Facility 19 — Roadmap to 100x", { bold: true, size: 16 });
+  writeLine(cursor, "WeLaunch — Roadmap to 100x", { bold: true, size: 16 });
   writeLine(cursor, workspaceName, { bold: true, size: 12 });
   if (doc.domain) writeLine(cursor, doc.domain, { size: 9 });
   cursor.y += 2;
@@ -144,7 +144,7 @@ export function buildVisionRoadmapPdfFromMarkdown(
   const pdf = new jsPDF({ unit: "mm", format: "a4" });
   const cursor: PdfCursor = { doc: pdf, y: MARGIN_TOP };
 
-  writeLine(cursor, "Facility 19 — Roadmap to 100x", { bold: true, size: 16 });
+  writeLine(cursor, "WeLaunch — Roadmap to 100x", { bold: true, size: 16 });
   writeLine(cursor, workspaceName, { bold: true, size: 12 });
   cursor.y += 2;
 

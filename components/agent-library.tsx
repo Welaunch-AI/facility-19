@@ -51,7 +51,7 @@ export function AgentLibrary({
   if (displayAgents.length === 0) {
     const reason =
       displaySkippedReason(skippedReason) ??
-      "Based on your website and 60-day goal, none of our 49 Facility 19 agents are a strong fit. You can still continue to your vision roadmap focused on your goals.";
+      "Based on your website and 60-day goal, none of our 49 WeLaunch agents are a strong fit. You can still continue to your vision roadmap focused on your goals.";
     return (
       <div className="rounded-2xl border border-dashed border-[#DAD8D0] bg-white px-8 py-12 text-center">
         <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-[#5E6472]">
@@ -148,7 +148,7 @@ export function AgentPackageModal({
             </p>
             <p className="mt-4 text-[15px] leading-relaxed text-[#5E6472]">
               {displaySkippedReason(skippedReason) ??
-                "Based on your website and 60-day goal, none of our 49 Facility 19 agents are a strong fit. Your vision roadmap will focus on your stated goals."}
+                "Based on your website and 60-day goal, none of our 49 WeLaunch agents are a strong fit. Your vision roadmap will focus on your stated goals."}
             </p>
             <CustomAgentsCta />
           </div>

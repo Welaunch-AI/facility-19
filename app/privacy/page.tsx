@@ -41,7 +41,7 @@ const sections = [
     title: "2. How We Use Your Information",
     intro: "We use the information we collect exclusively to:",
     bullets: [
-      "Provide, operate, and improve the Facility 19 platform and its AI automation agents.",
+      "Provide, operate, and improve the WeLaunch platform and its AI automation agents.",
       "Execute contracted automation workflows including payroll processing, asset enrichment, ticket monitoring, and expense reconciliation.",
       "Authenticate users and manage access to the employee and technician portals.",
       "Communicate with users about service status, workflow results, and support matters.",
@@ -69,7 +69,7 @@ const sections = [
   },
   {
     title: "6. Data Ownership",
-    text: "You retain full ownership of all data you provide to or generate through our platform. Facility 19 acts as a data processor on your behalf. We do not claim ownership of your business data, employee records, financial information, or any other content you bring to or create within our platform.",
+    text: "You retain full ownership of all data you provide to or generate through our platform. WeLaunch acts as a data processor on your behalf. We do not claim ownership of your business data, employee records, financial information, or any other content you bring to or create within our platform.",
   },
   {
     title: "7. Children's Privacy",
@@ -93,10 +93,14 @@ export default function PrivacyPage() {
         <div className="mx-auto flex max-w-[760px] items-center justify-between px-7 py-6">
           <Link
             href="/"
-            className="text-[15px] font-medium tracking-[-0.01em] transition-opacity hover:opacity-70"
+            className="inline-flex items-center transition-opacity hover:opacity-70"
+            aria-label="WeLaunch"
           >
-            <span>Facility</span>
-            <span className="text-[#6B7BFF]">19</span>
+            <img
+              src="/logo/welaunch-logo-black.svg"
+              alt="WeLaunch"
+              className="h-[22px] w-auto"
+            />
           </Link>
           <Link
             href="/"
@@ -116,10 +120,10 @@ export default function PrivacyPage() {
         </h1>
         <p className="mt-5 text-[15px] leading-relaxed text-[#5E6472]">
           Effective Date: June 1, 2026 · Last Updated: June 24, 2026 ·
-          Facility 19 / WeLaunch Inc.
+          WeLaunch / WeLaunch Inc.
         </p>
         <p className="mt-8 text-[17px] leading-[1.65] text-[#1A1A1D]">
-          This Privacy Policy describes how Facility 19 (operated by WeLaunch
+          This Privacy Policy describes how WeLaunch (operated by WeLaunch
           Inc., &ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;)
           collects, uses, and protects information when you use our AI-powered
           back-office automation platform, including our agent suite (ASIS),
@@ -184,14 +188,23 @@ export default function PrivacyPage() {
                 <div className="mt-4 text-[16px] leading-[1.65] text-[#1A1A1D]">
                   <p>{section.text}</p>
                   <address className="mt-4 not-italic">
-                    <p className="font-medium">Facility 19 / WeLaunch Inc.</p>
+                    <p className="font-medium">WeLaunch / WeLaunch Inc.</p>
                     <p className="mt-2">
                       Website:{" "}
                       <a
-                        href="https://facility19.com"
+                        href="https://www.welaunch.ai"
                         className="text-[#3D4DDB] underline-offset-2 hover:underline"
                       >
-                        https://facility19.com
+                        https://www.welaunch.ai
+                      </a>
+                    </p>
+                    <p className="mt-2">
+                      Email:{" "}
+                      <a
+                        href="mailto:Support@welaunch.ai"
+                        className="text-[#3D4DDB] underline-offset-2 hover:underline"
+                      >
+                        Support@welaunch.ai
                       </a>
                     </p>
                   </address>
