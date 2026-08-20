@@ -8,8 +8,6 @@ import {
   type PageObjectResponse,
   type RichTextItemResponse,
 } from "@notionhq/client";
-import { unstable_cache } from "next/cache";
-import { connection } from "next/server";
 import { cache } from "react";
 
 /** Must stay a numeric literal in `export const revalidate` on blog routes. */
@@ -74,12 +72,6 @@ function isRetryableNetworkError(error: unknown) {
   );
 }
 
-function notionUuid(id: string) {
-  const hex = id.replace(/-/g, "").toLowerCase();
-  if (hex.length !== 32 || !/^[0-9a-f]+$/.test(hex)) return id;
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
-}
-
 /** Notion's SDK only retries HTTP 429/5xx, not TCP timeouts from `fetch`. */
 async function fetchWithRetry(url: string, init?: RequestInit) {
   const maxAttempts = 2;
@@ -89,8 +81,6 @@ async function fetchWithRetry(url: string, init?: RequestInit) {
     try {
       return await fetch(url, {
         ...init,
-        // Next.js otherwise caches Notion GETs and can freeze an empty/failed
-        // build-time response into production ISR.
         cache: "no-store",
       });
     } catch (error) {
@@ -129,20 +119,12 @@ async function getDataSourceId(notion: Client) {
     throw new Error("NOTION_DATABASE_ID is not set");
   }
 
-  try {
-    const database = await notion.databases.retrieve({ database_id: databaseId });
-    if (isFullDatabase(database) && database.data_sources[0]?.id) {
-      cachedDataSourceId = database.data_sources[0].id;
-      return cachedDataSourceId;
-    }
-  } catch (error) {
-    console.error(
-      "[notion] databases.retrieve failed, trying database id as data source",
-      error,
-    );
+  const database = await notion.databases.retrieve({ database_id: databaseId });
+  if (!isFullDatabase(database) || !database.data_sources[0]?.id) {
+    throw new Error("No data source found on Notion database");
   }
 
-  cachedDataSourceId = notionUuid(databaseId);
+  cachedDataSourceId = database.data_sources[0].id;
   return cachedDataSourceId;
 }
 
@@ -364,18 +346,14 @@ function isPublishedPage(page: PageObjectResponse) {
   return true;
 }
 
-const loadPublishedPosts = unstable_cache(
-  async () => queryPublishedPages(),
-  ["notion-published-posts-v2"],
-  { revalidate: BLOG_REVALIDATE_SECONDS, tags: [BLOG_CACHE_TAG] },
-);
-
 export const getPublishedPosts = cache(async (): Promise<BlogPostMeta[]> => {
   if (!isNotionConfigured()) return [];
-  // Skip build-time prerender so a failed Notion call cannot freeze an empty
-  // listing into the production ISR cache.
-  await connection();
-  return loadPublishedPosts();
+  try {
+    return await queryPublishedPages();
+  } catch (error) {
+    console.error("[notion] failed to load published posts", error);
+    return [];
+  }
 });
 
 export async function getBlogSlugs(): Promise<string[]> {
@@ -384,7 +362,7 @@ export async function getBlogSlugs(): Promise<string[]> {
 }
 
 async function queryPostBySlug(slug: string): Promise<BlogPost | null> {
-  const posts = await loadPublishedPosts();
+  const posts = await getPublishedPosts();
   const meta = posts.find((post) => post.slug === slug);
   if (!meta) return null;
 
@@ -414,16 +392,14 @@ async function queryPostBySlug(slug: string): Promise<BlogPost | null> {
   return { ...meta, blocks: withChildren };
 }
 
-const loadPostBySlug = unstable_cache(
-  async (slug: string) => queryPostBySlug(slug),
-  ["notion-post-by-slug-v2"],
-  { revalidate: BLOG_REVALIDATE_SECONDS, tags: [BLOG_CACHE_TAG] },
-);
-
 export const getPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   if (!isNotionConfigured()) return null;
-  await connection();
-  return loadPostBySlug(slug);
+  try {
+    return await queryPostBySlug(slug);
+  } catch (error) {
+    console.error("[notion] failed to load post", slug, error);
+    return null;
+  }
 });
 
 function shouldExpandChildren(type: BlockObjectResponse["type"]) {
