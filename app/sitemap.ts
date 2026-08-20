@@ -15,7 +15,10 @@ const publicRoutes = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getServerSiteUrl();
-  const blogPosts = await getPublishedPosts();
+  const blogPosts = await getPublishedPosts().catch((error) => {
+    console.error("[sitemap] failed to load blog posts", error);
+    return [];
+  });
 
   const staticEntries = publicRoutes.map(({ path, changeFrequency, priority }) => ({
     url: `${baseUrl}${path}`,

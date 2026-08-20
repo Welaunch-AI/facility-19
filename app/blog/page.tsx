@@ -9,6 +9,7 @@ import { formatBlogDate, postCategory } from "@/lib/blog";
 import { getPublishedPosts } from "@/lib/notion";
 
 export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
   const posts = await getPublishedPosts();

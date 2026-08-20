@@ -23,6 +23,7 @@ import {
 import { absoluteUrl, defaultOpenGraph, pageJsonLdGraph } from "@/lib/seo";
 
 export const revalidate = 60;
+export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 type PageProps = {

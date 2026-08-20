@@ -9,6 +9,7 @@ import {
   type RichTextItemResponse,
 } from "@notionhq/client";
 import { unstable_cache } from "next/cache";
+import { connection } from "next/server";
 import { cache } from "react";
 
 /** Must stay a numeric literal in `export const revalidate` on blog routes. */
@@ -73,20 +74,31 @@ function isRetryableNetworkError(error: unknown) {
   );
 }
 
+function notionUuid(id: string) {
+  const hex = id.replace(/-/g, "").toLowerCase();
+  if (hex.length !== 32 || !/^[0-9a-f]+$/.test(hex)) return id;
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 /** Notion's SDK only retries HTTP 429/5xx, not TCP timeouts from `fetch`. */
 async function fetchWithRetry(url: string, init?: RequestInit) {
-  const maxAttempts = 4;
+  const maxAttempts = 2;
   let lastError: unknown;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      return await fetch(url, init);
+      return await fetch(url, {
+        ...init,
+        // Next.js otherwise caches Notion GETs and can freeze an empty/failed
+        // build-time response into production ISR.
+        cache: "no-store",
+      });
     } catch (error) {
       lastError = error;
       if (attempt === maxAttempts - 1 || !isRetryableNetworkError(error)) {
         throw error;
       }
-      await sleep(750 * 2 ** attempt);
+      await sleep(400 * 2 ** attempt);
     }
   }
 
@@ -101,9 +113,9 @@ function getClient() {
   if (!cachedClient) {
     cachedClient = new Client({
       auth: token,
-      timeoutMs: 60_000,
+      timeoutMs: 15_000,
       fetch: fetchWithRetry,
-      retry: { maxRetries: 4, initialRetryDelayMs: 1000 },
+      retry: { maxRetries: 2, initialRetryDelayMs: 400 },
     });
   }
   return cachedClient;
@@ -117,15 +129,21 @@ async function getDataSourceId(notion: Client) {
     throw new Error("NOTION_DATABASE_ID is not set");
   }
 
-  const database = await notion.databases.retrieve({ database_id: databaseId });
-  if (!isFullDatabase(database) || !database.data_sources[0]?.id) {
-    throw new Error("No data source found on Notion database");
+  try {
+    const database = await notion.databases.retrieve({ database_id: databaseId });
+    if (isFullDatabase(database) && database.data_sources[0]?.id) {
+      cachedDataSourceId = database.data_sources[0].id;
+      return cachedDataSourceId;
+    }
+  } catch (error) {
+    console.error(
+      "[notion] databases.retrieve failed, trying database id as data source",
+      error,
+    );
   }
 
-  const dataSourceId = database.data_sources[0].id;
-
-  cachedDataSourceId = dataSourceId;
-  return dataSourceId;
+  cachedDataSourceId = notionUuid(databaseId);
+  return cachedDataSourceId;
 }
 
 function plainText(richText: RichTextItemResponse[] | undefined) {
@@ -315,25 +333,20 @@ function mapPageToMeta(page: PageObjectResponse): BlogPostMeta {
 }
 
 async function queryPublishedPages() {
-  try {
-    const notion = getClient();
-    const dataSourceId = await getDataSourceId(notion);
+  const notion = getClient();
+  const dataSourceId = await getDataSourceId(notion);
 
-    // Fetch all rows, then filter client-side so "Publish" / "Published" both work
-    // and missing Date sorts don't break the query.
-    const rows = await collectPaginatedAPI(notion.dataSources.query, {
-      data_source_id: dataSourceId,
-    });
+  // Fetch all rows, then filter client-side so "Publish" / "Published" both work
+  // and missing Date sorts don't break the query.
+  const rows = await collectPaginatedAPI(notion.dataSources.query, {
+    data_source_id: dataSourceId,
+  });
 
-    return rows
-      .filter(isFullPage)
-      .filter(isPublishedPage)
-      .map(mapPageToMeta)
-      .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
-  } catch (error) {
-    console.error("[notion] failed to load published posts", error);
-    return [];
-  }
+  return rows
+    .filter(isFullPage)
+    .filter(isPublishedPage)
+    .map(mapPageToMeta)
+    .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
 }
 
 function isPublishedPage(page: PageObjectResponse) {
@@ -353,12 +366,15 @@ function isPublishedPage(page: PageObjectResponse) {
 
 const loadPublishedPosts = unstable_cache(
   async () => queryPublishedPages(),
-  ["notion-published-posts"],
+  ["notion-published-posts-v2"],
   { revalidate: BLOG_REVALIDATE_SECONDS, tags: [BLOG_CACHE_TAG] },
 );
 
 export const getPublishedPosts = cache(async (): Promise<BlogPostMeta[]> => {
   if (!isNotionConfigured()) return [];
+  // Skip build-time prerender so a failed Notion call cannot freeze an empty
+  // listing into the production ISR cache.
+  await connection();
   return loadPublishedPosts();
 });
 
@@ -368,49 +384,45 @@ export async function getBlogSlugs(): Promise<string[]> {
 }
 
 async function queryPostBySlug(slug: string): Promise<BlogPost | null> {
-  try {
-    const posts = await loadPublishedPosts();
-    const meta = posts.find((post) => post.slug === slug);
-    if (!meta) return null;
+  const posts = await loadPublishedPosts();
+  const meta = posts.find((post) => post.slug === slug);
+  if (!meta) return null;
 
-    const notion = getClient();
-    const blocks = await collectPaginatedAPI(notion.blocks.children.list, {
-      block_id: meta.id,
-    });
+  const notion = getClient();
+  const blocks = await collectPaginatedAPI(notion.blocks.children.list, {
+    block_id: meta.id,
+  });
 
-    const fullBlocks = blocks.filter(isFullBlock);
+  const fullBlocks = blocks.filter(isFullBlock);
 
-    // Resolve one level of nested children for lists/toggles
-    const withChildren: BlogBlock[] = [];
-    for (const block of fullBlocks) {
-      if (block.has_children && shouldExpandChildren(block.type)) {
-        const children = await collectPaginatedAPI(notion.blocks.children.list, {
-          block_id: block.id,
-        });
-        withChildren.push({
-          ...block,
-          children: children.filter(isFullBlock),
-        });
-      } else {
-        withChildren.push(block);
-      }
+  // Resolve one level of nested children for lists/toggles
+  const withChildren: BlogBlock[] = [];
+  for (const block of fullBlocks) {
+    if (block.has_children && shouldExpandChildren(block.type)) {
+      const children = await collectPaginatedAPI(notion.blocks.children.list, {
+        block_id: block.id,
+      });
+      withChildren.push({
+        ...block,
+        children: children.filter(isFullBlock),
+      });
+    } else {
+      withChildren.push(block);
     }
-
-    return { ...meta, blocks: withChildren };
-  } catch (error) {
-    console.error("[notion] failed to load post", slug, error);
-    return null;
   }
+
+  return { ...meta, blocks: withChildren };
 }
 
 const loadPostBySlug = unstable_cache(
   async (slug: string) => queryPostBySlug(slug),
-  ["notion-post-by-slug"],
+  ["notion-post-by-slug-v2"],
   { revalidate: BLOG_REVALIDATE_SECONDS, tags: [BLOG_CACHE_TAG] },
 );
 
 export const getPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   if (!isNotionConfigured()) return null;
+  await connection();
   return loadPostBySlug(slug);
 });
 
