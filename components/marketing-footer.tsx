@@ -23,7 +23,7 @@ const COMPANY_LINKS: FooterLink[] = [
 ];
 
 const GET_STARTED_LINKS: FooterLink[] = [
-  { label: "Create your workspace →", href: "/start" },
+  { label: "workspace →", href: "/start" },
   { label: "Meet Aria →", href: "/talk-to-aria" },
   { label: "Book a call →", href: CAL_DEMO_URL, external: true },
 ];

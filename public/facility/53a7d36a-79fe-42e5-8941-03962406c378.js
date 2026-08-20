@@ -74,7 +74,7 @@ function Nav() {
           <a href="/partners">Partners</a>
         </div>
         <div className="nav-cta">
-          <a className="btn btn-primary nav-cta-start" href={START_URL} style={{ height: 40 }} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
+          <a className="btn btn-primary nav-cta-start" href={START_URL} style={{ height: 40 }} onMouseEnter={onStartHover} onFocus={onStartHover}>workspace</a>
           <a className="btn btn-ghost nav-cta-book" href={BOOK_URL} target="_blank" rel="noreferrer" style={{ height: 40 }}>Book a call</a>
         </div>
         <button
@@ -98,7 +98,7 @@ function Nav() {
           <a href="/blog" onClick={close}>Blog</a>
           <a href="/partners" onClick={close}>Partners</a>
           <div className="nav-mobile-ctas">
-            <a className="btn btn-primary" href={START_URL} onClick={close} onMouseEnter={onStartHover} onFocus={onStartHover}>Create your workspace</a>
+            <a className="btn btn-primary" href={START_URL} onClick={close} onMouseEnter={onStartHover} onFocus={onStartHover}>workspace</a>
             <a className="btn btn-ghost" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
           </div>
         </div>
@@ -133,7 +133,7 @@ function Footer() {
           { l: 'Terms of Service', h: '/terms' },
         ]}/>
         <FooterCol title="Get started" items={[
-          { l: 'Create your workspace →', h: START_URL, ext: false },
+          { l: 'workspace →', h: START_URL, ext: false },
           { l: 'Meet Aria →', h: ARIA_URL, ext: false },
           { l: 'Book a call →', h: BOOK_URL, ext: true },
         ]}/>

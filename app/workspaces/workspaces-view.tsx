@@ -62,7 +62,7 @@ export function WorkspacesView({
             {isTransitioning ? (
               <LoadingInline size="sm" label="Starting interview" />
             ) : (
-              "Create your workspace"
+              "workspace"
             )}
           </BrandButton>
           <GhostButton type="button" onClick={() => router.refresh()}>
@@ -99,7 +99,7 @@ export function WorkspacesView({
               {isTransitioning ? (
                 <LoadingInline size="sm" label="Starting interview" />
               ) : (
-                "Create your workspace"
+                "workspace"
               )}
             </BrandButton>
           </div>

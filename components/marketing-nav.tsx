@@ -39,7 +39,7 @@ export function DefaultMarketingCtas({ height = 40 }: { height?: number }) {
   return (
     <>
       <Link className="btn btn-primary" href="/start" style={{ height }}>
-        Create your workspace <ArrowRight />
+        workspace <ArrowRight />
       </Link>
       <a
         className="btn btn-ghost"
