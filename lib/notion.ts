@@ -81,8 +81,11 @@ async function fetchWithRetry(url: string, init?: RequestInit) {
     try {
       return await fetch(url, {
         ...init,
-        cache: "no-store",
-      });
+        next: {
+          revalidate: BLOG_REVALIDATE_SECONDS,
+          tags: [BLOG_CACHE_TAG],
+        },
+      } as RequestInit);
     } catch (error) {
       lastError = error;
       if (attempt === maxAttempts - 1 || !isRetryableNetworkError(error)) {
@@ -348,12 +351,7 @@ function isPublishedPage(page: PageObjectResponse) {
 
 export const getPublishedPosts = cache(async (): Promise<BlogPostMeta[]> => {
   if (!isNotionConfigured()) return [];
-  try {
-    return await queryPublishedPages();
-  } catch (error) {
-    console.error("[notion] failed to load published posts", error);
-    return [];
-  }
+  return queryPublishedPages();
 });
 
 export async function getBlogSlugs(): Promise<string[]> {
@@ -394,12 +392,7 @@ async function queryPostBySlug(slug: string): Promise<BlogPost | null> {
 
 export const getPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   if (!isNotionConfigured()) return null;
-  try {
-    return await queryPostBySlug(slug);
-  } catch (error) {
-    console.error("[notion] failed to load post", slug, error);
-    return null;
-  }
+  return queryPostBySlug(slug);
 });
 
 function shouldExpandChildren(type: BlockObjectResponse["type"]) {

@@ -23,15 +23,20 @@ import {
 import { absoluteUrl, defaultOpenGraph, pageJsonLdGraph } from "@/lib/seo";
 
 export const revalidate = 60;
-export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return [];
+export async function generateStaticParams() {
+  try {
+    const posts = await getPublishedPosts();
+    return posts.map((post) => ({ slug: post.slug }));
+  } catch (error) {
+    console.error("[blog] generateStaticParams failed", error);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

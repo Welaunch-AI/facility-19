@@ -10,7 +10,6 @@ const description =
   "Insights on facility management, field operations, and deploying AI agents for dispatch, compliance, and vendor coordination.";
 
 export const revalidate = 60;
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title,
