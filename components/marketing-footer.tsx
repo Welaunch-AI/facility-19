@@ -18,8 +18,9 @@ const PRODUCT_LINKS: FooterLink[] = [
 const COMPANY_LINKS: FooterLink[] = [
   { label: "Proof", href: "/#proof" },
   { label: "Contact", href: "/#contact" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Service", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms of Service", href: "/legal/terms-of-service" },
+  { label: "SMS Policy", href: "/sms-policy" },
 ];
 
 const GET_STARTED_LINKS: FooterLink[] = [

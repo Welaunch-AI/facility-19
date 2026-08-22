@@ -65,8 +65,9 @@ A client's system is isolated and belongs to them. Co-Build is the one exception
 - [Partner Program](${baseUrl}/partners): Referral program for FM and home service connectors
 - [Blog](${baseUrl}/blog): Operations insights, case studies, and AI deployment writing
 ${blogIndex ? `${blogIndex}\n` : ""}- Vertical case studies: Rael/Facility19 (fire protection), ProForce (pest control), Schneider Law, Astronomica (Cosmic Prep)
-- [Privacy Policy](${baseUrl}/privacy)
-- [Terms of Service](${baseUrl}/terms)
+- [Privacy Policy](${baseUrl}/privacy-policy)
+- [Terms of Service](${baseUrl}/legal/terms-of-service)
+- [SMS Policy](${baseUrl}/sms-policy)
 
 ## Contact
 General inquiries: ${CONTACT_EMAIL}

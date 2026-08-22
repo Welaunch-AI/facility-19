@@ -10,12 +10,12 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: "/privacy" },
+  alternates: { canonical: "/privacy-policy" },
   openGraph: {
     ...defaultOpenGraph,
     title: `${title} | WeLaunch`,
     description,
-    url: "/privacy",
+    url: "/privacy-policy",
   },
   twitter: {
     card: "summary_large_image",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const privacyJsonLd = pageJsonLdGraph({
   name: title,
   description,
-  path: "/privacy",
+  path: "/privacy-policy",
 });
 
 export default function PrivacyLayout({

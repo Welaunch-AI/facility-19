@@ -49,12 +49,14 @@ body.facility-shell.aria-voice-page {
   background: #ffffff;
 }
 
-/* Allow scroll on legal pages (privacy, terms) and partners. */
+/* Allow scroll on legal pages (privacy, terms, sms) and partners. */
 html.facility-html.privacy-page,
 html.facility-html.terms-page,
+html.facility-html.sms-page,
 html.facility-html.partners-page,
 body.facility-shell.privacy-page,
 body.facility-shell.terms-page,
+body.facility-shell.sms-page,
 body.facility-shell.partners-page {
   overflow: auto;
   overscroll-behavior: auto;

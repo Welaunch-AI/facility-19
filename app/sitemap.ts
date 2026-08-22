@@ -9,8 +9,9 @@ const publicRoutes = [
   { path: "/blog", changeFrequency: "weekly" as const, priority: 0.8 },
   { path: "/partners", changeFrequency: "monthly" as const, priority: 0.8 },
   { path: "/talk-to-aria", changeFrequency: "monthly" as const, priority: 0.8 },
-  { path: "/privacy", changeFrequency: "yearly" as const, priority: 0.3 },
-  { path: "/terms", changeFrequency: "yearly" as const, priority: 0.3 },
+  { path: "/privacy-policy", changeFrequency: "yearly" as const, priority: 0.3 },
+  { path: "/legal/terms-of-service", changeFrequency: "yearly" as const, priority: 0.3 },
+  { path: "/sms-policy", changeFrequency: "yearly" as const, priority: 0.3 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

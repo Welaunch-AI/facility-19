@@ -238,7 +238,7 @@ export default function TermsPage() {
               data only as instructed by you through your use of the platform and
               in accordance with our{" "}
               <Link
-                href="/privacy"
+                href="/privacy-policy"
                 className="text-[#3D4DDB] underline-offset-2 hover:underline"
               >
                 Privacy Policy

@@ -129,8 +129,9 @@ function Footer() {
         <FooterCol title="Company" items={[
           { l: 'Proof', h: '#proof' },
           { l: 'Contact', h: '#contact' },
-          { l: 'Privacy Policy', h: '/privacy' },
-          { l: 'Terms of Service', h: '/terms' },
+          { l: 'Privacy Policy', h: '/privacy-policy' },
+          { l: 'Terms of Service', h: '/legal/terms-of-service' },
+          { l: 'SMS Policy', h: '/sms-policy' },
         ]}/>
         <FooterCol title="Get started" items={[
           { l: 'workspace →', h: START_URL, ext: false },

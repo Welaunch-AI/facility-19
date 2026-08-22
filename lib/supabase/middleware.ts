@@ -15,7 +15,11 @@ export async function updateSession(request: NextRequest) {
 
   const publicPaths = [
     "/privacy",
+    "/privacy-policy",
     "/terms",
+    "/legal/terms-of-service",
+    "/sms-policy",
+    "/legal/sms-policy",
     "/partners",
     "/talk-to-aria",
     "/sitemap.xml",
