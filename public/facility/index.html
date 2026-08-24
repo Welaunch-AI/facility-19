@@ -902,6 +902,98 @@ section { position: relative; }
   box-shadow: 0 0 0 3px var(--brand-wash);
 }
 
+/* How it works */
+.f19-how-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 40px;
+}
+.f19-how-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--slate);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.f19-how-dots {
+  display: none;
+}
+
+/* Testimonials marquee (right → left) */
+.f19-testimonials-marquee {
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.f19-testimonials-track {
+  display: flex;
+  width: max-content;
+  gap: 28px;
+  padding: 8px 0 4px;
+  animation: f19TestimonialsRtl 55s linear infinite;
+  will-change: transform;
+}
+.f19-testimonials-marquee:hover .f19-testimonials-track {
+  animation-play-state: paused;
+}
+.f19-testimonial-card {
+  flex: 0 0 min(360px, 78vw);
+  width: min(360px, 78vw);
+  padding: 28px 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-sizing: border-box;
+}
+.f19-testimonial-card blockquote {
+  font-family: var(--f-display);
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  margin: 12px 0 0;
+}
+.f19-testimonial-meta {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.f19-testimonial-who {
+  font-size: 13px;
+  font-weight: 500;
+}
+.f19-testimonial-where {
+  font-size: 11px;
+  color: var(--slate);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+@keyframes f19TestimonialsRtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .f19-testimonials-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding-left: 28px;
+    padding-right: 28px;
+    justify-content: flex-start;
+  }
+  .f19-testimonial-card[aria-hidden="true"] {
+    display: none;
+  }
+}
+
 /* Dividers and lines */
 .hair { height: 1px; background: var(--line); border: 0; }
 .dotline {
@@ -1491,27 +1583,54 @@ section { position: relative; }
       text-align: left !important;
     }
 
-    /* How it works (#how): horizontal carousel, centered snap, neighbor peek */
+    /* How it works (#how): mobile carousel */
+    section#how.f19-how,
     section#how {
       overflow: visible !important;
+      padding: 56px 0 !important;
     }
-    section#how .wrap > div[style*="margin-top: 72"] > div[aria-hidden="true"]:first-of-type {
-      left: max(12px, env(safe-area-inset-left, 0px)) !important;
-      right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    .f19-how-head {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 14px !important;
+    }
+    .f19-how-head .display-xl {
+      font-size: clamp(1.75rem, 7vw, 2.25rem) !important;
+      line-height: 1.12 !important;
+    }
+    .f19-how-status {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      font-size: 11px !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+      color: var(--slate) !important;
+      padding: 8px 12px !important;
+      border-radius: 999px !important;
+      background: #fff !important;
+      border: 1px solid var(--line) !important;
+    }
+    .f19-how-body {
+      margin-top: 28px !important;
+    }
+    .f19-how-rail {
+      display: none !important;
     }
     #how .f19-how-steps {
       display: flex !important;
       flex-direction: row !important;
       flex-wrap: nowrap !important;
       grid-template-columns: unset !important;
-      gap: 14px !important;
+      gap: 12px !important;
       overflow-x: auto !important;
       overflow-y: visible !important;
       scroll-snap-type: x mandatory !important;
       scroll-padding-inline: max(20px, env(safe-area-inset-left, 0px)) !important;
       -webkit-overflow-scrolling: touch !important;
       scrollbar-width: none !important;
-      padding: 8px 0 28px !important;
+      padding: 4px 0 8px !important;
       margin-left: calc(-1 * max(20px, env(safe-area-inset-left, 0px))) !important;
       margin-right: calc(-1 * max(20px, env(safe-area-inset-right, 0px))) !important;
       padding-left: max(20px, env(safe-area-inset-left, 0px)) !important;
@@ -1519,13 +1638,14 @@ section { position: relative; }
       width: calc(100% + 2 * max(20px, env(safe-area-inset-left, 0px))) !important;
       max-width: none !important;
       box-sizing: border-box !important;
+      overscroll-behavior-x: contain !important;
     }
     #how .f19-how-steps::-webkit-scrollbar {
       display: none !important;
     }
     #how .f19-how-steps > div {
-      flex: 0 0 min(300px, calc(100vw - 56px)) !important;
-      max-width: min(320px, calc(100vw - 40px)) !important;
+      flex: 0 0 min(86vw, 320px) !important;
+      max-width: min(86vw, 320px) !important;
       min-width: 0 !important;
       scroll-snap-align: center !important;
       scroll-snap-stop: always !important;
@@ -1534,6 +1654,93 @@ section { position: relative; }
       width: 100% !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
+      gap: 14px !important;
+      padding: 16px !important;
+      border-radius: 16px !important;
+      background: #fff !important;
+      border: 1px solid var(--line) !important;
+      box-shadow: 0 1px 0 rgba(10, 10, 11, 0.03) !important;
+    }
+    #how .f19-how-badge {
+      width: 64px !important;
+      height: 64px !important;
+      border-radius: 14px !important;
+      font-size: 22px !important;
+      transform: none !important;
+    }
+    #how .f19-how-motion {
+      border-radius: 10px !important;
+      padding: 10px !important;
+    }
+    #how .f19-how-copy > div:nth-child(2) {
+      font-size: 18px !important;
+    }
+    #how .f19-how-copy p {
+      font-size: 13px !important;
+      margin-top: 8px !important;
+    }
+    .f19-how-dots {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin-top: 18px !important;
+    }
+    .f19-how-dot {
+      width: 8px !important;
+      height: 8px !important;
+      border-radius: 999px !important;
+      border: 0 !important;
+      padding: 0 !important;
+      background: var(--line-2, #dad8d0) !important;
+      cursor: pointer !important;
+      transition: width 0.2s ease, background 0.2s ease !important;
+    }
+    .f19-how-dot.is-active {
+      width: 22px !important;
+      background: var(--brand-ink) !important;
+    }
+
+    /* Testimonials marquee stays horizontal on mobile */
+    #testimonials.f19-testimonials {
+      padding: 64px 0 !important;
+      overflow: hidden !important;
+    }
+    #testimonials .f19-testimonials-track {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      grid-template-columns: unset !important;
+      width: max-content !important;
+      gap: 16px !important;
+      animation-duration: 42s !important;
+    }
+    #testimonials .f19-testimonial-card {
+      flex: 0 0 min(300px, 82vw) !important;
+      width: min(300px, 82vw) !important;
+      max-width: none !important;
+      padding: 22px 18px !important;
+    }
+    #testimonials .f19-testimonial-card blockquote {
+      font-size: 17px !important;
+    }
+
+    /* Linda live dispatch map: keep map tall + stats in a row */
+    #agents .f19-route-viz {
+      height: auto !important;
+      min-height: 0 !important;
+    }
+    #agents .f19-route-map {
+      display: block !important;
+      width: 100% !important;
+      height: 168px !important;
+      min-height: 168px !important;
+      flex: 0 0 auto !important;
+    }
+    #agents .f19-route-stats {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 8px !important;
     }
 
     /* Capabilities: full-width diagram column on small screens */
@@ -1628,11 +1835,11 @@ fbq('track', 'PageView');</script>
 
   <script type="text/babel" src="/facility/1e3e650e-aa0e-4e04-b39d-4aead09efde4.js"></script>
   <script type="text/babel" src="/facility/53a7d36a-79fe-42e5-8941-03962406c378.js"></script>
-  <script type="text/babel" src="/facility/db7aef4c-d33c-4494-8bc5-8a17fa534e52.js"></script>
+  <script type="text/babel" src="/facility/db7aef4c-d33c-4494-8bc5-8a17fa534e52.js?v=route3"></script>
   <script type="text/babel" src="/facility/a9cb3cc8-c059-409e-9fe7-cf1952414cb8.js"></script>
-  <script type="text/babel" src="/facility/f924e090-61f9-473f-9af9-87d9a38762f3.js"></script>
+  <script type="text/babel" src="/facility/f924e090-61f9-473f-9af9-87d9a38762f3.js?v=how2"></script>
   <script type="text/babel" src="/facility/0b3e742d-0e7d-49f1-97aa-e99a90c872d5.js"></script>
-  <script type="text/babel" src="/facility/cfee6374-f408-489d-8d5f-de129284fb93.js"></script>
+  <script type="text/babel" src="/facility/cfee6374-f408-489d-8d5f-de129284fb93.js?v=marquee2"></script>
   <script type="text/babel" src="/facility/7a0b9668-bf39-4fd0-bf17-33fc3566802d.js"></script>
 
 

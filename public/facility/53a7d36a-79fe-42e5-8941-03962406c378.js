@@ -67,8 +67,6 @@ function Nav() {
         <div className="nav-links">
           <a href="#agents">Team</a>
           <a href="#how">How it works</a>
-          <a href="#proof">Proof</a>
-          <a href="#pricing">Pricing</a>
           <a href="#contact">Contact</a>
           <a href="/blog">Blog</a>
           <a href="/partners">Partners</a>
@@ -92,8 +90,6 @@ function Nav() {
         <div className="nav-mobile-inner">
           <a href="#agents" onClick={close}>Team</a>
           <a href="#how" onClick={close}>How it works</a>
-          <a href="#proof" onClick={close}>Proof</a>
-          <a href="#pricing" onClick={close}>Pricing</a>
           <a href="#contact" onClick={close}>Contact</a>
           <a href="/blog" onClick={close}>Blog</a>
           <a href="/partners" onClick={close}>Partners</a>
@@ -124,24 +120,21 @@ function Footer() {
         <FooterCol title="Product" items={[
           { l: 'Meet the team', h: '#agents' },
           { l: 'How it works', h: '#how' },
-          { l: 'Pricing', h: '#pricing' },
         ]}/>
         <FooterCol title="Company" items={[
-          { l: 'Proof', h: '#proof' },
           { l: 'Contact', h: '#contact' },
           { l: 'Privacy Policy', h: '/privacy-policy' },
           { l: 'Terms of Service', h: '/legal/terms-of-service' },
           { l: 'SMS Policy', h: '/sms-policy' },
         ]}/>
         <FooterCol title="Get started" items={[
-          { l: 'workspace →', h: START_URL, ext: false },
+          { l: 'Workspace →', h: START_URL, ext: false },
           { l: 'Meet Aria →', h: ARIA_URL, ext: false },
           { l: 'Book a call →', h: BOOK_URL, ext: true },
         ]}/>
       </div>
       <div className="wrap" style={{ marginTop: 72, paddingTop: 28, borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'var(--slate)' }}>
         <span>© 2026 ARB Global LLC · WeLaunch</span>
-        <span className="mono" style={{ letterSpacing: '0.06em' }}>v3.2 · Built in America</span>
       </div>
     </footer>
   );

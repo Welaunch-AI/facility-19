@@ -24,7 +24,7 @@ function LiveTicker() {
     const id = setInterval(() => {
       setItems(prev => [TICKER_EVENTS[i % TICKER_EVENTS.length], ...prev.slice(0, 3)]);
       i += 1;
-    }, 2400);
+    }, 800);
     return () => clearInterval(id);
   }, []);
   return (
@@ -49,7 +49,7 @@ function LiveTicker() {
         {items.map((it, i) => (
           <div key={`${it.agent}-${i}-${it.msg}`} style={{
             display: 'flex', alignItems: 'center', gap: 12, padding: '10px 18px', fontSize: 13,
-            opacity: 1 - i * 0.16, transition: 'opacity .5s',
+            opacity: 1 - i * 0.16, transition: 'opacity .25s',
           }}>
             <span style={{
               fontFamily: 'var(--f-mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.04em',

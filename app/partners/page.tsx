@@ -1,11 +1,9 @@
-"use client";
-
 import { ArrowRight, Check, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { MarketingContactSection } from "@/components/marketing-contact-section";
 import { Reveal } from "@/components/Reveal";
 import { MarketingFooter } from "@/components/marketing-footer";
-import { PARTNERS_FAQS } from "@/lib/partners-faqs";
-import { CAL_DEMO_URL, CAL_EMBED_URL } from "@/lib/cal-demo-link";
+import { buildCalEmbedUrl } from "@/lib/cal-demo-link";
+import { PartnersFaq } from "./partners-faq";
 import { PartnersNav } from "./partners-nav";
 
 function Hero() {
@@ -298,35 +296,38 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how" className="grid-bg relative">
-      <div className="mx-auto max-w-7xl px-6 py-24">
-        <div className="flex items-end justify-between gap-8">
-          <div className="max-w-2xl">
-            <span className="eyebrow eyebrow-dot">How it works</span>
-            <h2 className="mt-5 text-4xl font-semibold tracking-tight text-ink md:text-5xl">
-              Three steps.{" "}
-              <span className="text-brand">That&apos;s the whole thing.</span>
-            </h2>
-          </div>
+    <section id="how" className="partners-how grid-bg relative">
+      <div className="partners-how__inner mx-auto max-w-7xl px-6 py-24">
+        <div className="partners-how__header max-w-2xl">
+          <span className="eyebrow eyebrow-dot">How it works</span>
+          <h2 className="mt-5 text-4xl font-semibold tracking-tight text-ink md:text-5xl">
+            Three steps.{" "}
+            <span className="text-brand">That&apos;s the whole thing.</span>
+          </h2>
         </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        <ol className="partners-how__steps mt-12">
           {STEPS.map((s, i) => (
             <Reveal
+              as="li"
               key={s.n}
               delay={i * 140}
               variant="up"
-              className="card-soft hover-lift group relative overflow-hidden p-7"
+              className="partners-how__step card-soft hover-lift group relative overflow-hidden"
             >
               <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-brand/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-              <div className="font-mono text-sm text-brand">{s.n}</div>
-              <h3 className="mt-6 text-2xl font-semibold tracking-tight text-ink transition-transform duration-300 group-hover:-translate-y-0.5">
-                {s.title}
-              </h3>
-              <p className="mt-3 text-ink-muted">{s.body}</p>
+              <div className="partners-how__badge font-mono text-sm text-brand">
+                {s.n}
+              </div>
+              <div className="partners-how__copy">
+                <h3 className="text-2xl font-semibold tracking-tight text-ink transition-transform duration-300 group-hover:-translate-y-0.5">
+                  {s.title}
+                </h3>
+                <p className="mt-3 text-ink-muted">{s.body}</p>
+              </div>
             </Reveal>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );
@@ -413,72 +414,16 @@ function Proof() {
   );
 }
 
-const FAQS = PARTNERS_FAQS;
-
-function FAQ() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section id="faq" className="grid-bg relative">
-      <div className="mx-auto max-w-5xl px-6 py-24">
-        <div className="max-w-2xl">
-          <span className="eyebrow eyebrow-dot">FAQ</span>
-          <h2 className="mt-5 text-4xl font-semibold tracking-tight text-ink md:text-5xl">
-            Questions, answered.
-          </h2>
-        </div>
-
-        <div className="mt-12 divide-y divide-line border-y border-line">
-          {FAQS.map((f, i) => {
-            const isOpen = open === i;
-            return (
-              <Reveal as="div" key={f.q} delay={i * 60} variant="up">
-                <button
-                  type="button"
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="group block w-full text-left"
-                >
-                  <div className="flex items-start justify-between gap-6 py-6">
-                    <div className="flex-1">
-                      <div className="text-lg font-medium text-ink transition-colors group-hover:text-brand">
-                        {f.q}
-                      </div>
-                      <div
-                        className="grid transition-all duration-500 ease-out"
-                        style={{
-                          gridTemplateRows: isOpen ? "1fr" : "0fr",
-                          opacity: isOpen ? 1 : 0,
-                          marginTop: isOpen ? "0.75rem" : "0",
-                        }}
-                      >
-                        <p className="max-w-3xl overflow-hidden text-ink-muted">
-                          {f.a}
-                        </p>
-                      </div>
-                    </div>
-                    <span
-                      className="mt-1 font-mono text-xl leading-none text-ink-muted transition-transform duration-300"
-                      style={{
-                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                      }}
-                    >
-                      {isOpen ? "–" : "+"}
-                    </span>
-                  </div>
-                </button>
-              </Reveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function CalEmbed() {
+  const embedSrc = buildCalEmbedUrl({
+    layout: "month_view",
+    theme: "light",
+  });
+
   return (
     <section id="apply" className="section-fade-top relative bg-surface-2">
-      <div className="mx-auto max-w-4xl px-6 py-24">
-        <div className="text-center">
+      <div className="mx-auto max-w-6xl px-6 py-24">
+        <div className="mx-auto max-w-2xl text-center">
           <span className="eyebrow eyebrow-dot">Apply</span>
           <h2 className="mt-5 text-4xl font-semibold tracking-tight text-ink md:text-5xl">
             Book a partner call.
@@ -488,34 +433,20 @@ function CalEmbed() {
             program and answer any questions.
           </p>
           <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-3 rounded-xl border border-line bg-surface p-4">
-            <Sparkles className="h-5 w-5 text-brand" />
-            <p className="text-sm text-ink-muted">
+            <Sparkles className="h-5 w-5 shrink-0 text-brand" />
+            <p className="text-left text-sm text-ink-muted">
               Most partners make their first referral within 21 days.
             </p>
           </div>
         </div>
 
-        <div className="mt-12">
-          <div className="card-soft overflow-hidden p-1 md:p-1">
-            <iframe
-              title="Book a WeLaunch partner call"
-              src={CAL_EMBED_URL}
-              className="w-full rounded-xl bg-surface"
-              style={{ width: "100%", height: "750px", border: 0 }}
-              loading="lazy"
-            />
-          </div>
-          <p className="mt-4 text-center text-sm text-ink-muted">
-            Calendar not loading?{" "}
-            <a
-              href={CAL_DEMO_URL}
-              className="font-medium text-brand hover:text-ink"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open booking page
-            </a>
-          </p>
+        <div className="partners-cal-embed mt-12">
+          <iframe
+            title="Book a WeLaunch partner call"
+            src={embedSrc}
+            className="partners-cal-embed__frame"
+            loading="lazy"
+          />
         </div>
       </div>
     </section>
@@ -533,7 +464,8 @@ export default function PartnersPage() {
         <Earnings />
         <HowItWorks />
         <Proof />
-        <FAQ />
+        <PartnersFaq />
+        <MarketingContactSection />
         <CalEmbed />
       </main>
       <MarketingFooter />

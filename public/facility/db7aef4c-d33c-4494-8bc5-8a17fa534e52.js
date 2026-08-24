@@ -276,15 +276,6 @@ function AgentPortrait({ agent, size = 160, animated = true, showOverlay = true,
             display: 'block',
           }}
         />
-        {/* Live status dot */}
-        <div style={{
-          position: 'absolute', top: size * 0.06, right: size * 0.06,
-          width: Math.max(8, size * 0.07), height: Math.max(8, size * 0.07),
-          borderRadius: '50%', background: '#1F8A5F',
-          border: `2px solid #fff`,
-          boxShadow: '0 0 0 1px rgba(31,138,95,0.25)',
-          animation: animated ? 'pulseDot 1.8s ease-in-out infinite' : undefined,
-        }}/>
       </div>
     );
   }
@@ -423,14 +414,6 @@ function AgentPortrait({ agent, size = 160, animated = true, showOverlay = true,
             <path d="M70 130 Q 74 150 100 156 Q 126 150 130 130 Q 126 146 100 148 Q 74 146 70 130 Z" fill={look.hair} opacity="0.9"/>
           )}
         </g>
-
-        {/* Live status */}
-        <g transform="translate(168, 20)">
-          <circle r="6" fill="#fff"/>
-          <circle r="4" fill="#1F8A5F">
-            {animated && <animate attributeName="opacity" values="1;0.5;1" dur="1.8s" repeatCount="indefinite"/>}
-          </circle>
-        </g>
       </svg>
     </div>
   );
@@ -441,15 +424,31 @@ function AgentPortrait({ agent, size = 160, animated = true, showOverlay = true,
 // Live map with animated truck dots — big improvement
 function RouteViz() {
   return (
-    <div style={{ background: '#F8FAFD', borderRadius: 12, border: '1px solid var(--line)', padding: 16, height: 240, display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="f19-route-viz" style={{ background: '#F8FAFD', borderRadius: 12, border: '1px solid var(--line)', padding: 16, minHeight: 280, display: 'flex', flexDirection: 'column', gap: 12, boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span className="live-dot" />
           <span className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Live dispatch · 6 techs</span>
         </div>
         <span className="mono" style={{ fontSize: 10, color: 'var(--good)' }}>↑ 38 stops</span>
       </div>
-      <svg viewBox="0 0 340 160" width="100%" style={{ flex: 1, borderRadius: 8, background: '#fff', border: '1px solid var(--line-2)' }}>
+      <svg
+        viewBox="0 0 340 160"
+        width="100%"
+        height="160"
+        preserveAspectRatio="xMidYMid meet"
+        className="f19-route-map"
+        style={{
+          display: 'block',
+          width: '100%',
+          height: 160,
+          minHeight: 160,
+          flex: '0 0 auto',
+          borderRadius: 8,
+          background: '#fff',
+          border: '1px solid var(--line-2)',
+        }}
+      >
         <defs>
           <pattern id="streetgrid" width="18" height="18" patternUnits="userSpaceOnUse">
             <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#E2E8F0" strokeWidth="0.5"/>
@@ -501,7 +500,7 @@ function RouteViz() {
           </animateMotion>
         </g>
       </svg>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, fontSize: 11, fontFamily: 'var(--f-mono)' }}>
+      <div className="f19-route-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8, fontSize: 11, fontFamily: 'var(--f-mono)' }}>
         <div style={{ padding: '6px 10px', background: '#fff', borderRadius: 6, border: '1px solid var(--line)' }}>
           <div style={{ color: 'var(--slate)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.05em' }}>ETA</div>
           <div style={{ color: 'var(--ink-2)', fontWeight: 500 }}>11:42 AM</div>
@@ -563,7 +562,7 @@ function WaveViz() {
 // Improved asset card with equipment rendering
 function AssetViz() {
   return (
-    <div style={{ background: 'linear-gradient(180deg, #F0FDFA, #FFFFFF)', borderRadius: 12, border: '1px solid var(--line)', padding: 18, height: 240, display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ background: 'linear-gradient(180deg, #F0FDFA, #FFFFFF)', borderRadius: 12, border: '1px solid var(--line)', padding: 18, minHeight: 240, display: 'flex', flexDirection: 'column', gap: 12, overflow: 'hidden', boxSizing: 'border-box' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Indexing asset</span>
         <span className="live-dot" />
@@ -615,7 +614,7 @@ function ProcureViz() {
     { v: 'Johnstone', price: 1188, pct: 83, sku: 'JN-8834', win: true },
   ];
   return (
-    <div style={{ background: 'linear-gradient(180deg, #FFFBEB, #FFFFFF)', borderRadius: 12, border: '1px solid var(--line)', padding: 18, height: 240, display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ background: 'linear-gradient(180deg, #FFFBEB, #FFFFFF)', borderRadius: 12, border: '1px solid var(--line)', padding: 18, minHeight: 240, display: 'flex', flexDirection: 'column', gap: 12, overflow: 'hidden', boxSizing: 'border-box' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Sourcing · 3-ton compressor</span>
         <span className="mono" style={{ fontSize: 10, color: 'var(--good)', fontWeight: 600 }}>−14% vs budget</span>
@@ -699,39 +698,59 @@ function ARViz() {
 // Improved fleet grid with truck visual
 function FleetViz() {
   const rows = 6, cols = 14;
+  const cells = Array.from({ length: rows * cols }, (_, i) => {
+    const roll = (i * 37) % 100;
+    const state = roll > 95 ? 'idle' : roll > 88 ? 'pending' : 'active';
+    return {
+      x: i % cols,
+      y: Math.floor(i / cols),
+      color: state === 'active' ? '#06B6D4' : state === 'pending' ? '#F59E0B' : '#EF4444',
+      active: state === 'active',
+    };
+  });
+  const gap = 0.12;
   return (
-    <div style={{ background: 'linear-gradient(180deg, #ECFEFF, #FFFFFF)', borderRadius: 12, border: '1px solid var(--line)', padding: 18, height: 240, display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div style={{ background: 'linear-gradient(180deg, #ECFEFF, #FFFFFF)', borderRadius: 12, border: '1px solid var(--line)', padding: 18, display: 'flex', flexDirection: 'column', gap: 12, boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <span className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Fleet monitor · 142 live</span>
         <span className="mono" style={{ fontSize: 10, color: '#F59E0B' }}>1 idle &gt; 15m</span>
       </div>
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 3 }}>
-        {Array.from({ length: rows * cols }).map((_, i) => {
-          const roll = (i * 37) % 100;
-          const state = roll > 95 ? 'idle' : roll > 88 ? 'pending' : 'active';
-          const color = state === 'active' ? '#06B6D4' : state === 'pending' ? '#F59E0B' : '#EF4444';
-          return (
-            <div key={i} style={{
-              borderRadius: 2,
-              background: color,
-              opacity: 0.85,
-              position: 'relative',
-              animation: state === 'active' ? `truckPulse ${2 + (i % 5) * 0.4}s ease-in-out ${(i % 7) * 0.15}s infinite alternate` : 'none',
-            }}/>
-          );
-        })}
-      </div>
+      <svg
+        viewBox={`0 0 ${cols} ${rows}`}
+        width="100%"
+        height="120"
+        preserveAspectRatio="none"
+        role="img"
+        aria-label="Fleet status grid"
+        style={{ display: 'block', width: '100%', height: 120, borderRadius: 4, background: '#E0F7FA' }}
+      >
+        {cells.map((c, i) => (
+          <rect
+            key={i}
+            x={c.x + gap / 2}
+            y={c.y + gap / 2}
+            width={1 - gap}
+            height={1 - gap}
+            rx={0.12}
+            fill={c.color}
+            opacity={0.9}
+          >
+            {c.active && (
+              <animate attributeName="opacity" values="0.45;0.95;0.45" dur={`${2 + (i % 5) * 0.4}s`} begin={`${(i % 7) * 0.15}s`} repeatCount="indefinite" />
+            )}
+          </rect>
+        ))}
+      </svg>
       <div style={{ background: '#fff', border: '1px solid #FEE2E2', borderRadius: 8, padding: '10px 12px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#F59E0B', animation: 'pulseDot 1.5s infinite' }}/>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#F59E0B', animation: 'pulseDot 1.5s infinite', flexShrink: 0 }}/>
             <span className="mono" style={{ fontSize: 10, color: 'var(--ink-2)', fontWeight: 600 }}>Tech #22 · Truck idle 18 min</span>
           </div>
           <span className="mono" style={{ fontSize: 9, color: 'var(--slate)' }}>calling...</span>
         </div>
         <div style={{ fontSize: 11, color: 'var(--slate)' }}>Site #1908 · job closed 20 min ago</div>
       </div>
-      <style>{`@keyframes truckPulse { from { opacity: 0.4; } to { opacity: 0.95; } }`}</style>
     </div>
   );
 }

@@ -12,11 +12,9 @@ type FooterLink = {
 const PRODUCT_LINKS: FooterLink[] = [
   { label: "Meet the team", href: "/#agents" },
   { label: "How it works", href: "/#how" },
-  { label: "Pricing", href: "/#pricing" },
 ];
 
 const COMPANY_LINKS: FooterLink[] = [
-  { label: "Proof", href: "/#proof" },
   { label: "Contact", href: "/#contact" },
   { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Terms of Service", href: "/legal/terms-of-service" },
@@ -24,7 +22,7 @@ const COMPANY_LINKS: FooterLink[] = [
 ];
 
 const GET_STARTED_LINKS: FooterLink[] = [
-  { label: "workspace →", href: "/start" },
+  { label: "Workspace →", href: "/start" },
   { label: "Meet Aria →", href: "/talk-to-aria" },
   { label: "Book a call →", href: CAL_DEMO_URL, external: true },
 ];
@@ -78,7 +76,6 @@ export function MarketingFooter() {
       </div>
       <div className="wrap marketing-footer-bottom">
         <span>© 2026 ARB Global LLC · WeLaunch</span>
-        <span className="mono">v3.2 · Built in America</span>
       </div>
     </footer>
   );

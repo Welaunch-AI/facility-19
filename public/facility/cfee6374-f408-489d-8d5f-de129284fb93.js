@@ -205,38 +205,37 @@ function Cases({ cases }) {
 }
 
 function Testimonials({ items }) {
+  const loop = items.concat(items);
   return (
-    <section id="testimonials" style={{ padding: '120px 0' }}>
+    <section id="testimonials" className="f19-testimonials" style={{ padding: '120px 0', overflow: 'hidden' }}>
       <div className="wrap">
         <RevealP>
-          <div className="section-head" style={{ marginBottom: 64 }}>
+          <div className="section-head" style={{ marginBottom: 48 }}>
             <div className="section-eyebrow">In their words</div>
             <h2 className="display-xl">Operators who have been in FM <span style={{ color: 'var(--slate)' }}>for decades.</span></h2>
           </div>
         </RevealP>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
-          {items.map((t, i) => (
-            <RevealP key={i} delay={i * 80}>
-              <div style={{ padding: '8px 0' }}>
-                <svg width="28" height="22" viewBox="0 0 28 22" fill="none" style={{ opacity: 0.25 }}>
+        <div className="f19-testimonials-marquee" aria-label="Operator testimonials">
+          <div className="f19-testimonials-track">
+            {loop.map((t, i) => (
+              <article
+                key={`${t.who}-${i}`}
+                className="f19-testimonial-card"
+                aria-hidden={i >= items.length ? 'true' : undefined}
+              >
+                <svg width="28" height="22" viewBox="0 0 28 22" fill="none" style={{ opacity: 0.25 }} aria-hidden>
                   <path d="M0 22V13C0 6 3 1.3 9.1 0l1.5 3C6 4.6 3.5 7.5 3.3 11h3.8V22H0zm16.9 0V13c0-7 3-11.7 9.1-13l1.5 3c-4.6 1.6-7 4.5-7.3 8h3.8V22h-7.1z" fill="var(--ink)"/>
                 </svg>
-                <blockquote style={{
-                  fontFamily: 'var(--f-display)',
-                  fontSize: 22, lineHeight: 1.35,
-                  letterSpacing: '-0.015em',
-                  marginTop: 12,
-                  maxWidth: 380,
-                }}>
+                <blockquote>
                   {t.q}
                 </blockquote>
-                <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--line)' }}>
-                  <div style={{ fontSize: 13, fontWeight: 500 }}>{t.who}</div>
-                  <div className="mono" style={{ fontSize: 11, color: 'var(--slate)', letterSpacing: '0.04em', marginTop: 2 }}>{t.where}</div>
+                <div className="f19-testimonial-meta">
+                  <div className="f19-testimonial-who">{t.who}</div>
+                  <div className="mono f19-testimonial-where">{t.where}</div>
                 </div>
-              </div>
-            </RevealP>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

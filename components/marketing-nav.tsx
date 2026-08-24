@@ -65,16 +65,19 @@ export function MarketingNav({ currentPath, cta, mobileCta }: MarketingNavProps)
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => {
+      const next = window.scrollY > 8;
+      setScrolled((prev) => (prev === next ? prev : next));
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const value = open ? "hidden" : "auto";
-    document.documentElement.style.setProperty("overflow", value, "important");
-    document.body.style.setProperty("overflow", value, "important");
+    if (!open) return;
+    document.documentElement.style.setProperty("overflow", "hidden", "important");
+    document.body.style.setProperty("overflow", "hidden", "important");
     return () => {
       document.documentElement.style.removeProperty("overflow");
       document.body.style.removeProperty("overflow");

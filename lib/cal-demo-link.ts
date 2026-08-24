@@ -32,4 +32,22 @@ export function buildCalDemoLink({
   return qs ? `${CAL_DEMO_URL}?${qs}` : CAL_DEMO_URL;
 }
 
-export const CAL_EMBED_URL = `${CAL_DEMO_URL}?embed=true&layout=month_view`;
+type CalEmbedOptions = {
+  layout?: "month_view" | "week_view" | "column_view";
+  theme?: "light" | "dark" | "auto";
+};
+
+export function buildCalEmbedUrl({
+  layout = "month_view",
+  theme = "light",
+}: CalEmbedOptions = {}) {
+  const params = new URLSearchParams({
+    embed: "true",
+    layout,
+    theme,
+    useSlotsViewOnSmallScreen: "true",
+  });
+  return `${CAL_DEMO_URL}?${params.toString()}`;
+}
+
+export const CAL_EMBED_URL = buildCalEmbedUrl();

@@ -514,149 +514,292 @@ function StepMotion({ n, active }) {
 
 function HowItWorks({ steps }) {
   const [active, setActive] = useStateS(0);
+  const [paused, setPaused] = useStateS(false);
   const howCarouselRef = useRefS(null);
-  // auto-advance
+  const suppressScrollSync = useRefS(false);
+
   useEffectS(() => {
+    if (paused) return undefined;
     const t = setInterval(() => {
-      setActive(prev => (prev + 1) % steps.length);
-    }, 3800);
+      setActive((prev) => (prev + 1) % steps.length);
+    }, 4200);
     return () => clearInterval(t);
-  }, [steps.length]);
+  }, [steps.length, paused]);
 
   useEffectS(() => {
     const root = howCarouselRef.current;
-    if (!root || typeof window === "undefined") return;
+    if (!root || typeof window === 'undefined') return;
     if (window.innerWidth > 720) return;
-    const howEl = document.getElementById("how");
-    if (!howEl) return;
-    const r = howEl.getBoundingClientRect();
-    if (r.bottom <= 0 || r.top >= window.innerHeight) return;
     const slide = root.children[active];
     if (!slide) return;
-    requestAnimationFrame(() => {
-      slide.scrollIntoView({
-        inline: "center",
-        block: "nearest",
-        behavior: "smooth",
-      });
-    });
+    suppressScrollSync.current = true;
+    const left = slide.offsetLeft - (root.clientWidth - slide.clientWidth) / 2;
+    root.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+    const release = window.setTimeout(() => {
+      suppressScrollSync.current = false;
+    }, 450);
+    return () => window.clearTimeout(release);
   }, [active]);
+
+  useEffectS(() => {
+    const root = howCarouselRef.current;
+    if (!root || typeof window === 'undefined') return;
+
+    const onScroll = () => {
+      if (suppressScrollSync.current || window.innerWidth > 720) return;
+      const center = root.scrollLeft + root.clientWidth / 2;
+      let nearest = 0;
+      let best = Infinity;
+      Array.from(root.children).forEach((child, i) => {
+        const mid = child.offsetLeft + child.clientWidth / 2;
+        const dist = Math.abs(mid - center);
+        if (dist < best) {
+          best = dist;
+          nearest = i;
+        }
+      });
+      setActive((prev) => (prev === nearest ? prev : nearest));
+    };
+
+    root.addEventListener('scroll', onScroll, { passive: true });
+    return () => root.removeEventListener('scroll', onScroll);
+  }, []);
 
   const progress = ((active + 0.5) / steps.length) * 100;
 
   return (
-    <section id="how" style={{ padding: '120px 0', background: 'var(--paper-2)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', position: 'relative', overflow: 'hidden' }}>
-      {/* subtle background grid */}
-      <div aria-hidden style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: 'linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px)',
-        backgroundSize: '48px 48px',
-        opacity: 0.25, pointerEvents: 'none',
-        maskImage: 'radial-gradient(circle at 50% 40%, #000, transparent 75%)',
-        WebkitMaskImage: 'radial-gradient(circle at 50% 40%, #000, transparent 75%)',
-      }}/>
+    <section
+      id="how"
+      className="f19-how"
+      style={{
+        padding: '120px 0',
+        background: 'var(--paper-2)',
+        borderTop: '1px solid var(--line)',
+        borderBottom: '1px solid var(--line)',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage:
+            'linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          opacity: 0.25,
+          pointerEvents: 'none',
+          maskImage: 'radial-gradient(circle at 50% 40%, #000, transparent 75%)',
+          WebkitMaskImage: 'radial-gradient(circle at 50% 40%, #000, transparent 75%)',
+        }}
+      />
       <div className="wrap" style={{ position: 'relative' }}>
         <RevealS>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'end', gap: 40 }}>
+          <div className="f19-how-head">
             <div className="section-head">
               <div className="section-eyebrow">How it works</div>
-              <h2 className="display-xl">From first call to production agent <span style={{ color: 'var(--slate)' }}>in under five weeks.</span></h2>
+              <h2 className="display-xl">
+                From first call to production agent{' '}
+                <span style={{ color: 'var(--slate)' }}>in under five weeks.</span>
+              </h2>
             </div>
-            <div className="mono" style={{ fontSize: 11, color: 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span className="live-dot"/> Now showing: Step {String(active+1).padStart(2,'0')} / {String(steps.length).padStart(2,'0')}
+            <div className="f19-how-status mono">
+              <span className="live-dot" />
+              Step {String(active + 1).padStart(2, '0')} / {String(steps.length).padStart(2, '0')}
             </div>
           </div>
         </RevealS>
 
-        <div style={{ marginTop: 72, position: 'relative' }}>
-          {/* Progress rail */}
-          <div aria-hidden style={{
-            position: 'absolute', left: 40, right: 40, top: 44, height: 2, borderRadius: 2,
-            background: 'var(--line)',
-          }}>
-            <div style={{
-              position: 'absolute', left: 0, top: 0, height: '100%',
-              width: `${progress}%`, background: 'var(--brand-ink)',
-              borderRadius: 2, transition: 'width 1.1s cubic-bezier(0.4, 0, 0.2, 1)',
-            }}/>
-            {/* traveling pulse */}
-            <div style={{
-              position: 'absolute', top: '50%', left: `${progress}%`,
-              width: 10, height: 10, borderRadius: '50%',
-              background: 'var(--brand-ink)',
-              transform: 'translate(-50%, -50%)',
-              boxShadow: '0 0 0 4px rgba(61,77,219,0.18)',
-              transition: 'left 1.1s cubic-bezier(0.4, 0, 0.2, 1)',
-            }}/>
+        <div className="f19-how-body" style={{ marginTop: 72, position: 'relative' }}>
+          <div
+            className="f19-how-rail"
+            aria-hidden
+            style={{
+              position: 'absolute',
+              left: 40,
+              right: 40,
+              top: 44,
+              height: 2,
+              borderRadius: 2,
+              background: 'var(--line)',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                height: '100%',
+                width: `${progress}%`,
+                background: 'var(--brand-ink)',
+                borderRadius: 2,
+                transition: 'width 1.1s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: `${progress}%`,
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: 'var(--brand-ink)',
+                transform: 'translate(-50%, -50%)',
+                boxShadow: '0 0 0 4px rgba(61,77,219,0.18)',
+                transition: 'left 1.1s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            />
           </div>
 
-          <div ref={howCarouselRef} className="f19-how-steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}>
+          <div
+            ref={howCarouselRef}
+            className="f19-how-steps"
+            onPointerDown={() => setPaused(true)}
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24 }}
+          >
             {steps.map((s, i) => {
               const isActive = i === active;
               const isDone = i < active;
               return (
                 <RevealS key={i} delay={i * 80}>
                   <button
-                    onClick={() => setActive(i)}
+                    type="button"
+                    onClick={() => {
+                      setPaused(true);
+                      setActive(i);
+                    }}
+                    aria-current={isActive ? 'step' : undefined}
                     style={{
-                      width: '100%', textAlign: 'left', padding: 0, background: 'transparent',
-                      border: 'none', cursor: 'pointer',
-                      display: 'flex', flexDirection: 'column', gap: 20,
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: 0,
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 20,
                     }}
                   >
-                    {/* Step badge */}
-                    <div style={{
-                      width: 88, height: 88, borderRadius: 18, position: 'relative',
-                      background: isActive ? 'var(--brand-ink)' : '#fff',
-                      color: isActive ? '#fff' : 'var(--brand-ink)',
-                      border: isActive ? '1px solid var(--brand-ink)' : '1px solid var(--line)',
-                      display: 'grid', placeItems: 'center',
-                      fontFamily: 'var(--f-display)', fontSize: 30, fontWeight: 500, letterSpacing: '-0.02em',
-                      boxShadow: isActive ? '0 18px 40px -14px rgba(61,77,219,0.45), 0 0 0 6px rgba(61,77,219,0.08)' : '0 2px 0 rgba(10,10,11,0.02)',
-                      transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                      transform: isActive ? 'translateY(-4px)' : 'translateY(0)',
-                    }}>
+                    <div
+                      className="f19-how-badge"
+                      style={{
+                        width: 88,
+                        height: 88,
+                        borderRadius: 18,
+                        position: 'relative',
+                        background: isActive ? 'var(--brand-ink)' : '#fff',
+                        color: isActive ? '#fff' : 'var(--brand-ink)',
+                        border: isActive ? '1px solid var(--brand-ink)' : '1px solid var(--line)',
+                        display: 'grid',
+                        placeItems: 'center',
+                        fontFamily: 'var(--f-display)',
+                        fontSize: 30,
+                        fontWeight: 500,
+                        letterSpacing: '-0.02em',
+                        boxShadow: isActive
+                          ? '0 18px 40px -14px rgba(61,77,219,0.45), 0 0 0 6px rgba(61,77,219,0.08)'
+                          : '0 2px 0 rgba(10,10,11,0.02)',
+                        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transform: isActive ? 'translateY(-4px)' : 'translateY(0)',
+                      }}
+                    >
                       {isDone ? (
                         <svg width="28" height="28" viewBox="0 0 28 28">
-                          <path d="M7 14 l5 5 l9 -11" stroke="#1F8A5F" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path
+                            d="M7 14 l5 5 l9 -11"
+                            stroke="#1F8A5F"
+                            strokeWidth="2.5"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                       ) : (
                         <span>{s.n}</span>
                       )}
-                      {/* active ring */}
                       {isActive && (
-                        <div style={{
-                          position: 'absolute', inset: -8, borderRadius: 22,
-                          border: '1.5px solid var(--brand-ink)', opacity: 0.3,
-                          animation: 'stepRing 2.2s ease-out infinite',
-                        }}/>
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: -8,
+                            borderRadius: 22,
+                            border: '1.5px solid var(--brand-ink)',
+                            opacity: 0.3,
+                            animation: 'stepRing 2.2s ease-out infinite',
+                          }}
+                        />
                       )}
                     </div>
 
-                    {/* Motion graphic */}
-                    <div style={{
-                      width: '100%', aspectRatio: '4/3',
-                      background: '#fff', borderRadius: 12, border: '1px solid var(--line)',
-                      padding: 14, position: 'relative',
-                      transition: 'all 0.4s ease',
-                      opacity: isActive ? 1 : 0.55,
-                      transform: isActive ? 'translateY(0)' : 'translateY(0)',
-                    }}>
+                    <div
+                      className="f19-how-motion"
+                      style={{
+                        width: '100%',
+                        aspectRatio: '4/3',
+                        background: '#fff',
+                        borderRadius: 12,
+                        border: '1px solid var(--line)',
+                        padding: 14,
+                        position: 'relative',
+                        transition: 'all 0.4s ease',
+                        opacity: isActive ? 1 : 0.55,
+                      }}
+                    >
                       <StepMotion n={s.n} active={isActive} />
                     </div>
 
-                    {/* Copy */}
-                    <div>
-                      <div className="mono" style={{ fontSize: 11, color: isActive ? 'var(--brand-ink)' : 'var(--slate)', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 500, transition: 'color 0.3s' }}>{s.len}</div>
-                      <div style={{ fontFamily: 'var(--f-display)', fontSize: 22, fontWeight: 500, letterSpacing: '-0.02em', marginTop: 4 }}>
+                    <div className="f19-how-copy">
+                      <div
+                        className="mono"
+                        style={{
+                          fontSize: 11,
+                          color: isActive ? 'var(--brand-ink)' : 'var(--slate)',
+                          letterSpacing: '0.08em',
+                          textTransform: 'uppercase',
+                          fontWeight: 500,
+                          transition: 'color 0.3s',
+                        }}
+                      >
+                        {s.len}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: 'var(--f-display)',
+                          fontSize: 22,
+                          fontWeight: 500,
+                          letterSpacing: '-0.02em',
+                          marginTop: 4,
+                        }}
+                      >
                         {s.t}
                       </div>
-                      <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--slate)', marginTop: 10 }}>{s.d}</p>
+                      <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--slate)', marginTop: 10 }}>
+                        {s.d}
+                      </p>
                     </div>
                   </button>
                 </RevealS>
               );
             })}
+          </div>
+
+          <div className="f19-how-dots" role="tablist" aria-label="How it works steps">
+            {steps.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                role="tab"
+                aria-selected={i === active}
+                className={'f19-how-dot' + (i === active ? ' is-active' : '')}
+                onClick={() => {
+                  setPaused(true);
+                  setActive(i);
+                }}
+              />
+            ))}
           </div>
         </div>
       </div>
