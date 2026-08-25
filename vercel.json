@@ -5,6 +5,30 @@
       "has": [{ "type": "host", "value": "f19-polsia.vercel.app" }],
       "destination": "https://www.welaunch.ai/:path*",
       "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "welaunch.space" }],
+      "destination": "https://www.welaunch.ai/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.welaunch.space" }],
+      "destination": "https://www.welaunch.ai/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "welaunch.site" }],
+      "destination": "https://www.welaunch.ai/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.welaunch.site" }],
+      "destination": "https://www.welaunch.ai/:path*",
+      "permanent": true
     }
   ]
 }

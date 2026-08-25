@@ -1,12 +1,22 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
+const CANONICAL_HOST = "www.welaunch.ai";
+
+const REDIRECT_HOSTS = new Set([
+  "f19-polsia.vercel.app",
+  "welaunch.space",
+  "www.welaunch.space",
+  "welaunch.site",
+  "www.welaunch.site",
+]);
+
 export async function proxy(request: NextRequest) {
-  const host = request.headers.get("host")?.toLowerCase();
-  if (host === "f19-polsia.vercel.app") {
+  const host = request.headers.get("host")?.toLowerCase().split(":")[0];
+  if (host && REDIRECT_HOSTS.has(host)) {
     const url = request.nextUrl.clone();
     url.protocol = "https:";
-    url.hostname = "www.welaunch.ai";
+    url.hostname = CANONICAL_HOST;
     url.port = "";
 
     if (url.pathname === "/" && url.searchParams.has("code")) {
