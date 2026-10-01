@@ -28,11 +28,11 @@ export default function TermsPage() {
           <Link
             href="/"
             className="inline-flex items-center transition-opacity hover:opacity-70"
-            aria-label="WeLaunch"
+            aria-label="Facility19"
           >
             <img
-              src="/logo/welaunch-logo-black.svg"
-              alt="WeLaunch"
+              src="/logo/facility19-logo-black.png"
+              alt="Facility19"
               className="h-[22px] w-auto"
             />
           </Link>
@@ -54,11 +54,11 @@ export default function TermsPage() {
         </h1>
         <p className="mt-5 text-[15px] leading-relaxed text-[#5E6472]">
           Effective Date: June 1, 2026 · Last Updated: June 24, 2026 ·
-          WeLaunch / WeLaunch Inc.
+          Facility19 / Facility19 Inc.
         </p>
         <p className={`mt-8 ${bodyClass}`}>
           Please read these Terms of Service and End-User License Agreement
-          (&ldquo;Agreement&rdquo;) carefully before using the WeLaunch
+          (&ldquo;Agreement&rdquo;) carefully before using the Facility19
           platform. By accessing or using our services, you (&ldquo;Client,&rdquo;
           &ldquo;User,&rdquo; or &ldquo;you&rdquo;) agree to be bound by this
           Agreement. If you do not agree, do not use our services.
@@ -86,7 +86,7 @@ export default function TermsPage() {
           <section id="services">
             <h2 className={headingClass}>1. Services Description</h2>
             <p className={`mt-4 ${bodyClass}`}>
-              WeLaunch (operated by WeLaunch Inc.) provides an AI-powered
+              Facility19 (operated by Facility19 Inc.) provides an AI-powered
               back-office automation platform for facility management companies.
               Our services include, but are not limited to:
             </p>
@@ -120,7 +120,7 @@ export default function TermsPage() {
             <h2 className={headingClass}>2. License Grant</h2>
             <p className={`mt-4 ${bodyClass}`}>
               Subject to your compliance with this Agreement and timely payment
-              of applicable fees, WeLaunch grants you a limited,
+              of applicable fees, Facility19 grants you a limited,
               non-exclusive, non-transferable, revocable license to access and
               use our platform solely for your internal business operations.
             </p>
@@ -180,14 +180,14 @@ export default function TermsPage() {
             <h2 className={headingClass}>4. Third-Party Integrations</h2>
             <p className={`mt-4 ${bodyClass}`}>
               This section governs your use of third-party platforms connected to
-              WeLaunch.
+              Facility19.
             </p>
             <p className={`mt-4 ${bodyClass}`}>
               Our platform integrates with third-party services including
               accounting and payroll systems, field service management platforms,
               expense management tools, fleet systems, and communication
               providers (&ldquo;Third-Party Services&rdquo;). By connecting a
-              Third-Party Service to WeLaunch, you authorize us to access,
+              Third-Party Service to Facility19, you authorize us to access,
               read, and write data within that service as necessary to deliver
               the automation workflows you have contracted.
             </p>
@@ -201,7 +201,7 @@ export default function TermsPage() {
               <li>
                 <span className="font-medium">Data use restriction:</span> Data
                 accessed from any Third-Party Service will not be used for any
-                purpose other than providing your contracted WeLaunch
+                purpose other than providing your contracted Facility19
                 services. We will not sell, share, or use this data for AI model
                 training or any secondary commercial purpose.
               </li>
@@ -209,7 +209,7 @@ export default function TermsPage() {
                 <span className="font-medium">Third-party terms:</span> Your use
                 of any Third-Party Service through our integration remains
                 subject to that provider&apos;s own terms of service and privacy
-                policy. WeLaunch is not responsible for the practices of
+                policy. Facility19 is not responsible for the practices of
                 Third-Party Service providers.
               </li>
               <li>
@@ -230,11 +230,11 @@ export default function TermsPage() {
             <h2 className={headingClass}>5. Data Ownership and Processing</h2>
             <p className={`mt-4 ${bodyClass}`}>
               You retain full ownership of all data you provide to or generate
-              through the WeLaunch platform, including employee records,
+              through the Facility19 platform, including employee records,
               financial data, business operational data, and any other content.
             </p>
             <p className={`mt-4 ${bodyClass}`}>
-              WeLaunch acts as a data processor on your behalf. We process your
+              Facility19 acts as a data processor on your behalf. We process your
               data only as instructed by you through your use of the platform and
               in accordance with our{" "}
               <Link
@@ -290,14 +290,14 @@ export default function TermsPage() {
           <section id="ip">
             <h2 className={headingClass}>8. Intellectual Property</h2>
             <p className={`mt-4 ${bodyClass}`}>
-              WeLaunch and its licensors retain all intellectual property
+              Facility19 and its licensors retain all intellectual property
               rights in the platform, including software, AI models, agent
               architectures, interfaces, and documentation. Nothing in this
               Agreement transfers any IP rights to you beyond the limited
               license granted in Section 2.
             </p>
             <p className={`mt-4 ${bodyClass}`}>
-              You grant WeLaunch a limited license to use your data solely as
+              You grant Facility19 a limited license to use your data solely as
               necessary to provide the services you have contracted. This license
               does not extend to any secondary use of your data.
             </p>
@@ -306,7 +306,7 @@ export default function TermsPage() {
           <section id="disclaimers">
             <h2 className={headingClass}>9. Disclaimers</h2>
             <p className={`mt-4 text-[15px] leading-[1.7] text-[#1A1A1D]`}>
-              THE WELAUNCH PLATFORM IS PROVIDED &ldquo;AS IS&rdquo; AND
+              THE FACILITY19 PLATFORM IS PROVIDED &ldquo;AS IS&rdquo; AND
               &ldquo;AS AVAILABLE.&rdquo; WE MAKE NO WARRANTIES, EXPRESS OR
               IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
               PARTICULAR PURPOSE, OR UNINTERRUPTED SERVICE. AI-GENERATED
@@ -324,13 +324,13 @@ export default function TermsPage() {
           <section id="liability">
             <h2 className={headingClass}>10. Limitation of Liability</h2>
             <p className={`mt-4 ${bodyClass}`}>
-              To the maximum extent permitted by law, WeLaunch&apos;s total
+              To the maximum extent permitted by law, Facility19&apos;s total
               liability for any claim arising out of or related to this Agreement
               shall not exceed the total fees paid by you in the twelve (12)
               months preceding the claim.
             </p>
             <p className={`mt-4 ${bodyClass}`}>
-              In no event shall WeLaunch be liable for indirect, incidental,
+              In no event shall Facility19 be liable for indirect, incidental,
               special, consequential, or punitive damages, including lost profits,
               lost data, or business interruption, even if we have been advised
               of the possibility of such damages.
@@ -373,7 +373,7 @@ export default function TermsPage() {
               For questions about this Agreement or our services:
             </p>
             <address className={`mt-4 not-italic ${bodyClass}`}>
-              <p className="font-medium">WeLaunch / WeLaunch Inc.</p>
+              <p className="font-medium">Facility19 / Facility19 Inc.</p>
               <p className="mt-2">
                 Website:{" "}
                 <a

@@ -22,7 +22,6 @@ const COMPANY_LINKS: FooterLink[] = [
 ];
 
 const GET_STARTED_LINKS: FooterLink[] = [
-  { label: "Workspace →", href: "/start" },
   { label: "Meet Aria →", href: "/talk-to-aria" },
   { label: "Book a call →", href: CAL_DEMO_URL, external: true },
 ];
@@ -75,7 +74,7 @@ export function MarketingFooter() {
         <FooterCol title="Get started" items={GET_STARTED_LINKS} />
       </div>
       <div className="wrap marketing-footer-bottom">
-        <span>© 2026 ARB Global LLC · WeLaunch</span>
+        <span>© 2026 ARB Global LLC · Facility19</span>
       </div>
     </footer>
   );

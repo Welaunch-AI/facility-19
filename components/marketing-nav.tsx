@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
-import { CAL_DEMO_URL } from "@/lib/cal-demo-link";
 import { MARKETING_NAV_LINKS } from "@/lib/site-nav";
-import { WeLaunchLogo } from "@/components/welaunch-logo";
+import { Facility19Logo } from "@/components/facility19-logo";
 
 export function Wordmark({ size = 22 }: { size?: number }) {
   return (
     <span className="nav-logo-mark">
-      <WeLaunchLogo height={size} />
+      <Facility19Logo height={size} />
     </span>
   );
 }
@@ -32,25 +31,6 @@ export function ArrowRight({ size = 14 }: { size?: number }) {
         strokeLinejoin="round"
       />
     </svg>
-  );
-}
-
-export function DefaultMarketingCtas({ height = 40 }: { height?: number }) {
-  return (
-    <>
-      <Link className="btn btn-primary" href="/start" style={{ height }}>
-        workspace <ArrowRight />
-      </Link>
-      <a
-        className="btn btn-ghost"
-        href={CAL_DEMO_URL}
-        target="_blank"
-        rel="noreferrer"
-        style={{ height }}
-      >
-        Book a call
-      </a>
-    </>
   );
 }
 
@@ -96,7 +76,7 @@ export function MarketingNav({ currentPath, cta, mobileCta }: MarketingNavProps)
         <Link
           className="nav-logo"
           href="/"
-          aria-label="WeLaunch"
+          aria-label="Facility19"
           onClick={close}
         >
           <Wordmark />

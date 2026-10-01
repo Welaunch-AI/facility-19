@@ -12,11 +12,11 @@ export default function SmsPolicyPage() {
           <Link
             href="/"
             className="inline-flex items-center transition-opacity hover:opacity-70"
-            aria-label="WeLaunch"
+            aria-label="Facility19"
           >
             <img
-              src="/logo/welaunch-logo-black.svg"
-              alt="WeLaunch"
+              src="/logo/facility19-logo-black.png"
+              alt="Facility19"
               className="h-[22px] w-auto"
             />
           </Link>
@@ -37,17 +37,17 @@ export default function SmsPolicyPage() {
           SMS Policy
         </h1>
         <p className="mt-5 text-[15px] leading-relaxed text-[#5E6472]">
-          WeLaunch / WeLaunch Inc.
+          Facility19 / Facility19 Inc.
         </p>
 
         <div className="mt-14 space-y-12">
           <section>
             <h2 className={headingClass}>1. Overview</h2>
             <p className={`mt-4 ${bodyClass}`}>
-              This SMS Policy explains how WeLaunch (&ldquo;we,&rdquo;
+              This SMS Policy explains how Facility19 (&ldquo;we,&rdquo;
               &ldquo;our,&rdquo; &ldquo;us&rdquo;) uses text messaging (SMS/MMS)
               to communicate with individuals who have opted in to receive
-              messages from us, and how WeLaunch supports SMS messaging on
+              messages from us, and how Facility19 supports SMS messaging on
               behalf of the businesses and AI agentic systems we build and
               operate for our clients.
             </p>
@@ -66,8 +66,8 @@ export default function SmsPolicyPage() {
               >
                 Privacy Policy
               </Link>
-              . By opting in to receive SMS messages from WeLaunch or from a
-              business using WeLaunch&apos;s systems, you agree to the terms
+              . By opting in to receive SMS messages from Facility19 or from a
+              business using Facility19&apos;s systems, you agree to the terms
               below.
             </p>
           </section>
@@ -169,7 +169,7 @@ export default function SmsPolicyPage() {
           <section>
             <h2 className={headingClass}>6. AI &amp; Automated Messaging</h2>
             <p className={`mt-4 ${bodyClass}`}>
-              Some SMS communications sent by WeLaunch or by the businesses we
+              Some SMS communications sent by Facility19 or by the businesses we
               build systems for are generated or triggered by AI agentic
               systems, including automated follow up, re-engagement sequences,
               and AI employee workflows.
@@ -215,7 +215,7 @@ export default function SmsPolicyPage() {
           <section>
             <h2 className={headingClass}>8. Compliance</h2>
             <p className={`mt-4 ${bodyClass}`}>
-              WeLaunch and the systems we build for clients are designed to
+              Facility19 and the systems we build for clients are designed to
               operate in accordance with:
             </p>
             <ul className={`mt-5 list-disc space-y-3 pl-5 ${bodyClass}`}>
@@ -225,7 +225,7 @@ export default function SmsPolicyPage() {
               <li>Applicable state and federal messaging regulations</li>
             </ul>
             <p className={`mt-5 ${bodyClass}`}>
-              Clients using WeLaunch systems to send SMS are responsible for
+              Clients using Facility19 systems to send SMS are responsible for
               maintaining their own valid consent records and complying with
               applicable law in their jurisdiction and industry.
             </p>
@@ -234,7 +234,7 @@ export default function SmsPolicyPage() {
           <section>
             <h2 className={headingClass}>9. Changes to This Policy</h2>
             <p className={`mt-4 ${bodyClass}`}>
-              WeLaunch may update this SMS Policy at any time. Updated versions
+              Facility19 may update this SMS Policy at any time. Updated versions
               become effective immediately upon posting on the website.
             </p>
           </section>
@@ -245,7 +245,7 @@ export default function SmsPolicyPage() {
               For questions about this SMS Policy or to report an issue:
             </p>
             <address className={`mt-4 not-italic ${bodyClass}`}>
-              <p className="font-medium">WeLaunch / WeLaunch Inc.</p>
+              <p className="font-medium">Facility19 / Facility19 Inc.</p>
               <p className="mt-2">530 5th Avenue, New York, NY 10036</p>
               <p className="mt-2">
                 Website:{" "}

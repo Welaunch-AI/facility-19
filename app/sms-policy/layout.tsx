@@ -5,7 +5,7 @@ import { SmsBodyUnlock } from "./sms-body-unlock";
 
 const title = "SMS Policy";
 const description =
-  "SMS Policy explaining how WeLaunch uses text messaging, consent, opt out, and compliance for SMS and MMS communications.";
+  "SMS Policy explaining how Facility19 uses text messaging, consent, opt out, and compliance for SMS and MMS communications.";
 
 export const metadata: Metadata = {
   title,
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/sms-policy" },
   openGraph: {
     ...defaultOpenGraph,
-    title: `${title} | WeLaunch`,
+    title: `${title} | Facility19`,
     description,
     url: "/sms-policy",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${title} | WeLaunch`,
+    title: `${title} | Facility19`,
     description,
     images: [defaultOpenGraph.images[0].url],
   },

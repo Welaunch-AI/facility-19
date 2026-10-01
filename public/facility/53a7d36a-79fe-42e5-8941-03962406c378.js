@@ -3,31 +3,12 @@
 const { useEffect, useState, useRef, useMemo } = React;
 
 const ARIA_URL = '/talk-to-aria';
-const START_URL = '/start';
-const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
-
-function prefetchStartRoute() {
-  if (window.__f19StartPrefetch) return;
-  window.__f19StartPrefetch = true;
-  const add = (rel, href, as) => {
-    if (document.querySelector('link[href="' + href + '"]')) return;
-    const l = document.createElement('link');
-    l.rel = rel;
-    l.href = href;
-    if (as) l.as = as;
-    if (href.indexOf('spline') !== -1) l.crossOrigin = 'anonymous';
-    document.head.appendChild(l);
-  };
-  add('prefetch', START_URL);
-  add('prefetch', SPLINE_SCENE, 'fetch');
-  fetch(SPLINE_SCENE, { mode: 'cors' }).catch(function () {});
-}
 const BOOK_URL = 'https://cal.com/aviralbhutani/welaunch.ai';
 
 function Wordmark({ size = 22 }) {
   return (
     <span className="nav-logo-mark" style={{ display: 'inline-flex', alignItems: 'center' }}>
-      <img src="/logo/welaunch-logo-black.svg" alt="WeLaunch" style={{ height: size, width: 'auto', display: 'block' }} />
+      <img src="/logo/facility19-logo-black.png" alt="Facility19" style={{ height: size, width: 'auto', display: 'block' }} />
     </span>
   );
 }
@@ -53,27 +34,21 @@ function Nav() {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
-  useEffect(() => {
-    prefetchStartRoute();
-  }, []);
   const close = () => setOpen(false);
-  const onStartHover = () => prefetchStartRoute();
   return (
     <nav className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' is-open' : '')}>
       <div className="wrap nav-inner">
-        <a className="nav-logo" href="#top" aria-label="WeLaunch" onClick={close}>
+        <a className="nav-logo" href="#top" aria-label="Facility19" onClick={close}>
           <Wordmark />
         </a>
         <div className="nav-links">
           <a href="#agents">Team</a>
           <a href="#how">How it works</a>
           <a href="#contact">Contact</a>
-          <a href="/blog">Blog</a>
           <a href="/partners">Partners</a>
         </div>
         <div className="nav-cta">
-          <a className="btn btn-primary nav-cta-start" href={START_URL} style={{ height: 40 }} onMouseEnter={onStartHover} onFocus={onStartHover}>workspace</a>
-          <a className="btn btn-ghost nav-cta-book" href={BOOK_URL} target="_blank" rel="noreferrer" style={{ height: 40 }}>Book a call</a>
+          <a className="btn btn-brand-ink nav-cta-book" href={BOOK_URL} target="_blank" rel="noreferrer" style={{ height: 40 }}>Book a call</a>
         </div>
         <button
           className="nav-burger"
@@ -91,11 +66,9 @@ function Nav() {
           <a href="#agents" onClick={close}>Team</a>
           <a href="#how" onClick={close}>How it works</a>
           <a href="#contact" onClick={close}>Contact</a>
-          <a href="/blog" onClick={close}>Blog</a>
           <a href="/partners" onClick={close}>Partners</a>
           <div className="nav-mobile-ctas">
-            <a className="btn btn-primary" href={START_URL} onClick={close} onMouseEnter={onStartHover} onFocus={onStartHover}>workspace</a>
-            <a className="btn btn-ghost" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
+            <a className="btn btn-brand-ink" href={BOOK_URL} target="_blank" rel="noreferrer" onClick={close}>Book a call</a>
           </div>
         </div>
       </div>
@@ -128,13 +101,12 @@ function Footer() {
           { l: 'SMS Policy', h: '/sms-policy' },
         ]}/>
         <FooterCol title="Get started" items={[
-          { l: 'Workspace →', h: START_URL, ext: false },
           { l: 'Meet Aria →', h: ARIA_URL, ext: false },
           { l: 'Book a call →', h: BOOK_URL, ext: true },
         ]}/>
       </div>
       <div className="wrap" style={{ marginTop: 72, paddingTop: 28, borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'var(--slate)' }}>
-        <span>© 2026 ARB Global LLC · WeLaunch</span>
+        <span>© 2026 ARB Global LLC · Facility19</span>
       </div>
     </footer>
   );
@@ -282,7 +254,7 @@ function AriaBubble() {
             }}>AR</div>
             <div>
               <div style={{ fontSize: 15, fontWeight: 500 }}>Hi, I'm Aria.</div>
-              <div className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>The front door at WeLaunch</div>
+              <div className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>The front door at Facility19</div>
             </div>
           </div>
           <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-2)' }}>

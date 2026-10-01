@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getServerSiteUrl } from "@/lib/site-url";
 
-const DISALLOW = ["/api/", "/auth/", "/onboarding", "/workspaces/", "/start"];
+const DISALLOW = ["/api/"];
 
 const AI_CRAWLERS = [
   // OpenAI

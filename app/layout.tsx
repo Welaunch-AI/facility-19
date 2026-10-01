@@ -13,9 +13,9 @@ import {
   siteJsonLdGraph,
 } from "@/lib/seo";
 import {
-  WELAUNCH_APPLE_TOUCH_ICON,
-  WELAUNCH_FAVICON,
-} from "@/lib/welaunch-brand";
+  FACILITY19_APPLE_TOUCH_ICON,
+  FACILITY19_FAVICON,
+} from "@/lib/facility19-brand";
 import "./globals.css";
 
 const GTM_ID = "GTM-TJF5GCZ4";
@@ -83,12 +83,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: WELAUNCH_FAVICON, type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+      { url: FACILITY19_FAVICON, type: "image/png", sizes: "512x512" },
     ],
     shortcut: "/favicon.ico",
-    apple: [{ url: WELAUNCH_APPLE_TOUCH_ICON, sizes: "180x180" }],
+    apple: [{ url: FACILITY19_APPLE_TOUCH_ICON, sizes: "180x180" }],
   },
 };
 

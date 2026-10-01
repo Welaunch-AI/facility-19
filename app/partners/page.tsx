@@ -23,7 +23,7 @@ function Hero() {
             className="eyebrow eyebrow-dot"
             style={{ animation: "fade-in 0.6s ease-out both" }}
           >
-            WeLaunch Partner Program
+            Facility19 Partner Program
           </span>
           <h1
             className="mt-6 text-balance text-5xl font-semibold leading-[1.02] tracking-tight text-ink md:text-7xl"
@@ -116,7 +116,7 @@ function WhatWeDo() {
                   Live deployments
                 </div>
                 <div className="font-mono text-xs text-ink-muted">
-                  welaunch · today
+                  facility19 · today
                 </div>
               </div>
               <ul className="divide-y divide-line">
@@ -442,7 +442,7 @@ function CalEmbed() {
 
         <div className="partners-cal-embed mt-12">
           <iframe
-            title="Book a WeLaunch partner call"
+            title="Book a Facility19 partner call"
             src={embedSrc}
             className="partners-cal-embed__frame"
             loading="lazy"

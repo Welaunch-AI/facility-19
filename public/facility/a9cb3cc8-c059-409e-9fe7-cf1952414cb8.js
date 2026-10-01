@@ -43,7 +43,7 @@ function LiveTicker() {
             Live operations feed
           </span>
         </div>
-        <span className="mono" style={{ fontSize: 11, color: 'var(--slate-2)' }}>welaunch · today</span>
+        <span className="mono" style={{ fontSize: 11, color: 'var(--slate-2)' }}>facility19 · today</span>
       </div>
       <div style={{ padding: '8px 0' }}>
         {items.map((it, i) => (

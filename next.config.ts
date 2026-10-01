@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         destination: "/sms-policy",
         permanent: true,
       },
+      { source: "/blog/:path*", destination: "/", permanent: true },
+      { source: "/start", destination: "/", permanent: false },
+      { source: "/onboarding", destination: "/", permanent: false },
+      { source: "/workspaces/:path*", destination: "/", permanent: false },
+      { source: "/auth/:path*", destination: "/", permanent: false },
     ];
   },
   async rewrites() {

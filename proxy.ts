@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
 
 const CANONICAL_HOST = "www.welaunch.ai";
 
@@ -11,22 +10,17 @@ const REDIRECT_HOSTS = new Set([
   "www.welaunch.site",
 ]);
 
-export async function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const host = request.headers.get("host")?.toLowerCase().split(":")[0];
   if (host && REDIRECT_HOSTS.has(host)) {
     const url = request.nextUrl.clone();
     url.protocol = "https:";
     url.hostname = CANONICAL_HOST;
     url.port = "";
-
-    if (url.pathname === "/" && url.searchParams.has("code")) {
-      url.pathname = "/auth/callback";
-    }
-
     return NextResponse.redirect(url);
   }
 
-  return updateSession(request);
+  return NextResponse.next();
 }
 
 export const config = {
