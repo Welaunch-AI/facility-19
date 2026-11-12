@@ -1,8 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const CANONICAL_HOST = "www.welaunch.ai";
+const CANONICAL_HOST = "www.facility19.com";
 
 const REDIRECT_HOSTS = new Set([
+  "facility19.com",
+  "facility19.ai",
+  "www.facility19.ai",
+  "welaunch.ai",
+  "www.welaunch.ai",
   "f19-polsia.vercel.app",
   "welaunch.space",
   "www.welaunch.space",

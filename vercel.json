@@ -2,32 +2,62 @@
   "redirects": [
     {
       "source": "/:path*",
+      "has": [{ "type": "host", "value": "facility19.com" }],
+      "destination": "https://www.facility19.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "facility19.ai" }],
+      "destination": "https://www.facility19.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.facility19.ai" }],
+      "destination": "https://www.facility19.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "welaunch.ai" }],
+      "destination": "https://www.facility19.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.welaunch.ai" }],
+      "destination": "https://www.facility19.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
       "has": [{ "type": "host", "value": "f19-polsia.vercel.app" }],
-      "destination": "https://www.welaunch.ai/:path*",
+      "destination": "https://www.facility19.com/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "welaunch.space" }],
-      "destination": "https://www.welaunch.ai/:path*",
+      "destination": "https://www.facility19.com/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.welaunch.space" }],
-      "destination": "https://www.welaunch.ai/:path*",
+      "destination": "https://www.facility19.com/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "welaunch.site" }],
-      "destination": "https://www.welaunch.ai/:path*",
+      "destination": "https://www.facility19.com/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.welaunch.site" }],
-      "destination": "https://www.welaunch.ai/:path*",
+      "destination": "https://www.facility19.com/:path*",
       "permanent": true
     }
   ]

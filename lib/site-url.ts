@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://www.welaunch.ai";
+const DEFAULT_SITE_URL = "https://www.facility19.com";
 
 function normalizeSiteUrl(url: string) {
   return url.replace(/\/$/, "");

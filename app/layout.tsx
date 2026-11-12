@@ -13,9 +13,9 @@ import {
   siteJsonLdGraph,
 } from "@/lib/seo";
 import {
-  FACILITY19_APPLE_TOUCH_ICON,
-  FACILITY19_FAVICON,
-} from "@/lib/facility19-brand";
+  RISERR_APPLE_TOUCH_ICON,
+  RISERR_FAVICON,
+} from "@/lib/riserr-brand";
 import "./globals.css";
 
 const GTM_ID = "GTM-TJF5GCZ4";
@@ -84,10 +84,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
-      { url: FACILITY19_FAVICON, type: "image/png", sizes: "512x512" },
+      { url: RISERR_FAVICON, type: "image/png", sizes: "512x512" },
     ],
     shortcut: "/favicon.ico",
-    apple: [{ url: FACILITY19_APPLE_TOUCH_ICON, sizes: "180x180" }],
+    apple: [{ url: RISERR_APPLE_TOUCH_ICON, sizes: "180x180" }],
   },
 };
 

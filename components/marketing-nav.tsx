@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { MARKETING_NAV_LINKS } from "@/lib/site-nav";
-import { Facility19Logo } from "@/components/facility19-logo";
+import { RiserrLogo } from "@/components/riserr-logo";
 
-export function Wordmark({ size = 22 }: { size?: number }) {
+export function Wordmark({ size = 30 }: { size?: number }) {
   return (
     <span className="nav-logo-mark">
-      <Facility19Logo height={size} />
+      <RiserrLogo height={size} />
     </span>
   );
 }
@@ -76,7 +76,7 @@ export function MarketingNav({ currentPath, cta, mobileCta }: MarketingNavProps)
         <Link
           className="nav-logo"
           href="/"
-          aria-label="Facility19"
+          aria-label="Riserr"
           onClick={close}
         >
           <Wordmark />

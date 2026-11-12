@@ -1,19 +1,19 @@
-import { FACILITY19_WORDMARK } from "@/lib/facility19-brand";
+import { RISERR_WORDMARK } from "@/lib/riserr-brand";
 
-type Facility19LogoProps = {
+type RiserrLogoProps = {
   height?: number;
   className?: string;
 };
 
-export function Facility19Logo({
+export function RiserrLogo({
   height = 24,
   className = "",
-}: Facility19LogoProps) {
+}: RiserrLogoProps) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={FACILITY19_WORDMARK}
-      alt="Facility19"
+      src={RISERR_WORDMARK}
+      alt="Riserr"
       height={height}
       className={className}
       style={{ height, width: "auto", display: "block" }}

@@ -1,25 +1,25 @@
 import { getServerSiteUrl } from "@/lib/site-url";
 import { CAL_DEMO_URL } from "@/lib/cal-demo-link";
-import { FACILITY19_WORDMARK } from "@/lib/facility19-brand";
+import { RISERR_WORDMARK } from "@/lib/riserr-brand";
 
-export const SITE_NAME = "Facility19";
+export const SITE_NAME = "Riserr";
 export const SITE_LEGAL_NAME = "ARB Global LLC";
-export const SITE_PARENT_ORG = "Facility19 Inc.";
+export const SITE_PARENT_ORG = "Riserr Inc.";
 export const SITE_TAGLINE = "AI employees for facility management";
 
 export const SITE_DESCRIPTION =
-  "Facility19 deploys AI agents for dispatch, scheduling, compliance, vendor management, and field operations. Live at RAEL Fire Safety and ProForce Pest Control. Integrates with your existing CMMS, GPS, and work order stack.";
+  "Riserr deploys AI agents for dispatch, scheduling, compliance, vendor management, and field operations. Live at RAEL Fire Safety and ProForce Pest Control. Integrates with your existing CMMS, GPS, and work order stack.";
 
 export const SITE_DEFINITION =
-  "Facility19 is an AI operating system for facility management and field service operations. The platform deploys AI agents that handle dispatch, scheduling, compliance, vendor management, inventory, and customer communications around the clock. Facility19 integrates with existing tech stacks—work order systems, CMMS platforms, GPS, accounting, and telephony—rather than replacing them. Live deployments include RAEL Fire Safety (40 field technicians with GPS-verified job site visibility) and ProForce Pest Control. Operators typically go live in under five weeks from contract signing. Each AI agent runs a specific process such as dispatch coordination, after-hours intake, procurement, or documentation.";
+  "Riserr is an AI operating system for facility management and field service operations. The platform deploys AI agents that handle dispatch, scheduling, compliance, vendor management, inventory, and customer communications around the clock. Riserr integrates with existing tech stacks—work order systems, CMMS platforms, GPS, accounting, and telephony—rather than replacing them. Live deployments include RAEL Fire Safety (40 field technicians with GPS-verified job site visibility) and ProForce Pest Control. Operators typically go live in under five weeks from contract signing. Each AI agent runs a specific process such as dispatch coordination, after-hours intake, procurement, or documentation.";
 
 export const OG_IMAGE_PATH = "/og-image.png";
-export const SITE_LOGO_PATH = FACILITY19_WORDMARK;
+export const SITE_LOGO_PATH = RISERR_WORDMARK;
 
 export const SITE_SAME_AS = [CAL_DEMO_URL] as const;
 
 export const SITE_CONTACT = {
-  url: "https://www.welaunch.ai",
+  url: "https://www.facility19.com",
   email: "Support@welaunch.ai",
 } as const;
 

@@ -58,7 +58,7 @@ export function MarketingFooter() {
     <footer className="marketing-footer">
       <div className="wrap marketing-footer-grid">
         <div className="marketing-footer-brand">
-          <Wordmark size={26} />
+          <Wordmark size={34} />
           <p>
             America&apos;s first AI staffing company built for facility
             management. Deployed, monitored, and maintained by a 40-person
@@ -74,7 +74,7 @@ export function MarketingFooter() {
         <FooterCol title="Get started" items={GET_STARTED_LINKS} />
       </div>
       <div className="wrap marketing-footer-bottom">
-        <span>© 2026 ARB Global LLC · Facility19</span>
+        <span>© 2026 ARB Global LLC · Riserr</span>
       </div>
     </footer>
   );

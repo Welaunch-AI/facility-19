@@ -5,10 +5,10 @@ const { useEffect, useState, useRef, useMemo } = React;
 const ARIA_URL = '/talk-to-aria';
 const BOOK_URL = 'https://cal.com/aviralbhutani/welaunch.ai';
 
-function Wordmark({ size = 22 }) {
+function Wordmark({ size = 30 }) {
   return (
     <span className="nav-logo-mark" style={{ display: 'inline-flex', alignItems: 'center' }}>
-      <img src="/logo/facility19-logo-black.png" alt="Facility19" style={{ height: size, width: 'auto', display: 'block' }} />
+      <img src="/logo/riserr-wordmark.png?v=2" alt="Riserr" style={{ height: size, width: 'auto', display: 'block' }} />
     </span>
   );
 }
@@ -38,7 +38,7 @@ function Nav() {
   return (
     <nav className={'nav' + (scrolled ? ' scrolled' : '') + (open ? ' is-open' : '')}>
       <div className="wrap nav-inner">
-        <a className="nav-logo" href="#top" aria-label="Facility19" onClick={close}>
+        <a className="nav-logo" href="#top" aria-label="Riserr" onClick={close}>
           <Wordmark />
         </a>
         <div className="nav-links">
@@ -81,7 +81,7 @@ function Footer() {
     <footer style={{ borderTop: '1px solid var(--line)', marginTop: 120, paddingTop: 72, paddingBottom: 56, background: 'var(--paper)' }}>
       <div className="wrap" style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', gap: 40 }}>
         <div>
-          <Wordmark size={26} />
+          <Wordmark size={34} />
           <p style={{ marginTop: 18, maxWidth: 360, color: 'var(--slate)', fontSize: 15, lineHeight: 1.55 }}>
             America's first AI staffing company built for facility management. Deployed, monitored, and maintained by a 40-person operations team.
           </p>
@@ -106,7 +106,7 @@ function Footer() {
         ]}/>
       </div>
       <div className="wrap" style={{ marginTop: 72, paddingTop: 28, borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 13, color: 'var(--slate)' }}>
-        <span>© 2026 ARB Global LLC · Facility19</span>
+        <span>© 2026 ARB Global LLC · Riserr</span>
       </div>
     </footer>
   );
@@ -254,7 +254,7 @@ function AriaBubble() {
             }}>AR</div>
             <div>
               <div style={{ fontSize: 15, fontWeight: 500 }}>Hi, I'm Aria.</div>
-              <div className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>The front door at Facility19</div>
+              <div className="mono" style={{ fontSize: 10, color: 'var(--slate)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>The front door at Riserr</div>
             </div>
           </div>
           <p style={{ fontSize: 13, lineHeight: 1.55, color: 'var(--ink-2)' }}>
